@@ -1,0 +1,40 @@
+{
+  "dir": "C:\\Users\\Betty Shi\\.claude\\skills\\ai-gossip\\assets\\issues\\2026-07-09",
+  "items": [
+    {
+      "file": "01-gpt56-two-manga.png",
+      "title": "GPT-5.6 全面开放",
+      "subtitle": null,
+      "panels": ["仅限预览", "三档全上了"],
+      "poster": false
+    },
+    {
+      "file": "02-gpt-live-single-manga.png",
+      "title": "ChatGPT 能边听边说了",
+      "subtitle": "GPT-Live · 7月8日上线",
+      "panels": [],
+      "poster": false
+    },
+    {
+      "file": "03-fable5-two-manga.png",
+      "title": "Fable 5 促销又续了四天",
+      "subtitle": null,
+      "panels": ["原定到期", "卡着对手发新模型"],
+      "poster": false
+    },
+    {
+      "file": "04-muse-image-three-poster.png",
+      "title": "@一下就能拿你照片 AI 出图",
+      "subtitle": null,
+      "panels": ["公开照片被抽走", "生成新图", "本人没同意"],
+      "poster": true
+    },
+    {
+      "file": "05-gemini-cap-two-manga.png",
+      "title": "Google 给 Meta 算力限购了",
+      "subtitle": null,
+      "panels": ["配额不够", "自己盖机房"],
+      "poster": false
+    }
+  ]
+}
