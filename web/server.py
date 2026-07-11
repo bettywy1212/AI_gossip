@@ -366,6 +366,24 @@ def start_scheduler():
 
 
 # ---------------------------------------------------------------- API（对访客只读）
+@app.get("/api/issues")
+def list_issues():
+    """往期目录：按日期倒序，附每期标题列表供归档页展示。"""
+    out = []
+    for p in sorted(ISSUE_DIR.glob("*.json"), reverse=True):
+        try:
+            d = json.loads(p.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        out.append({
+            "date": d.get("date", p.stem),
+            "generated_at": d.get("generated_at"),
+            "count": len(d.get("items", [])),
+            "titles": [it.get("title", "") for it in d.get("items", [])],
+        })
+    return out
+
+
 @app.get("/api/issues/latest")
 def get_latest_issue():
     day = latest_issue_day()

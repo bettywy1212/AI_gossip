@@ -139,6 +139,12 @@ body::after {
   padding: 0 4px;
 }
 .info-bar span:first-child { color: var(--teal); }
+.info-bar .archive-link {
+  margin-left: auto;
+  color: var(--yellow);
+  text-decoration: none;
+}
+.info-bar .archive-link:hover { text-decoration: underline; }
 
 /* ---------------- 瓜田卡片 ---------------- */
 
@@ -225,6 +231,49 @@ body::after {
 .detail .hook-box::before { content: "🍉 一句话吃瓜："; color: var(--cream); }
 .detail .source { font-size: 13px; }
 .detail .source a { color: var(--teal); }
+
+.share-row { margin-bottom: 18px; }
+.share-btn { background: var(--teal); }
+.share-btn:hover { background: #55c9b8; }
+.share-btn:disabled { opacity: .8; cursor: default; }
+
+/* ---------------- 往期回顾 ---------------- */
+
+.arch-title {
+  font-size: 22px;
+  color: var(--yellow);
+  margin: 4px 0 18px;
+  letter-spacing: 2px;
+}
+.arch-row {
+  padding: 16px 18px;
+  margin-bottom: 18px;
+  cursor: pointer;
+}
+.arch-row:hover { background: var(--panel-2); }
+.arch-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.arch-date { color: var(--teal); font-size: 15px; }
+.arch-new {
+  margin-left: 10px;
+  font-size: 11px;
+  background: var(--pink);
+  color: var(--cream);
+  border: 2px solid var(--ink);
+  padding: 2px 7px;
+}
+.arch-count { font-size: 12px; color: var(--muted); }
+.arch-titles {
+  list-style: none;
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--cream);
+}
+.arch-titles li::before { content: "🍉 "; }
 
 .comic-zone { margin-bottom: 18px; }
 .comic-zone img {

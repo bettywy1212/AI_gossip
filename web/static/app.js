@@ -1,8 +1,13 @@
-/* AI 八卦特刊 · 前端（只读展示，hash 路由：#/ 瓜田、#/item/{idx} 单瓜） */
+/* AI 八卦特刊 · 前端（只读展示，hash 路由）
+   #/            最新刊
+   #/archive     往期回顾
+   #/d/{date}    某一期
+   #/d/{date}/{idx} 单瓜详情 */
 
 const app = document.getElementById("app");
-let issue = null;   // 最新刊缓存
-let status = null;  // 流水线状态缓存
+const issueCache = {};  // date -> issue
+let latestDate = null;
+let status = null;      // 流水线状态缓存
 
 const MELON = { 1: "🍉", 2: "🍉🍉", 3: "🍉🍉🍉" };
 const MELON_LABEL = { 1: "小瓜", 2: "中瓜", 3: "大瓜" };
@@ -13,7 +18,7 @@ const esc = (s) =>
 
 /* ---------------- 公共件 ---------------- */
 
-function masthead() {
+function masthead(issue) {
   const hooks = (issue?.items || []).map((it) => it.hook).filter(Boolean);
   const ticker = hooks.length
     ? `<div class="ticker"><div class="ticker-inner">${
@@ -31,19 +36,21 @@ function masthead() {
   </header>`;
 }
 
-function infoBar() {
+function infoBar(issue) {
   if (!issue) return "";
   const gen = (issue.generated_at || "").replace("T", " ").slice(0, 16);
   const nxt = (status?.next_update || "").replace("T", " ").slice(0, 16);
+  const isLatest = issue.date === latestDate;
   return `<div class="info-bar">
-    <span>📅 第 ${esc(issue.date)} 期</span>
+    <span>📅 第 ${esc(issue.date)} 期${isLatest ? "" : "（往期）"}</span>
     ${gen ? `<span>🖨️ 更新于 ${esc(gen)}</span>` : ""}
-    ${nxt ? `<span>⏰ 下期 ${esc(nxt)}</span>` : ""}
+    ${isLatest && nxt ? `<span>⏰ 下期 ${esc(nxt)}</span>` : ""}
+    <a class="archive-link" href="#/archive">📚 往期回顾</a>
   </div>`;
 }
 
 function loadingView(main, sub) {
-  app.innerHTML = `${masthead()}
+  app.innerHTML = `${masthead(null)}
     <div class="loading">
       <div class="melon-spin">🍉</div>
       <div>${esc(main)}</div>
@@ -53,12 +60,18 @@ function loadingView(main, sub) {
 
 function emptyView() {
   const nxt = (status?.next_update || "").replace("T", " ").slice(0, 16);
-  app.innerHTML = `${masthead()}
+  app.innerHTML = `${masthead(null)}
     <div class="pixel-box empty-box">
       <div class="melon-spin">🍉</div>
       <p>第一期还在印刷机里翻滚……</p>
       <p class="sub">${status?.generating ? "编辑部正在连夜赶稿，稍后刷新即可" : nxt ? `下期出刊：${esc(nxt)}` : "请稍后刷新"}</p>
     </div>`;
+}
+
+function errorView(msg) {
+  app.innerHTML = `${masthead(null)}
+    <div class="pixel-box error-box"><p>出错了：${esc(msg)}</p>
+    <p style="margin-top:12px"><a class="pixel-btn small" href="#/">回瓜田</a></p></div>`;
 }
 
 async function api(path) {
@@ -73,38 +86,59 @@ async function api(path) {
   return resp.json();
 }
 
-async function ensureIssue() {
-  if (issue) return true;
-  loadingView("翻刊中……");
-  try {
-    [issue, status] = await Promise.all([
-      api("/api/issues/latest"),
-      api("/api/status").catch(() => null),
-    ]);
-    return true;
-  } catch (e) {
-    if (e.status === 404) {
-      status = await api("/api/status").catch(() => null);
-      emptyView();
-    } else {
-      app.innerHTML = `${masthead()}
-        <div class="pixel-box error-box"><p>出错了：${esc(e.message)}</p></div>`;
-    }
-    return false;
-  }
+async function getIssue(date) {
+  if (issueCache[date]) return issueCache[date];
+  const issue = await api(date === "latest" ? "/api/issues/latest" : `/api/issues/${date}`);
+  issueCache[issue.date] = issue;
+  if (date === "latest") latestDate = issue.date;
+  if (!status) status = await api("/api/status").catch(() => null);
+  return issue;
 }
 
-/* ---------------- 瓜田（主页） ---------------- */
+/* ---------------- 转发 ---------------- */
 
-async function homeView() {
-  if (!(await ensureIssue())) return;
+async function copyShare(btn, text) {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    ta.remove();
+  }
+  const old = btn.textContent;
+  btn.textContent = "✅ 已复制，去群里丢瓜";
+  btn.disabled = true;
+  setTimeout(() => { btn.textContent = old; btn.disabled = false; }, 1600);
+}
+
+function shareText(it, date, idx) {
+  const url = `${location.origin}/#/d/${date}/${idx}`;
+  return `🍉 ${it.hook}\n\n${url}`;
+}
+
+/* ---------------- 瓜田（某一期的列表） ---------------- */
+
+async function issueView(date) {
+  let issue;
+  try {
+    issue = await getIssue(date);
+  } catch (e) {
+    if (e.status === 404 && date === "latest") {
+      status = status || (await api("/api/status").catch(() => null));
+      return emptyView();
+    }
+    return errorView(e.message);
+  }
   const cards = issue.items
     .map((it, i) => {
       const thumb = it.image
         ? `<div class="card-thumb"><img src="/images/${esc(it.image)}" alt="" loading="lazy"></div>`
         : `<div class="card-thumb no-img"><span>🖼️ 画手赶稿中</span></div>`;
       return `
-      <article class="pixel-box card" onclick="location.hash='#/item/${i}'">
+      <article class="pixel-box card" onclick="location.hash='#/d/${esc(issue.date)}/${i}'">
         ${thumb}
         <div class="card-body">
           <div class="level-badge lv${it.melon_level || 1}">${MELON[it.melon_level] || "🍉"} ${MELON_LABEL[it.melon_level] || "小瓜"}</div>
@@ -115,14 +149,19 @@ async function homeView() {
       </article>`;
     })
     .join("");
-  app.innerHTML = `${masthead()}${infoBar()}<main class="cards">${cards}</main>
+  app.innerHTML = `${masthead(issue)}${infoBar(issue)}<main class="cards">${cards}</main>
     <footer class="foot">内容由 AI 编辑部自动采写，吃瓜需谨慎，转发前看来源 🍉</footer>`;
 }
 
 /* ---------------- 单瓜详情 ---------------- */
 
-async function itemView(idx) {
-  if (!(await ensureIssue())) return;
+async function itemView(date, idx) {
+  let issue;
+  try {
+    issue = await getIssue(date);
+  } catch (e) {
+    return errorView(e.message);
+  }
   const it = issue.items[idx];
   if (!it) { location.hash = "#/"; return render(); }
 
@@ -130,25 +169,64 @@ async function itemView(idx) {
     ? `<div class="comic-zone"><img src="/images/${esc(it.image)}" alt="八卦漫画"></div>`
     : `<div class="comic-zone no-img"><span>🖼️ 本条漫画还在画手桌上，下期补上</span></div>`;
 
-  app.innerHTML = `${masthead()}
-    <a class="back pixel-btn small" href="#/">← 回瓜田</a>
+  app.innerHTML = `${masthead(issue)}
+    <a class="back pixel-btn small" href="#/d/${esc(issue.date)}">← 回瓜田</a>
     <div class="pixel-box detail">
       <div class="level-badge lv${it.melon_level || 1}">${MELON[it.melon_level] || "🍉"} ${MELON_LABEL[it.melon_level] || "小瓜"}</div>
       <h2>${esc(it.title)}</h2>
       ${comic}
       <div class="body">${esc(it.body)}</div>
       <div class="hook-box">${esc(it.hook)}</div>
+      <div class="share-row">
+        <button class="pixel-btn small share-btn" id="share">🍉 复制吃瓜文案</button>
+      </div>
       <div class="source">来源：<a href="${esc(it.source_url)}" target="_blank" rel="noopener">${esc(it.source_title || it.source_url)}</a></div>
     </div>`;
+
+  document.getElementById("share").onclick = (ev) =>
+    copyShare(ev.currentTarget, shareText(it, issue.date, idx));
+}
+
+/* ---------------- 往期回顾 ---------------- */
+
+async function archiveView() {
+  let list;
+  try {
+    list = await api("/api/issues");
+  } catch (e) {
+    return errorView(e.message);
+  }
+  if (!latestDate) { try { await getIssue("latest"); } catch {} }
+  const rows = list.length
+    ? list
+        .map((iss) => `
+        <article class="pixel-box arch-row" onclick="location.hash='#/d/${esc(iss.date)}'">
+          <div class="arch-head">
+            <span class="arch-date">📅 ${esc(iss.date)}${iss.date === latestDate ? '<span class="arch-new">最新</span>' : ""}</span>
+            <span class="arch-count">${iss.count} 条瓜</span>
+          </div>
+          <ul class="arch-titles">
+            ${iss.titles.map((t) => `<li>${esc(t)}</li>`).join("")}
+          </ul>
+        </article>`)
+        .join("")
+    : `<div class="pixel-box empty-box"><p>还没有往期，瓜田刚开垦 🍉</p></div>`;
+  app.innerHTML = `${masthead(null)}
+    <a class="back pixel-btn small" href="#/">← 回最新刊</a>
+    <h2 class="arch-title">📚 往期回顾</h2>
+    ${rows}`;
 }
 
 /* ---------------- 路由 ---------------- */
 
 function render() {
   const hash = location.hash || "#/";
-  const m = hash.match(/^#\/item\/(\d+)$/);
-  if (m) return itemView(Number(m[1]));
-  return homeView();
+  let m;
+  if (hash === "#/archive") return archiveView();
+  if ((m = hash.match(/^#\/d\/(\d{4}-\d{2}-\d{2})\/(\d+)$/))) return itemView(m[1], Number(m[2]));
+  if ((m = hash.match(/^#\/d\/(\d{4}-\d{2}-\d{2})$/))) return issueView(m[1]);
+  if ((m = hash.match(/^#\/item\/(\d+)$/))) return itemView("latest", Number(m[1])); // 旧链接兼容
+  return issueView("latest");
 }
 
 window.addEventListener("hashchange", render);
