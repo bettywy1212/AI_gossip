@@ -1,0 +1,289 @@
+/* AI 八卦特刊 · 像素杂志风 */
+
+:root {
+  --bg: #2b2138;          /* 深紫夜幕 */
+  --panel: #3d2f52;
+  --panel-2: #4a3a63;
+  --ink: #1a1226;
+  --cream: #faf6ee;
+  --coral: #e85a4f;
+  --teal: #41b3a3;
+  --yellow: #f4b942;
+  --pink: #ff2e88;
+  --shadow: #140e1f;
+  --muted: #9a8bb5;
+  --px: 4px;              /* 像素描边基准 */
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { image-rendering: pixelated; }
+
+body {
+  font-family: "Fusion Pixel 12px Proportional SC", "SimSun", monospace;
+  background: var(--bg);
+  color: var(--cream);
+  min-height: 100vh;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,.05) 1px, transparent 1px);
+  background-size: 12px 12px;
+}
+
+/* CRT 扫描线，盖在整页上但不挡点击 */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom, transparent 0 3px, rgba(0,0,0,.08) 3px 4px);
+  z-index: 99;
+}
+
+#app { max-width: 880px; margin: 0 auto; padding: 20px 16px 64px; }
+
+/* ---------------- 像素通用件 ---------------- */
+
+.pixel-box {
+  background: var(--panel);
+  border: var(--px) solid var(--ink);
+  box-shadow: var(--px) var(--px) 0 var(--shadow),
+              calc(var(--px) * 2) calc(var(--px) * 2) 0 var(--ink);
+}
+
+.pixel-btn {
+  font-family: inherit;
+  font-size: 20px;
+  color: var(--ink);
+  background: var(--yellow);
+  border: var(--px) solid var(--ink);
+  box-shadow: var(--px) var(--px) 0 var(--ink);
+  padding: 14px 28px;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+}
+.pixel-btn:hover { background: #ffd066; }
+.pixel-btn:active {
+  transform: translate(var(--px), var(--px));
+  box-shadow: 0 0 0 var(--ink);
+}
+.pixel-btn.small { font-size: 14px; padding: 8px 16px; }
+
+/* ---------------- 报头 ---------------- */
+
+.masthead { margin-bottom: 18px; }
+
+.mast-top {
+  text-align: center;
+  cursor: pointer;
+  padding: 18px 12px 14px;
+  background: var(--panel);
+  border: var(--px) solid var(--ink);
+  border-bottom-width: calc(var(--px) * 2);
+  box-shadow: var(--px) var(--px) 0 var(--shadow);
+  position: relative;
+}
+.mast-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 11px;
+  color: var(--ink);
+  background: var(--pink);
+  color: var(--cream);
+  padding: 3px 8px;
+  border: 2px solid var(--ink);
+  transform: rotate(3deg);
+}
+.masthead h1 {
+  font-size: 38px;
+  letter-spacing: 6px;
+  color: var(--yellow);
+  text-shadow: var(--px) var(--px) 0 var(--ink),
+               calc(var(--px)*2) calc(var(--px)*2) 0 var(--coral);
+}
+.masthead .tagline {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--teal);
+}
+
+/* 走马灯：本期 hook 滚动 */
+.ticker {
+  overflow: hidden;
+  background: var(--ink);
+  border: var(--px) solid var(--ink);
+  border-top: none;
+  white-space: nowrap;
+}
+.ticker-inner {
+  display: inline-block;
+  padding: 8px 0;
+  font-size: 13px;
+  color: var(--yellow);
+  animation: ticker 45s linear infinite;
+}
+.ticker-inner span { margin-right: 48px; }
+@keyframes ticker { to { transform: translateX(-50%); } }
+
+/* ---------------- 信息条 ---------------- */
+
+.info-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 18px;
+  padding: 0 4px;
+}
+.info-bar span:first-child { color: var(--teal); }
+
+/* ---------------- 瓜田卡片 ---------------- */
+
+.cards { display: flex; flex-direction: column; gap: 22px; }
+
+.card {
+  display: flex;
+  cursor: pointer;
+  overflow: hidden;
+}
+.card:hover { background: var(--panel-2); }
+.card:hover .card-thumb img { transform: scale(1.04); }
+
+.card-thumb {
+  flex: 0 0 38%;
+  min-height: 150px;
+  border-right: var(--px) solid var(--ink);
+  overflow: hidden;
+  background: var(--ink);
+}
+.card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .15s steps(3);
+}
+.card-thumb.no-img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.card-body { flex: 1; padding: 16px 18px; min-width: 0; }
+.card-body h3 { font-size: 19px; line-height: 1.5; color: var(--cream); margin-top: 8px; }
+.card-body .hook {
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--yellow);
+  line-height: 1.6;
+}
+.card-body .chars { margin-top: 10px; font-size: 12px; color: var(--muted); }
+
+/* 瓜度徽章 */
+.level-badge {
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: 1px;
+  padding: 3px 10px;
+  border: 2px solid var(--ink);
+  color: var(--ink);
+}
+.level-badge.lv1 { background: var(--teal); }
+.level-badge.lv2 { background: var(--yellow); }
+.level-badge.lv3 {
+  background: var(--pink);
+  color: var(--cream);
+  animation: blink 1s steps(2) infinite;
+}
+@keyframes blink { 50% { filter: brightness(1.35); } }
+
+.foot {
+  margin-top: 36px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ---------------- 单瓜详情 ---------------- */
+
+.detail { padding: 20px; }
+.detail h2 { font-size: 24px; line-height: 1.5; margin: 10px 0 16px; color: var(--yellow); }
+.detail .body { font-size: 16px; line-height: 2; margin-bottom: 18px; white-space: pre-wrap; }
+.detail .hook-box {
+  border: var(--px) dashed var(--pink);
+  padding: 12px 16px;
+  font-size: 15px;
+  color: var(--pink);
+  margin-bottom: 18px;
+  line-height: 1.7;
+}
+.detail .hook-box::before { content: "🍉 一句话吃瓜："; color: var(--cream); }
+.detail .source { font-size: 13px; }
+.detail .source a { color: var(--teal); }
+
+.comic-zone { margin-bottom: 18px; }
+.comic-zone img {
+  width: 100%;
+  display: block;
+  border: var(--px) solid var(--ink);
+  box-shadow: var(--px) var(--px) 0 var(--shadow);
+}
+.comic-zone.no-img {
+  border: var(--px) dashed var(--muted);
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+  padding: 32px 12px;
+}
+
+.back { display: inline-block; margin-bottom: 18px; }
+
+/* ---------------- 加载 / 空态 / 错误 ---------------- */
+
+.loading {
+  text-align: center;
+  padding: 48px 0;
+  font-size: 18px;
+  line-height: 2.2;
+}
+.melon-spin {
+  display: inline-block;
+  font-size: 48px;
+  animation: spin 1s steps(4) infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading .sub, .empty-box .sub { font-size: 13px; color: var(--muted); }
+
+.empty-box {
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 17px;
+  line-height: 2.2;
+}
+
+.error-box {
+  padding: 20px;
+  border-color: var(--coral);
+  color: var(--coral);
+  font-size: 14px;
+  line-height: 1.8;
+  word-break: break-all;
+}
+
+@media (max-width: 640px) {
+  .masthead h1 { font-size: 26px; letter-spacing: 3px; }
+  .card { flex-direction: column; }
+  .card-thumb {
+    flex: none;
+    border-right: none;
+    border-bottom: var(--px) solid var(--ink);
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+  }
+  .detail h2 { font-size: 20px; }
+}

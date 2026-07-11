@@ -9,3 +9,9 @@ Thumbs.db
 # Editor
 .vscode/
 .idea/
+
+# Web MVP
+web/.env
+web/data/
+web/*.log
+__pycache__/
