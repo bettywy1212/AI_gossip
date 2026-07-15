@@ -24,6 +24,58 @@
 
 4. 打开 http://localhost:8000
 
+## 团队共建：让异地伙伴也能看到效果
+
+> **注意**：`http://127.0.0.1:8000` 只有你本机能打开。GitHub 仓库地址是  
+> **https://github.com/bettywy1212/AI_gossip**（不是 localhost 链接）。
+
+### 方案 A · 最快（推荐 demo）：内网穿透，2 分钟出公网链接
+
+你本机保持 `uvicorn` 运行，另开一个终端：
+
+```powershell
+# 若未安装：winget install Cloudflare.cloudflared
+cloudflared tunnel --url http://127.0.0.1:8000
+```
+
+终端会打印一行 `https://xxxx.trycloudflare.com`，**把这个链接发给队友**即可——他们浏览器打开就能看到完整效果（投票、主题、榜单都在）。
+
+- 优点：零部署、立刻可看、数据就是你本机这期
+- 缺点：你电脑要开着、关终端链接就失效（黑客松 demo 够用）
+
+### 方案 B · 共建代码：推 GitHub，队友本地跑
+
+1. 你先把改动 push 到 https://github.com/bettywy1212/AI_gossip  
+2. 队友：
+
+   ```bash
+   git clone https://github.com/bettywy1212/AI_gossip.git
+   cd AI_gossip/web
+   pip install -r requirements.txt
+   copy .env.example .env   # Windows；Mac/Linux 用 cp
+   uvicorn server:app --port 8000
+   ```
+
+3. **重要**：`.gitignore` 忽略了 `web/data/`（刊物 JSON + 漫画图），clone 下来默认是空刊。任选其一：
+   - **省事**：你 zip 整个 `web/data/` 文件夹发群，他们解压到 `web/data/`
+   - **长期**：把 demo 数据也 commit 进仓库（见下方「可选：提交 demo 数据」）
+
+### 方案 C · 长期公网（黑客松后）：部署到云
+
+需要 7×24 在线时用 Render / Railway / 阿里云等，把 `web/` 作为 Python 服务部署；`.env` 里填 API Key，数据目录挂载持久盘。比 A/B 多一步，适合正式对外。
+
+### 可选：提交 demo 数据进 GitHub
+
+若希望 clone 即有内容，可在 `.gitignore` 里对 demo 期次放行，或单独建 `web/data-demo/` 并在 README 说明复制到 `web/data/`。
+
+## v1.1（页面能力）
+
+- **测测我**（`#/quiz`）：四题读者类型倾向测试 → 推荐主题与读法并本地记忆
+- **单条竖屏分享图**：详情页「下载分享图」（漫画 + 标题 + 一句话吃瓜）
+- **轻量新闻标记**：当事方下划线、数字圈示、冲突句高亮；过载型自动降噪
+
+刻意不做：送报定制特刊、20 条纯文本加餐、整刊长图（易冲产品调性、加重选择负担）。
+
 ## 定时机制
 
 - `UPDATE_TIMES=08:05,20:05`（`.env` 可改）：早刊收割美国公司夜里放的大招、赶早高峰；晚刊收割国内/欧洲白天的新闻、赶晚间刷手机高峰
@@ -51,6 +103,7 @@ web/
 
 | 方法 | 路径 | 说明 |
 |------|------|------|
+| GET | `/api/issues` | 往期列表（日期 / 条数 / 出刊时间） |
 | GET | `/api/issues/latest` | 最新一期成刊 |
 | GET | `/api/issues/{date}` | 读某日刊（`today` 可作别名） |
 | GET | `/api/status` | 流水线状态 / 下期出刊时间 |

@@ -3,6 +3,7 @@
 对访客只读：整条流水线（联网抓新闻 → 八卦化改写 → 每条生成轻漫画）
 全部在后台定时跑完，出刊 JSON 一次性落盘，前端永远只看到成品。
 
+  GET  /api/issues                往期列表（日期 / 条数等元信息）
   GET  /api/issues/latest         最新一期成刊
   GET  /api/issues/{date}         某日刊（today 可作别名）
   GET  /api/status                流水线状态（是否在印刷中 / 下期时间）
@@ -36,7 +37,7 @@ BASE_URL = os.getenv("DASHSCOPE_BASE_URL", "https://dashscope.aliyuncs.com")
 TEXT_MODEL = os.getenv("TEXT_MODEL", "qwen-plus")
 IMAGE_MODEL = os.getenv("IMAGE_MODEL", "wan2.2-t2i-flash")
 IMAGE_SIZE = os.getenv("IMAGE_SIZE", "1280*720")
-NEWS_COUNT = int(os.getenv("NEWS_COUNT", "5"))
+NEWS_COUNT = int(os.getenv("NEWS_COUNT", "8"))
 UPDATE_TIMES = os.getenv("UPDATE_TIMES", "08:05,20:05")
 ADMIN_TOKEN = os.getenv("ADMIN_TOKEN", "melon-admin")
 
@@ -89,7 +90,9 @@ GOSSIP_SYSTEM_PROMPT = """你是「AI 八卦特刊」的主编，人设是娱乐
   "characters": ["出场公司/人物"],
   "source_title": "来源标题",
   "source_url": "来源链接",
-  "scene": "本条最有戏的一个画面瞬间：谁+在做什么+什么表情，中文，30字内（供漫画导演用）"
+  "scene": "本条最有戏的一个画面瞬间：谁+在做什么+什么表情，中文，30字内（供漫画导演用）",
+  "poll": {"question": "预测型投票题：让读者猜这瓜接下来的走向，16字内，有悬念（如「XX 会认怂道歉吗？」）", "options": ["立场A，7字内", "立场B，7字内"]},
+  "marks": {"conflict": "正文里最戏剧的一句冲突点，直接摘自 body，12-22字，供前端高亮"}
 }"""
 
 NEWS_USER_PROMPT = """联网搜索今天（{today}）以及最近 48 小时内 AI 行业热度最高、最有戏剧性的 {count} 条新闻。优先选：巨头互撕、突然袭击式发布、天价挖人/融资、高管变动、翻车与打脸、监管开刀。逐条按规则改写成八卦特刊。确保 {count} 条互不重复、来自不同事件，来源链接真实可访问。"""
@@ -218,11 +221,64 @@ def issue_path(day: str) -> Path:
     return ISSUE_DIR / f"{day}.json"
 
 
+# 老刊没有 poll 字段时的兜底预测题（按瓜度给不同悬念）
+FALLBACK_POLLS = {
+    1: {"question": "这条会发酵成大瓜吗？", "options": ["会，蹲后续", "就这样了"]},
+    2: {"question": "你猜当事方接下来？", "options": ["嘴硬到底", "悄悄改口"]},
+    3: {"question": "这瓜还有续集吗？", "options": ["肯定有续集", "到此为止"]},
+}
+
+
+def ensure_polls(issue: dict) -> dict:
+    for it in issue.get("items") or []:
+        poll = it.get("poll")
+        ok = (
+            isinstance(poll, dict)
+            and poll.get("question")
+            and isinstance(poll.get("options"), list)
+            and len(poll["options"]) >= 2
+        )
+        if not ok:
+            it["poll"] = dict(FALLBACK_POLLS.get(it.get("melon_level", 1), FALLBACK_POLLS[1]))
+        else:
+            it["poll"]["options"] = poll["options"][:2]
+    return issue
+
+
+def _fallback_conflict(body: str) -> str:
+    """老刊缺 marks.conflict 时，从正文摘一句带戏剧感的短句。"""
+    body = (body or "").strip()
+    if not body:
+        return ""
+    for needle in ("翻译成人话：", "翻译成人话:", "这瓜后头肯定还有续集"):
+        i = body.find(needle)
+        if i != -1:
+            chunk = body[i : i + 40]
+            stop = re.search(r"[。！？]", chunk)
+            return chunk[: stop.end()] if stop else chunk
+    parts = re.split(r"[。！？]", body)
+    for p in parts:
+        p = p.strip()
+        if 10 <= len(p) <= 28:
+            return p
+    return (parts[0] if parts else body)[:22]
+
+
+def ensure_marks(issue: dict) -> dict:
+    for it in issue.get("items") or []:
+        marks = it.get("marks") if isinstance(it.get("marks"), dict) else {}
+        conflict = (marks.get("conflict") or "").strip()
+        if not conflict:
+            conflict = _fallback_conflict(it.get("body", ""))
+        it["marks"] = {"conflict": conflict}
+    return issue
+
+
 def load_issue(day: str) -> dict:
     p = issue_path(day)
     if not p.exists():
         raise HTTPException(404, f"{day} 还没有出刊")
-    return json.loads(p.read_text(encoding="utf-8"))
+    return ensure_marks(ensure_polls(json.loads(p.read_text(encoding="utf-8-sig"))))
 
 
 def save_issue(day: str, issue: dict) -> None:
@@ -239,6 +295,60 @@ def latest_issue_day() -> str | None:
 
 def resolve_day(day: str) -> str:
     return _date.today().isoformat() if day == "today" else day
+
+
+# ---------------------------------------------------------------- 投票（现场互动）
+# votes.json 结构：{ "<date>": { "<idx>": {"a": 12, "b": 5} } }
+VOTES_PATH = DATA_DIR / "votes.json"
+_votes_lock = threading.Lock()
+
+
+def _load_votes() -> dict:
+    if not VOTES_PATH.exists():
+        return {}
+    try:
+        return json.loads(VOTES_PATH.read_text(encoding="utf-8"))
+    except (ValueError, json.JSONDecodeError):
+        return {}
+
+
+def _save_votes(votes: dict) -> None:
+    tmp = VOTES_PATH.with_suffix(".json.tmp")
+    tmp.write_text(json.dumps(votes, ensure_ascii=False, indent=2), encoding="utf-8")
+    tmp.replace(VOTES_PATH)
+
+
+def _seed_counts(day: str, idx: int, melon_level: int) -> dict:
+    """预埋票数：避免 demo 冷启动空榜。按日期+序号做确定性伪随机，瓜度越高基数越大。"""
+    h = sum(day.encode()) * 31 + idx * 7
+    base = 6 + melon_level * 8            # lv1≈14 / lv2≈22 / lv3≈30
+    a = base + (h % 11)
+    b = base + ((h // 11) % 9)
+    return {"a": a, "b": b}
+
+
+def _ensure_item_votes(votes: dict, day: str, idx: int, melon_level: int = 1) -> dict:
+    day_votes = votes.setdefault(day, {})
+    key = str(idx)
+    if key not in day_votes:
+        day_votes[key] = _seed_counts(day, idx, melon_level)
+    return day_votes[key]
+
+
+def get_issue_votes(day: str) -> dict:
+    """某期全部条目的票数（不存在则按该期条目预埋并落盘）。"""
+    try:
+        issue = load_issue(day)
+    except HTTPException:
+        return {}
+    with _votes_lock:
+        votes = _load_votes()
+        before = json.dumps(votes.get(day))
+        for i, it in enumerate(issue.get("items") or []):
+            _ensure_item_votes(votes, day, i, it.get("melon_level", 1))
+        if json.dumps(votes.get(day)) != before:
+            _save_votes(votes)
+        return votes[day]
 
 
 # ---------------------------------------------------------------- 定时流水线
@@ -306,12 +416,12 @@ def run_pipeline(reason: str) -> None:
                 except Exception as e:  # noqa: BLE001 — 单图失败不拖垮整刊
                     log.warning("第 %d 条生图第 %d 次失败：%s", i + 1, attempt, e)
 
-        issue = {
+        issue = ensure_marks(ensure_polls({
             "date": day,
             "mode": "轻八卦模式·独立成篇",
             "generated_at": datetime.now().isoformat(timespec="seconds"),
             "items": items,
-        }
+        }))
         save_issue(day, issue)
         _pipeline_state["last_run"] = issue["generated_at"]
         log.info("出刊完成：%s（%d 条，%d 张图）",
@@ -366,6 +476,25 @@ def start_scheduler():
 
 
 # ---------------------------------------------------------------- API（对访客只读）
+@app.get("/api/issues")
+def list_issues():
+    """往期归档：按日期倒序列出已出刊期次（不含正文，只返回元信息）。"""
+    days = sorted((p.stem for p in ISSUE_DIR.glob("*.json")), reverse=True)
+    out = []
+    for day in days:
+        try:
+            issue = load_issue(day)
+        except HTTPException:
+            continue
+        out.append({
+            "date": day,
+            "generated_at": issue.get("generated_at"),
+            "item_count": len(issue.get("items") or []),
+            "mode": issue.get("mode"),
+        })
+    return {"issues": out}
+
+
 @app.get("/api/issues/latest")
 def get_latest_issue():
     day = latest_issue_day()
@@ -389,6 +518,69 @@ def get_status():
         "next_update": next_update_at().isoformat(timespec="minutes"),
         "update_times": UPDATE_TIMES,
     }
+
+
+@app.get("/api/votes/top")
+def get_top_votes(days: int = 7, limit: int = 3):
+    """「本周最熟的瓜」：近 N 天按总票数排序的条目榜单。"""
+    votes = _load_votes()
+    cutoff = (_date.today() - timedelta(days=days)).isoformat()
+    ranked = []
+    for day in sorted(votes, reverse=True):
+        if day < cutoff:
+            continue
+        try:
+            issue = load_issue(day)
+        except HTTPException:
+            continue
+        items = issue.get("items") or []
+        for key, cnt in votes[day].items():
+            idx = int(key)
+            if idx >= len(items):
+                continue
+            total = cnt.get("a", 0) + cnt.get("b", 0)
+            it = items[idx]
+            ranked.append({
+                "date": day,
+                "idx": idx,
+                "title": it.get("title"),
+                "hook": it.get("hook"),
+                "melon_level": it.get("melon_level", 1),
+                "total": total,
+                "a": cnt.get("a", 0),
+                "b": cnt.get("b", 0),
+                "poll": it.get("poll"),
+            })
+    ranked.sort(key=lambda x: x["total"], reverse=True)
+    return {"days": days, "top": ranked[:limit]}
+
+
+@app.get("/api/votes/{day}")
+def get_votes(day: str):
+    """某期全部条目票数（供卡片钩子和详情页初始分布）。"""
+    day = resolve_day(day)
+    return {"date": day, "votes": get_issue_votes(day)}
+
+
+@app.post("/api/vote")
+def cast_vote(payload: dict):
+    """投一票：{date, idx, choice: 'a'|'b'}。防重复交给前端 localStorage，demo 阶段够用。"""
+    day = str(payload.get("date", ""))
+    idx = payload.get("idx")
+    choice = payload.get("choice")
+    if choice not in ("a", "b") or not isinstance(idx, int) or idx < 0:
+        raise HTTPException(400, "参数不对：需要 date / idx(int) / choice('a'|'b')")
+    issue = load_issue(day)  # 不存在的期次直接 404
+    items = issue.get("items") or []
+    if idx >= len(items):
+        raise HTTPException(404, f"{day} 第 {idx} 条不存在")
+    with _votes_lock:
+        votes = _load_votes()
+        cnt = _ensure_item_votes(votes, day, idx, items[idx].get("melon_level", 1))
+        cnt[choice] += 1
+        _save_votes(votes)
+    total = cnt["a"] + cnt["b"]
+    return {"date": day, "idx": idx, "a": cnt["a"], "b": cnt["b"], "total": total}
 
 
 @app.post("/api/admin/rebuild")
