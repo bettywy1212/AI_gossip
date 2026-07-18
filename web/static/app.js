@@ -7,6 +7,8 @@ const app = document.getElementById("app");
 let issue = null;      // 当前阅读中的刊
 let latestDay = null;  // 最新一期日期
 let status = null;
+let askArticle = null;
+let askController = null;
 
 /* ---------------- 主题 ---------------- */
 
@@ -28,6 +30,91 @@ function setTheme(id, { rerender = true } = {}) {
   if (rerender) render();
 }
 
+/* ---------------- 随读问答 ---------------- */
+
+function askAssistantHtml() {
+  return `<button type="button" class="selection-ask" id="selection-ask" hidden>说人话</button>
+    <aside class="selection-answer" id="selection-answer" hidden aria-live="polite">
+      <button type="button" class="selection-close" id="selection-close" aria-label="关闭解读">×</button>
+      <div class="selection-quote" id="selection-quote"></div>
+      <div class="selection-result" id="selection-result"></div>
+      <small>随读解读</small>
+    </aside>`;
+}
+
+async function explainSelection(text, rect) {
+  const trigger = document.getElementById("selection-ask");
+  const panel = document.getElementById("selection-answer");
+  const quote = document.getElementById("selection-quote");
+  const result = document.getElementById("selection-result");
+  if (!text || !askArticle || !panel || !quote || !result) return;
+  trigger.hidden = true;
+  quote.textContent = `“${text}”`;
+  result.textContent = "正在结合这条新闻解释…";
+  result.className = "selection-result loading";
+  panel.hidden = false;
+  placeSelectionUi(panel, rect);
+  try {
+    const question = `请用简单的话解读我选中的内容“${text}”，并说明它在这条新闻里是什么意思。`;
+    const data = await apiPost("/api/ask", { question, article: askArticle, history: [] });
+    result.textContent = data.answer;
+    result.className = "selection-result";
+  } catch (e) {
+    result.textContent = e.message || "暂时解读不了，请稍后再试";
+    result.className = "selection-result error";
+  }
+}
+
+function placeSelectionUi(el, rect) {
+  const margin = 12;
+  const width = el.offsetWidth || 300;
+  const viewportLeft = Math.min(window.innerWidth - width - margin, Math.max(margin, rect.left + rect.width / 2 - width / 2));
+  const below = rect.bottom + 10;
+  const viewportTop = below + (el.offsetHeight || 48) > window.innerHeight
+    ? Math.max(margin, rect.top - (el.offsetHeight || 48) - 10)
+    : below;
+  el.style.left = `${window.scrollX + viewportLeft}px`;
+  el.style.top = `${window.scrollY + viewportTop}px`;
+}
+
+function setupAskAssistant() {
+  askController?.abort();
+  askController = new AbortController();
+  const { signal } = askController;
+  const body = document.querySelector(".detail .body");
+  const trigger = document.getElementById("selection-ask");
+  const panel = document.getElementById("selection-answer");
+  let selectedText = "";
+  let selectedRect = null;
+  const hide = () => { trigger.hidden = true; panel.hidden = true; };
+  body?.addEventListener("pointerup", () => setTimeout(() => {
+    const selection = window.getSelection();
+    const text = selection?.toString().trim().replace(/\s+/g, " ").slice(0, 160);
+    if (!text || !selection.rangeCount || !body.contains(selection.anchorNode)) {
+      trigger.hidden = true;
+      return;
+    }
+    selectedText = text;
+    selectedRect = selection.getRangeAt(0).getBoundingClientRect();
+    panel.hidden = true;
+    trigger.hidden = false;
+    placeSelectionUi(trigger, selectedRect);
+  }, 0), { signal });
+  trigger?.addEventListener("pointerdown", (e) => e.preventDefault(), { signal });
+  trigger?.addEventListener("click", () => explainSelection(selectedText, selectedRect), { signal });
+  document.getElementById("selection-close")?.addEventListener("click", hide, { signal });
+  document.addEventListener("selectionchange", () => {
+    const selection = window.getSelection();
+    if (!selection || selection.isCollapsed || !selection.toString().trim()) trigger.hidden = true;
+  }, { signal });
+  document.addEventListener("pointerdown", (e) => {
+    if (!trigger?.contains(e.target) && !panel?.contains(e.target) && !body?.contains(e.target)) hide();
+  }, { signal });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") hide();
+  }, { signal });
+}
+
 function themeSwitch() {
   return `<div class="theme-switch">
     ${THEMES.map((t) =>
@@ -47,28 +134,28 @@ const READER_TYPES = {
     id: "overload",
     name: "过载型",
     theme: "mag",
-    blurb: "高强度脑力后，高密度文字耐受下降——短块、大漫画、少干扰更适合你。",
+    blurb: "高强度脑力后，高密度文字耐受下降。短块、大漫画、少干扰更适合你。",
     tip: "建议：先看漫画和一句话吃瓜，正文默认折叠；标记已调成最轻。",
   },
   format: {
     id: "format",
     name: "形式排斥型",
     theme: "tabloid",
-    blurb: "对通稿腔、无冲突报道天然没兴趣——你需要的是权谋、得失和戏剧性。",
+    blurb: "对通稿腔、无冲突报道天然没兴趣。你需要的是权谋、得失和戏剧性。",
     tip: "建议：用复古小报读瓜；冲突句会加高亮，帮你一眼抓到爆点。",
   },
   learn: {
     id: "learn",
     name: "学习厌恶型",
     theme: "candy",
-    blurb: "不是不想知道，而是抗拒「我在上课」——吃瓜式接收才不累。",
+    blurb: "不是不想知道，而是抗拒「我在上课」。吃瓜式接收才不累。",
     tip: "建议：糖果粗野主题更像刷社媒；少术语感，当事方轻轻标一下即可。",
   },
   exec: {
     id: "exec",
     name: "执行型",
     theme: "pixel",
-    blurb: "启动难、易分心、读两行忘前两句——独立成篇 + 时间锚点更对路。",
+    blurb: "启动难、易分心、读两行忘前两句。独立成篇 + 时间锚点更对路。",
     tip: "建议：像素夜刊分块清楚；人物与「三天前/昨晚」时间锚会帮你回线。",
   },
 };
@@ -118,7 +205,11 @@ async function apiPost(path, body) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+  if (!resp.ok) {
+    let detail = `HTTP ${resp.status}`;
+    try { detail = (await resp.json()).detail || detail; } catch {}
+    throw new Error(detail);
+  }
   return resp.json();
 }
 
@@ -196,7 +287,7 @@ async function copyVoteTaunt(date, idx, choice) {
   const it = issue?.items?.[idx];
   if (!it?.poll) return;
   const label = it.poll.options[choice === "a" ? 0 : 1];
-  const text = `我押了「${label}」——${it.hook}\n\n你呢？👇\n${shareUrl(date, idx)}`;
+  const text = `我押了「${label}」：${it.hook}\n\n你呢？👇\n${shareUrl(date, idx)}`;
   try {
     await navigator.clipboard.writeText(text);
     toast("挑衅文案已复制，去群里扔炸弹吧");
@@ -551,7 +642,7 @@ function quizView() {
     <div class="pixel-box quiz-box">
       <div class="quiz-progress">第 ${step + 1} / ${QUIZ_QS.length} 题</div>
       <h2 class="page-title">测测你为什么读不进严肃新闻</h2>
-      <p class="page-sub">四题倾向描述，不是诊断——测完推荐最适配的主题与读法</p>
+      <p class="page-sub">四题倾向描述，不是诊断。测完推荐最适配的主题与读法</p>
       <p class="quiz-q">${esc(cur.q)}</p>
       <div class="quiz-opts">
         ${cur.opts.map((o, i) =>
@@ -823,7 +914,7 @@ async function homeView(date) {
               </span>
             </a>`;
           }).join("")}
-          <p class="top-cta-line">别光吃瓜——<strong>快去表态</strong>，看看你和多数人押同边吗 👇</p>
+          <p class="top-cta-line">别光吃瓜，<strong>快去表态</strong>，看看你和多数人押同边吗 👇</p>
           <a class="pixel-btn small top-cta" href="${ctaHref}">🍉 快去表态 →</a>
         </section>
       </aside>`;
@@ -860,6 +951,14 @@ async function itemView(idx, date) {
   if (!it) { location.hash = date ? `#/issue/${date}` : "#/"; return render(); }
 
   const viewingDate = issue.date;
+  askArticle = {
+    title: it.title,
+    body: it.body,
+    hook: it.hook,
+    characters: it.characters || [],
+    source_title: it.source_title || "",
+    source_url: it.source_url || "",
+  };
   const backHref = date && latestDay && date !== latestDay ? `#/issue/${date}` : "#/";
   const comic = it.image
     ? `<div class="comic-zone"><img src="/images/${esc(it.image)}" alt="八卦漫画"></div>`
@@ -890,8 +989,10 @@ async function itemView(idx, date) {
       </div>
       <div class="source">来源：<a href="${esc(it.source_url)}" target="_blank" rel="noopener">${esc(it.source_title || it.source_url)}</a></div>
     </div>
-    ${foot()}`;
+    ${foot()}
+    ${askAssistantHtml()}`;
   setupTickerScroll();
+  setupAskAssistant();
 }
 
 /* ---------------- 往期归档 ---------------- */
@@ -935,7 +1036,7 @@ function aboutView() {
   app.innerHTML = `${masthead()}${siteNav("about")}
     <div class="pixel-box about-box">
       <h2 class="page-title">关于 AI 八卦特刊</h2>
-      <p>想跟上 AI 行业动态，正经新闻却总读不进去？这里用好奇心包装事实——有漫画、有爆点、有来源，吃瓜读懂。</p>
+      <p>想跟上 AI 行业动态，正经新闻却总读不进去？这里用好奇心包装事实：有漫画、有爆点、有来源，吃瓜读懂。</p>
       <h3>我们是什么</h3>
       <ul>
         <li>趣味改写的<strong>行业瓜特刊</strong>，帮怕严肃报道的人无痛跟上 AI 动态</li>
@@ -945,7 +1046,7 @@ function aboutView() {
       <h3>我们不是什么</h3>
       <ul>
         <li><strong>不是新闻机构</strong>，不做原创调查报道</li>
-        <li>不是假新闻站，也不鼓励标题党误导——事实与时间线须可核对</li>
+        <li>不是假新闻站，也不鼓励标题党误导。事实与时间线须可核对</li>
         <li>不是深度研报或系统课，适合碎片吃瓜，不适合当决策依据</li>
       </ul>
       <h3>免责声明</h3>
@@ -968,7 +1069,7 @@ function aboutView() {
         <li>详情页「下载分享图」：竖屏单条卡片，方便发社媒</li>
         <li>正文轻量标记：当事方下划线、数字圈示、冲突句高亮（过载型自动降噪）</li>
       </ul>
-      <p class="about-note">刻意不做：送报定制特刊、20 条纯文本加餐、整刊长图——避免变资讯 App、加重选择负担。</p>
+      <p class="about-note">刻意不做：送报定制特刊、20 条纯文本加餐、整刊长图。避免变资讯 App、加重选择负担。</p>
     </div>
     ${foot()}`;
   setupTickerScroll();

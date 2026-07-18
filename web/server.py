@@ -25,7 +25,7 @@ from pathlib import Path
 
 import requests
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
@@ -51,6 +51,8 @@ log = logging.getLogger("ai-gossip")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
 app = FastAPI(title="ai-gossip")
+_ask_rate_lock = threading.Lock()
+_ask_rate: dict[str, list[float]] = {}
 
 # ---------------------------------------------------------------- 写作规则
 # 浓缩自 SKILL.md / references/writing-patterns.md，并按「更劲爆」目标加辣
@@ -581,6 +583,68 @@ def cast_vote(payload: dict):
         _save_votes(votes)
     total = cnt["a"] + cnt["b"]
     return {"date": day, "idx": idx, "a": cnt["a"], "b": cnt["b"], "total": total}
+
+
+@app.post("/api/ask")
+def ask_about_news(payload: dict, request: Request):
+    """基于当前新闻回答术语和背景问题，百炼密钥始终只在服务端使用。"""
+    client = request.client.host if request.client else "unknown"
+    now = time.time()
+    with _ask_rate_lock:
+        recent = [t for t in _ask_rate.get(client, []) if now - t < 60]
+        if len(recent) >= 20:
+            raise HTTPException(429, "问得太快了，休息一分钟再继续")
+        recent.append(now)
+        _ask_rate[client] = recent
+
+    question = str(payload.get("question", "")).strip()
+    article = payload.get("article") or {}
+    history = payload.get("history") or []
+    if not question:
+        raise HTTPException(400, "先写下你想问的问题")
+    if len(question) > 500:
+        raise HTTPException(400, "问题太长了，请控制在 500 字以内")
+    if not isinstance(article, dict) or not article.get("title"):
+        raise HTTPException(400, "缺少当前新闻上下文")
+
+    safe_history = []
+    if isinstance(history, list):
+        for msg in history[-6:]:
+            if not isinstance(msg, dict) or msg.get("role") not in ("user", "assistant"):
+                continue
+            content = str(msg.get("content", "")).strip()[:1500]
+            if content:
+                safe_history.append({"role": msg["role"], "content": content})
+
+    context = {
+        "title": str(article.get("title", ""))[:300],
+        "body": str(article.get("body", ""))[:5000],
+        "hook": str(article.get("hook", ""))[:500],
+        "characters": article.get("characters", [])[:12] if isinstance(article.get("characters"), list) else [],
+        "source_title": str(article.get("source_title", ""))[:300],
+        "source_url": str(article.get("source_url", ""))[:1000],
+    }
+    system = """你是 AI 八卦特刊的随读问答助手。读者正在看一条 AI 新闻，可能不懂术语、公司、产品或行业背景。
+回答规则：
+1. 先用一句最直白的话回答，再补充必要背景。
+2. 默认控制在 180 个汉字以内；复杂问题可分 2-4 个短点。
+3. 优先依据提供的新闻上下文。上下文没有明确写的内容，要说“这条新闻没有说明”，不要编造数字、引语或动机。
+4. 解释术语时必须说明“它与这条新闻有什么关系”。
+5. 口吻友好、清楚，可以轻松，但不要硬凹梗，不用婚恋或性别隐喻。
+6. 不使用 markdown 表格，不以“作为 AI”开头。"""
+    messages = [
+        {"role": "system", "content": system},
+        {"role": "user", "content": "当前新闻上下文：\n" + json.dumps(context, ensure_ascii=False)},
+        {"role": "assistant", "content": "收到，我会只围绕这条新闻和必要的通用背景解释。"},
+        *safe_history,
+        {"role": "user", "content": question},
+    ]
+    try:
+        answer = chat(messages, enable_search=False).strip()
+    except UpstreamError as exc:
+        log.warning("随读问答失败: %s", exc)
+        raise HTTPException(502, "问答助手暂时没接上百炼，请稍后再试") from exc
+    return {"answer": answer, "model": TEXT_MODEL}
 
 
 @app.post("/api/admin/rebuild")
