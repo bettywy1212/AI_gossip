@@ -9,24 +9,9 @@ Thumbs.db
 # Editor
 .vscode/
 .idea/
-.playwright-cli/
-
-# Claude Code 本地个人配置（团队共享配置走 .claude/settings.json）
-.claude/settings.local.json
 
 # Web MVP
 web/.env
+web/data/
 web/*.log
 __pycache__/
-
-# Runtime data：默认忽略，demo 刊物 / 配图 / 投票快照除外（供 clone 即看）
-web/data/*
-!web/data/issues/
-!web/data/images/
-!web/data/votes.json
-web/data/issues/*
-!web/data/issues/*.json
-web/data/images/*
-!web/data/images/*.png
-web/data/**/*.tmp
-web/data/**/*.json.tmp

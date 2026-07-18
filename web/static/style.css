@@ -1,4 +1,4 @@
-/* AI 八卦特刊 · 三主题（像素夜刊 / 复古娱乐小报 / 糖果新粗野）
+/* AI 八卦特刊 · 四主题（像素夜刊 / 复古娱乐小报 / 糖果新粗野 / 轻杂志）
    结构样式只写一份，主题差异全部走 body[data-theme] 的 CSS 变量 */
 
 /* ================= 主题令牌 ================= */
@@ -6,19 +6,19 @@
 /* —— 默认：像素夜刊 —— */
 body {
   --px: 4px;                          /* 描边/投影基准 */
-  --bg: #2b2138;
-  --bg-image: radial-gradient(circle, rgba(255, 255, 255, .05) 1px, transparent 1px);
+  --bg: #171522;
+  --bg-image: radial-gradient(circle, rgba(255, 255, 255, .055) 1px, transparent 1px);
   --bg-size: 12px 12px;
-  --panel: #3d2f52;
-  --panel-2: #4a3a63;
-  --ink: #1a1226;
-  --text: #faf6ee;
-  --muted: #9a8bb5;
-  --accent: #e85a4f;                  /* 珊瑚红 */
-  --hl: #f4b942;                      /* 高亮黄 */
-  --link: #41b3a3;                    /* 青 */
-  --hot: #ff2e88;                     /* 爆点粉 */
-  --shadow: #140e1f;
+  --panel: #252136;
+  --panel-2: #302a44;
+  --ink: #11101a;
+  --text: #f7f0df;
+  --muted: #b7adcd;
+  --accent: #ff6f91;                  /* 少量爆点粉，只用于徽章/警示 */
+  --hl: #f3c95f;                      /* 主高亮黄 */
+  --link: #80d8c6;                    /* 青绿链接/行动 */
+  --hot: #ff6f91;
+  --shadow: #090814;
 
   --font-body: "Fusion Pixel 12px Proportional SC", "SimSun", monospace;
   --font-display: "Fusion Pixel 12px Proportional SC", "SimSun", monospace;
@@ -31,8 +31,8 @@ body {
   --btn-shadow: var(--px) var(--px) 0 var(--ink);
   --title-color: var(--hl);
   --title-shadow: var(--px) var(--px) 0 var(--ink),
-                  calc(var(--px) * 2) calc(var(--px) * 2) 0 var(--accent);
-  --h2-color: var(--hl);
+                  calc(var(--px) * 2) calc(var(--px) * 2) 0 var(--shadow);
+  --h2-color: var(--text);
   --hook-color: var(--hl);
   --ticker-bg: var(--ink);
   --ticker-text: var(--hl);
@@ -207,9 +207,13 @@ body[data-theme="pixel"] img { image-rendering: pixelated; }
   margin-bottom: 10px;
 }
 .theme-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   font-family: var(--font-display);
-  font-size: 12px;
-  padding: 6px 12px;
+  font-size: 13px;
+  min-height: 32px;
+  padding: 7px 10px;
   cursor: pointer;
   color: var(--text);
   background: var(--panel);
@@ -225,6 +229,21 @@ body[data-theme="pixel"] img { image-rendering: pixelated; }
   font-weight: bold;
 }
 .theme-chip.preview { opacity: .85; }
+.theme-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  color: var(--ink);
+  background: var(--hl);
+  border: 1px solid var(--ink);
+  line-height: 1;
+}
+.theme-chip.active .theme-key {
+  background: var(--panel);
+}
+.theme-icon { line-height: 1; }
 
 /* ---------------- 站点导航 ---------------- */
 
@@ -413,18 +432,30 @@ body[data-theme="pixel"] .card-thumb img { transition-timing-function: steps(3);
 .card-body { flex: 1; padding: 16px 18px; min-width: 0; }
 .card-body h3 {
   font-family: var(--font-display);
-  font-size: 19px;
-  line-height: 1.5;
+  font-size: 21px;
+  line-height: 1.45;
   color: var(--text);
-  margin-top: 8px;
+  margin-top: 10px;
 }
 .card-body .hook {
   margin-top: 10px;
-  font-size: 14px;
+  font-size: 15px;
   color: var(--hook-color);
   line-height: 1.6;
 }
 .card-body .chars { margin-top: 10px; font-size: 12px; color: var(--muted); }
+.read-more {
+  display: inline-block;
+  margin-top: 12px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  color: var(--ink);
+  background: var(--link);
+  border: 2px solid var(--ink);
+  border-radius: calc(var(--radius) * .5);
+  padding: 5px 10px;
+  box-shadow: 3px 3px 0 var(--shadow);
+}
 
 /* 瓜度徽章 */
 .level-badge {
@@ -497,8 +528,28 @@ body[data-theme="pixel"] .card-thumb img { transition-timing-function: steps(3);
 .body-fold.open .body { display: block; }
 
 .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
-.detail .source { font-size: 13px; }
-.detail .source a { color: var(--link); }
+.detail .source {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.detail .source span {
+  flex: 0 0 auto;
+  color: var(--muted);
+}
+.detail .source a {
+  display: inline-block;
+  color: var(--ink);
+  background: var(--link);
+  border: 2px solid var(--ink);
+  border-radius: calc(var(--radius) * .5);
+  padding: 6px 10px;
+  text-decoration: none;
+  box-shadow: 3px 3px 0 var(--shadow);
+}
+.detail .source a:hover { background: var(--btn-bg-hover); }
 
 /* 往期 / 关于 */
 .archive-list { display: flex; flex-direction: column; gap: 12px; }
@@ -1220,7 +1271,25 @@ body[data-theme="mag"] .body-toggle { box-shadow: none; }
 }
 
 @media (max-width: 640px) {
-  .masthead h1 { font-size: 26px; letter-spacing: 3px; }
+  #app { padding: 14px 12px 48px; }
+  .theme-switch {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+    justify-content: stretch;
+  }
+  .theme-chip {
+    justify-content: center;
+    min-width: 0;
+    font-size: 12px;
+    padding: 7px 5px;
+  }
+  .mast-badge {
+    position: static;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+  .masthead h1 { font-size: 28px; letter-spacing: 1px; }
   .card { flex-direction: column; }
   .card-thumb {
     flex: none;
@@ -1229,6 +1298,7 @@ body[data-theme="mag"] .body-toggle { box-shadow: none; }
     min-height: 0;
     aspect-ratio: 16 / 9;
   }
-  .detail h2 { font-size: 20px; }
-  .theme-switch { justify-content: center; }
+  .card-body h3 { font-size: 20px; }
+  .detail h2 { font-size: 22px; }
+  .detail .source { flex-direction: column; }
 }
