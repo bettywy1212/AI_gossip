@@ -9,6 +9,10 @@ Thumbs.db
 # Editor
 .vscode/
 .idea/
+.playwright-cli/
+
+# Claude Code 本地个人配置（团队共享配置走 .claude/settings.json）
+.claude/settings.local.json
 
 # Web MVP
 web/.env

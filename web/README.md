@@ -107,6 +107,7 @@ web/
 | GET | `/api/issues/latest` | 最新一期成刊 |
 | GET | `/api/issues/{date}` | 读某日刊（`today` 可作别名） |
 | GET | `/api/status` | 流水线状态 / 下期出刊时间 |
+| POST | `/api/ask` | 基于当前新闻上下文调用百炼进行随读问答 |
 | POST | `/api/admin/rebuild?token=<ADMIN_TOKEN>` | 隐藏入口：强制立即重跑一期（后台执行） |
 
 ## 与 skill 的关系

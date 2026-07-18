@@ -7,6 +7,8 @@ const app = document.getElementById("app");
 let issue = null;      // 当前阅读中的刊
 let latestDay = null;  // 最新一期日期
 let status = null;
+let askArticle = null;
+let askHistory = [];
 
 /* ---------------- 主题 ---------------- */
 
@@ -28,6 +30,111 @@ function setTheme(id, { rerender = true } = {}) {
   if (rerender) render();
 }
 
+/* ---------------- 随读问答 ---------------- */
+
+function askAssistantHtml() {
+  return `<button type="button" class="ask-launcher" id="ask-launcher" aria-controls="ask-drawer" aria-expanded="false">问问这条</button>
+    <div class="ask-scrim" id="ask-scrim" hidden></div>
+    <aside class="ask-drawer" id="ask-drawer" aria-hidden="true" aria-label="AI 随读问答">
+      <header class="ask-head">
+        <div><strong>随读问答</strong><span>由百炼提供回答</span></div>
+        <button type="button" class="ask-close" id="ask-close" aria-label="关闭问答助手">关闭</button>
+      </header>
+      <div class="ask-context"><span>正在读</span><strong>${esc(askArticle?.title || "当前新闻")}</strong></div>
+      <div class="ask-messages" id="ask-messages" aria-live="polite">
+        <div class="ask-message assistant">遇到不懂的词，直接问我。我会结合这条新闻解释。</div>
+      </div>
+      <div class="ask-prompts" id="ask-prompts">
+        <button type="button">这条新闻在说什么？</button>
+        <button type="button">这里最关键的术语是什么？</button>
+        <button type="button">这对普通用户有什么影响？</button>
+      </div>
+      <form class="ask-form" id="ask-form">
+        <label for="ask-input">你的问题</label>
+        <div class="ask-compose">
+          <textarea id="ask-input" rows="2" maxlength="500" placeholder="例如：什么是 Agentic AI？" required></textarea>
+          <button type="submit" id="ask-send">发送</button>
+        </div>
+        <p class="ask-helper">回答仅用于理解新闻，请以原始来源为准。</p>
+      </form>
+    </aside>`;
+}
+
+function openAskAssistant() {
+  const drawer = document.getElementById("ask-drawer");
+  const scrim = document.getElementById("ask-scrim");
+  const launcher = document.getElementById("ask-launcher");
+  if (!drawer || !scrim || !launcher) return;
+  drawer.classList.add("open");
+  drawer.setAttribute("aria-hidden", "false");
+  launcher.setAttribute("aria-expanded", "true");
+  scrim.hidden = false;
+  requestAnimationFrame(() => scrim.classList.add("open"));
+  setTimeout(() => document.getElementById("ask-input")?.focus(), 180);
+}
+
+function closeAskAssistant() {
+  const drawer = document.getElementById("ask-drawer");
+  const scrim = document.getElementById("ask-scrim");
+  const launcher = document.getElementById("ask-launcher");
+  if (!drawer || !scrim || !launcher) return;
+  drawer.classList.remove("open");
+  drawer.setAttribute("aria-hidden", "true");
+  launcher.setAttribute("aria-expanded", "false");
+  scrim.classList.remove("open");
+  setTimeout(() => { scrim.hidden = true; }, 180);
+  launcher.focus();
+}
+
+function addAskMessage(role, content, state = "") {
+  const list = document.getElementById("ask-messages");
+  if (!list) return null;
+  const el = document.createElement("div");
+  el.className = `ask-message ${role}${state ? ` ${state}` : ""}`;
+  el.textContent = content;
+  list.appendChild(el);
+  list.scrollTop = list.scrollHeight;
+  return el;
+}
+
+async function submitAsk(question) {
+  const input = document.getElementById("ask-input");
+  const send = document.getElementById("ask-send");
+  const prompts = document.getElementById("ask-prompts");
+  const text = String(question || input?.value || "").trim();
+  if (!text || !askArticle || send?.disabled) return;
+  if (input) input.value = "";
+  if (prompts) prompts.hidden = true;
+  addAskMessage("user", text);
+  const waiting = addAskMessage("assistant", "正在结合这条新闻想一想…", "loading");
+  if (send) { send.disabled = true; send.textContent = "回答中"; }
+  try {
+    const data = await apiPost("/api/ask", { question: text, article: askArticle, history: askHistory });
+    if (waiting) { waiting.textContent = data.answer; waiting.classList.remove("loading"); }
+    askHistory.push({ role: "user", content: text }, { role: "assistant", content: data.answer });
+    askHistory = askHistory.slice(-6);
+  } catch (e) {
+    if (waiting) { waiting.textContent = e.message || "暂时回答不了，请稍后再试"; waiting.classList.remove("loading"); waiting.classList.add("error"); }
+  } finally {
+    if (send) { send.disabled = false; send.textContent = "发送"; }
+    input?.focus();
+  }
+}
+
+function setupAskAssistant() {
+  document.getElementById("ask-launcher")?.addEventListener("click", openAskAssistant);
+  document.getElementById("ask-close")?.addEventListener("click", closeAskAssistant);
+  document.getElementById("ask-scrim")?.addEventListener("click", closeAskAssistant);
+  document.getElementById("ask-form")?.addEventListener("submit", (e) => { e.preventDefault(); submitAsk(); });
+  document.getElementById("ask-input")?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submitAsk(); }
+  });
+  document.querySelectorAll("#ask-prompts button").forEach((btn) => btn.addEventListener("click", () => submitAsk(btn.textContent)));
+  document.getElementById("ask-drawer")?.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && document.getElementById("ask-drawer")?.classList.contains("open")) closeAskAssistant();
+  });
+}
+
 function themeSwitch() {
   return `<div class="theme-switch">
     ${THEMES.map((t) =>
@@ -47,28 +154,28 @@ const READER_TYPES = {
     id: "overload",
     name: "过载型",
     theme: "mag",
-    blurb: "高强度脑力后，高密度文字耐受下降——短块、大漫画、少干扰更适合你。",
+    blurb: "高强度脑力后，高密度文字耐受下降。短块、大漫画、少干扰更适合你。",
     tip: "建议：先看漫画和一句话吃瓜，正文默认折叠；标记已调成最轻。",
   },
   format: {
     id: "format",
     name: "形式排斥型",
     theme: "tabloid",
-    blurb: "对通稿腔、无冲突报道天然没兴趣——你需要的是权谋、得失和戏剧性。",
+    blurb: "对通稿腔、无冲突报道天然没兴趣。你需要的是权谋、得失和戏剧性。",
     tip: "建议：用复古小报读瓜；冲突句会加高亮，帮你一眼抓到爆点。",
   },
   learn: {
     id: "learn",
     name: "学习厌恶型",
     theme: "candy",
-    blurb: "不是不想知道，而是抗拒「我在上课」——吃瓜式接收才不累。",
+    blurb: "不是不想知道，而是抗拒「我在上课」。吃瓜式接收才不累。",
     tip: "建议：糖果粗野主题更像刷社媒；少术语感，当事方轻轻标一下即可。",
   },
   exec: {
     id: "exec",
     name: "执行型",
     theme: "pixel",
-    blurb: "启动难、易分心、读两行忘前两句——独立成篇 + 时间锚点更对路。",
+    blurb: "启动难、易分心、读两行忘前两句。独立成篇 + 时间锚点更对路。",
     tip: "建议：像素夜刊分块清楚；人物与「三天前/昨晚」时间锚会帮你回线。",
   },
 };
@@ -118,7 +225,11 @@ async function apiPost(path, body) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+  if (!resp.ok) {
+    let detail = `HTTP ${resp.status}`;
+    try { detail = (await resp.json()).detail || detail; } catch {}
+    throw new Error(detail);
+  }
   return resp.json();
 }
 
@@ -196,7 +307,7 @@ async function copyVoteTaunt(date, idx, choice) {
   const it = issue?.items?.[idx];
   if (!it?.poll) return;
   const label = it.poll.options[choice === "a" ? 0 : 1];
-  const text = `我押了「${label}」——${it.hook}\n\n你呢？👇\n${shareUrl(date, idx)}`;
+  const text = `我押了「${label}」：${it.hook}\n\n你呢？👇\n${shareUrl(date, idx)}`;
   try {
     await navigator.clipboard.writeText(text);
     toast("挑衅文案已复制，去群里扔炸弹吧");
@@ -551,7 +662,7 @@ function quizView() {
     <div class="pixel-box quiz-box">
       <div class="quiz-progress">第 ${step + 1} / ${QUIZ_QS.length} 题</div>
       <h2 class="page-title">测测你为什么读不进严肃新闻</h2>
-      <p class="page-sub">四题倾向描述，不是诊断——测完推荐最适配的主题与读法</p>
+      <p class="page-sub">四题倾向描述，不是诊断。测完推荐最适配的主题与读法</p>
       <p class="quiz-q">${esc(cur.q)}</p>
       <div class="quiz-opts">
         ${cur.opts.map((o, i) =>
@@ -823,7 +934,7 @@ async function homeView(date) {
               </span>
             </a>`;
           }).join("")}
-          <p class="top-cta-line">别光吃瓜——<strong>快去表态</strong>，看看你和多数人押同边吗 👇</p>
+          <p class="top-cta-line">别光吃瓜，<strong>快去表态</strong>，看看你和多数人押同边吗 👇</p>
           <a class="pixel-btn small top-cta" href="${ctaHref}">🍉 快去表态 →</a>
         </section>
       </aside>`;
@@ -860,6 +971,15 @@ async function itemView(idx, date) {
   if (!it) { location.hash = date ? `#/issue/${date}` : "#/"; return render(); }
 
   const viewingDate = issue.date;
+  askArticle = {
+    title: it.title,
+    body: it.body,
+    hook: it.hook,
+    characters: it.characters || [],
+    source_title: it.source_title || "",
+    source_url: it.source_url || "",
+  };
+  askHistory = [];
   const backHref = date && latestDay && date !== latestDay ? `#/issue/${date}` : "#/";
   const comic = it.image
     ? `<div class="comic-zone"><img src="/images/${esc(it.image)}" alt="八卦漫画"></div>`
@@ -890,8 +1010,10 @@ async function itemView(idx, date) {
       </div>
       <div class="source">来源：<a href="${esc(it.source_url)}" target="_blank" rel="noopener">${esc(it.source_title || it.source_url)}</a></div>
     </div>
-    ${foot()}`;
+    ${foot()}
+    ${askAssistantHtml()}`;
   setupTickerScroll();
+  setupAskAssistant();
 }
 
 /* ---------------- 往期归档 ---------------- */
@@ -935,7 +1057,7 @@ function aboutView() {
   app.innerHTML = `${masthead()}${siteNav("about")}
     <div class="pixel-box about-box">
       <h2 class="page-title">关于 AI 八卦特刊</h2>
-      <p>想跟上 AI 行业动态，正经新闻却总读不进去？这里用好奇心包装事实——有漫画、有爆点、有来源，吃瓜读懂。</p>
+      <p>想跟上 AI 行业动态，正经新闻却总读不进去？这里用好奇心包装事实：有漫画、有爆点、有来源，吃瓜读懂。</p>
       <h3>我们是什么</h3>
       <ul>
         <li>趣味改写的<strong>行业瓜特刊</strong>，帮怕严肃报道的人无痛跟上 AI 动态</li>
@@ -945,7 +1067,7 @@ function aboutView() {
       <h3>我们不是什么</h3>
       <ul>
         <li><strong>不是新闻机构</strong>，不做原创调查报道</li>
-        <li>不是假新闻站，也不鼓励标题党误导——事实与时间线须可核对</li>
+        <li>不是假新闻站，也不鼓励标题党误导。事实与时间线须可核对</li>
         <li>不是深度研报或系统课，适合碎片吃瓜，不适合当决策依据</li>
       </ul>
       <h3>免责声明</h3>
@@ -968,7 +1090,7 @@ function aboutView() {
         <li>详情页「下载分享图」：竖屏单条卡片，方便发社媒</li>
         <li>正文轻量标记：当事方下划线、数字圈示、冲突句高亮（过载型自动降噪）</li>
       </ul>
-      <p class="about-note">刻意不做：送报定制特刊、20 条纯文本加餐、整刊长图——避免变资讯 App、加重选择负担。</p>
+      <p class="about-note">刻意不做：送报定制特刊、20 条纯文本加餐、整刊长图。避免变资讯 App、加重选择负担。</p>
     </div>
     ${foot()}`;
   setupTickerScroll();
