@@ -6,10 +6,26 @@ let status = null;  // 流水线状态缓存
 
 const MELON = { 1: "🍉", 2: "🍉🍉", 3: "🍉🍉🍉" };
 const MELON_LABEL = { 1: "小瓜", 2: "中瓜", 3: "大瓜" };
+const THEMES = [
+  { id: "night", label: "夜刊" },
+  { id: "paper", label: "纸刊" },
+  { id: "mint", label: "薄荷" },
+  { id: "contrast", label: "高亮" },
+];
+const DEFAULT_THEME = "night";
+let currentTheme = localStorage.getItem("ai-gossip-theme") || DEFAULT_THEME;
 
 const esc = (s) =>
   String(s ?? "").replace(/[&<>"']/g, (c) =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+function applyTheme(theme) {
+  currentTheme = THEMES.some((t) => t.id === theme) ? theme : DEFAULT_THEME;
+  document.body.dataset.theme = currentTheme;
+  localStorage.setItem("ai-gossip-theme", currentTheme);
+}
+
+applyTheme(currentTheme);
 
 /* ---------------- 公共件 ---------------- */
 
@@ -22,10 +38,16 @@ function masthead() {
     : "";
   return `
   <header class="masthead">
-    <div class="mast-top" onclick="location.hash='#/'">
+    <div class="theme-switcher" aria-label="主题切换">
+      ${THEMES.map((theme, idx) => `
+        <button class="theme-btn" type="button" data-theme-option="${theme.id}" title="快捷键 ${idx + 1}">
+          <span class="theme-key">${idx + 1}</span>${theme.label}
+        </button>`).join("")}
+    </div>
+    <div class="mast-top" onclick="location.hash='#/'" role="link" tabindex="0">
       <span class="mast-badge">周四见？不，半天见</span>
       <h1>AI 八卦特刊</h1>
-      <div class="tagline">严肃新闻看麻了？来这儿吃口瓜 🍉</div>
+      <div class="tagline">像素夜刊 · 严肃新闻看麻了？来这儿吃口瓜</div>
     </div>
     ${ticker}
   </header>`;
@@ -111,6 +133,7 @@ async function homeView() {
           <h3>${esc(it.title)}</h3>
           <div class="hook">${esc(it.hook)}</div>
           <div class="chars">出场：${esc((it.characters || []).join(" · "))}</div>
+          <div class="read-more">阅读全文</div>
         </div>
       </article>`;
     })
@@ -138,7 +161,10 @@ async function itemView(idx) {
       ${comic}
       <div class="body">${esc(it.body)}</div>
       <div class="hook-box">${esc(it.hook)}</div>
-      <div class="source">来源：<a href="${esc(it.source_url)}" target="_blank" rel="noopener">${esc(it.source_title || it.source_url)}</a></div>
+      <div class="source">
+        <span>来源</span>
+        <a href="${esc(it.source_url)}" target="_blank" rel="noopener">${esc(it.source_title || it.source_url)}</a>
+      </div>
     </div>`;
 }
 
@@ -152,4 +178,16 @@ function render() {
 }
 
 window.addEventListener("hashchange", render);
+document.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-theme-option]");
+  if (!button) return;
+  event.stopPropagation();
+  applyTheme(button.dataset.themeOption);
+});
+document.addEventListener("keydown", (event) => {
+  if (event.target.closest("input, textarea, select, button, a")) return;
+  const idx = Number(event.key) - 1;
+  if (!THEMES[idx]) return;
+  applyTheme(THEMES[idx].id);
+});
 render();

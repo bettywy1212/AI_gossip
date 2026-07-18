@@ -1,18 +1,80 @@
 /* AI 八卦特刊 · 像素杂志风 */
 
 :root {
-  --bg: #2b2138;          /* 深紫夜幕 */
-  --panel: #3d2f52;
-  --panel-2: #4a3a63;
-  --ink: #1a1226;
-  --cream: #faf6ee;
-  --coral: #e85a4f;
-  --teal: #41b3a3;
-  --yellow: #f4b942;
-  --pink: #ff2e88;
-  --shadow: #140e1f;
-  --muted: #9a8bb5;
+  --bg: #171522;
+  --bg-dot: rgba(255, 255, 255, .055);
+  --panel: #252136;
+  --panel-2: #302a44;
+  --surface: #f8f0db;
+  --ink: #11101a;
+  --cream: #f7f0df;
+  --text: #f7f0df;
+  --text-strong: #fff8e8;
+  --muted: #b7adcd;
+  --accent: #f3c95f;
+  --accent-2: #80d8c6;
+  --danger: #ff6f91;
+  --shadow: #090814;
+  --button-bg: #f3c95f;
+  --button-hover: #ffe08a;
   --px: 4px;              /* 像素描边基准 */
+}
+
+body[data-theme="paper"] {
+  --bg: #efe6d1;
+  --bg-dot: rgba(67, 50, 29, .12);
+  --panel: #fff8e8;
+  --panel-2: #f4e8cf;
+  --surface: #211b2f;
+  --ink: #2b2138;
+  --cream: #fff8e8;
+  --text: #2b2138;
+  --text-strong: #17101f;
+  --muted: #6f637f;
+  --accent: #9d5a2f;
+  --accent-2: #1f7d73;
+  --danger: #b33b67;
+  --shadow: #c9b78d;
+  --button-bg: #f6cf70;
+  --button-hover: #ffe294;
+}
+
+body[data-theme="mint"] {
+  --bg: #122523;
+  --bg-dot: rgba(128, 216, 198, .10);
+  --panel: #193732;
+  --panel-2: #22483f;
+  --surface: #eff8ed;
+  --ink: #081613;
+  --cream: #f5fff7;
+  --text: #eefcf4;
+  --text-strong: #ffffff;
+  --muted: #a8d1c3;
+  --accent: #ffe07a;
+  --accent-2: #80d8c6;
+  --danger: #ff8d7a;
+  --shadow: #06100e;
+  --button-bg: #80d8c6;
+  --button-hover: #a7eadc;
+}
+
+body[data-theme="contrast"] {
+  --bg: #050506;
+  --bg-dot: rgba(255, 255, 255, .08);
+  --panel: #141414;
+  --panel-2: #222222;
+  --surface: #ffffff;
+  --ink: #000000;
+  --cream: #ffffff;
+  --text: #ffffff;
+  --text-strong: #ffffff;
+  --muted: #d4d4d4;
+  --accent: #ffd84d;
+  --accent-2: #8fffe8;
+  --danger: #ff7aa8;
+  --shadow: #000000;
+  --button-bg: #ffd84d;
+  --button-hover: #fff07e;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -22,10 +84,10 @@ html { image-rendering: pixelated; }
 body {
   font-family: "Fusion Pixel 12px Proportional SC", "SimSun", monospace;
   background: var(--bg);
-  color: var(--cream);
+  color: var(--text);
   min-height: 100vh;
   background-image:
-    radial-gradient(circle, rgba(255,255,255,.05) 1px, transparent 1px);
+    radial-gradient(circle, var(--bg-dot) 1px, transparent 1px);
   background-size: 12px 12px;
 }
 
@@ -55,7 +117,7 @@ body::after {
   font-family: inherit;
   font-size: 20px;
   color: var(--ink);
-  background: var(--yellow);
+  background: var(--button-bg);
   border: var(--px) solid var(--ink);
   box-shadow: var(--px) var(--px) 0 var(--ink);
   padding: 14px 28px;
@@ -63,7 +125,7 @@ body::after {
   user-select: none;
   text-decoration: none;
 }
-.pixel-btn:hover { background: #ffd066; }
+.pixel-btn:hover { background: var(--button-hover); }
 .pixel-btn:active {
   transform: translate(var(--px), var(--px));
   box-shadow: 0 0 0 var(--ink);
@@ -73,6 +135,60 @@ body::after {
 /* ---------------- 报头 ---------------- */
 
 .masthead { margin-bottom: 18px; }
+
+.theme-switcher {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.theme-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 32px;
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1;
+  color: var(--text);
+  background: var(--panel);
+  border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--shadow);
+  padding: 7px 9px;
+  cursor: pointer;
+}
+
+.theme-btn:hover {
+  color: var(--ink);
+  background: var(--accent);
+}
+
+.theme-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  color: var(--ink);
+  background: var(--accent);
+  border: 1px solid var(--ink);
+}
+
+body[data-theme="night"] .theme-btn[data-theme-option="night"],
+body[data-theme="paper"] .theme-btn[data-theme-option="paper"],
+body[data-theme="mint"] .theme-btn[data-theme-option="mint"],
+body[data-theme="contrast"] .theme-btn[data-theme-option="contrast"] {
+  color: var(--ink);
+  background: var(--accent);
+}
+
+body[data-theme="night"] .theme-btn[data-theme-option="night"] .theme-key,
+body[data-theme="paper"] .theme-btn[data-theme-option="paper"] .theme-key,
+body[data-theme="mint"] .theme-btn[data-theme-option="mint"] .theme-key,
+body[data-theme="contrast"] .theme-btn[data-theme-option="contrast"] .theme-key {
+  background: var(--surface);
+}
 
 .mast-top {
   text-align: center;
@@ -90,23 +206,22 @@ body::after {
   right: 10px;
   font-size: 11px;
   color: var(--ink);
-  background: var(--pink);
-  color: var(--cream);
+  background: var(--danger);
   padding: 3px 8px;
   border: 2px solid var(--ink);
   transform: rotate(3deg);
 }
 .masthead h1 {
   font-size: 38px;
-  letter-spacing: 6px;
-  color: var(--yellow);
+  letter-spacing: 3px;
+  color: var(--accent);
   text-shadow: var(--px) var(--px) 0 var(--ink),
-               calc(var(--px)*2) calc(var(--px)*2) 0 var(--coral);
+               calc(var(--px)*2) calc(var(--px)*2) 0 var(--shadow);
 }
 .masthead .tagline {
   margin-top: 8px;
   font-size: 13px;
-  color: var(--teal);
+  color: var(--accent-2);
 }
 
 /* 走马灯：本期 hook 滚动 */
@@ -121,7 +236,7 @@ body::after {
   display: inline-block;
   padding: 8px 0;
   font-size: 13px;
-  color: var(--yellow);
+  color: var(--accent);
   animation: ticker 45s linear infinite;
 }
 .ticker-inner span { margin-right: 48px; }
@@ -138,7 +253,7 @@ body::after {
   margin-bottom: 18px;
   padding: 0 4px;
 }
-.info-bar span:first-child { color: var(--teal); }
+.info-bar span:first-child { color: var(--accent-2); }
 
 /* ---------------- 瓜田卡片 ---------------- */
 
@@ -175,14 +290,30 @@ body::after {
 }
 
 .card-body { flex: 1; padding: 16px 18px; min-width: 0; }
-.card-body h3 { font-size: 19px; line-height: 1.5; color: var(--cream); margin-top: 8px; }
+.card-body h3 {
+  font-size: 21px;
+  line-height: 1.45;
+  color: var(--text-strong);
+  margin-top: 10px;
+}
 .card-body .hook {
   margin-top: 10px;
-  font-size: 14px;
-  color: var(--yellow);
+  font-size: 15px;
+  color: var(--accent);
   line-height: 1.6;
 }
 .card-body .chars { margin-top: 10px; font-size: 12px; color: var(--muted); }
+
+.read-more {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--ink);
+  background: var(--accent-2);
+  border: 2px solid var(--ink);
+  padding: 5px 10px;
+  box-shadow: 3px 3px 0 var(--shadow);
+}
 
 /* 瓜度徽章 */
 .level-badge {
@@ -193,14 +324,12 @@ body::after {
   border: 2px solid var(--ink);
   color: var(--ink);
 }
-.level-badge.lv1 { background: var(--teal); }
-.level-badge.lv2 { background: var(--yellow); }
+.level-badge.lv1 { background: var(--accent-2); }
+.level-badge.lv2 { background: var(--accent); }
 .level-badge.lv3 {
-  background: var(--pink);
-  color: var(--cream);
-  animation: blink 1s steps(2) infinite;
+  background: var(--danger);
+  color: var(--ink);
 }
-@keyframes blink { 50% { filter: brightness(1.35); } }
 
 .foot {
   margin-top: 36px;
@@ -212,19 +341,50 @@ body::after {
 /* ---------------- 单瓜详情 ---------------- */
 
 .detail { padding: 20px; }
-.detail h2 { font-size: 24px; line-height: 1.5; margin: 10px 0 16px; color: var(--yellow); }
-.detail .body { font-size: 16px; line-height: 2; margin-bottom: 18px; white-space: pre-wrap; }
+.detail h2 {
+  font-size: 28px;
+  line-height: 1.45;
+  margin: 12px 0 18px;
+  color: var(--text-strong);
+}
+.detail .body {
+  font-size: 18px;
+  line-height: 1.95;
+  margin-bottom: 18px;
+  white-space: pre-wrap;
+  color: var(--text);
+}
 .detail .hook-box {
-  border: var(--px) dashed var(--pink);
+  background: rgba(255, 255, 255, .04);
+  border: var(--px) dashed var(--accent);
   padding: 12px 16px;
-  font-size: 15px;
-  color: var(--pink);
+  font-size: 17px;
+  color: var(--accent);
   margin-bottom: 18px;
   line-height: 1.7;
 }
-.detail .hook-box::before { content: "🍉 一句话吃瓜："; color: var(--cream); }
-.detail .source { font-size: 13px; }
-.detail .source a { color: var(--teal); }
+.detail .hook-box::before { content: "一句话吃瓜："; color: var(--text-strong); }
+.detail .source {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.detail .source span {
+  flex: 0 0 auto;
+  color: var(--muted);
+}
+.detail .source a {
+  display: inline-block;
+  color: var(--ink);
+  background: var(--accent-2);
+  border: 2px solid var(--ink);
+  padding: 6px 10px;
+  text-decoration: none;
+  box-shadow: 3px 3px 0 var(--shadow);
+}
+.detail .source a:hover { background: var(--button-hover); }
 
 .comic-zone { margin-bottom: 18px; }
 .comic-zone img {
@@ -268,15 +428,32 @@ body::after {
 
 .error-box {
   padding: 20px;
-  border-color: var(--coral);
-  color: var(--coral);
+  border-color: var(--danger);
+  color: var(--danger);
   font-size: 14px;
   line-height: 1.8;
   word-break: break-all;
 }
 
 @media (max-width: 640px) {
-  .masthead h1 { font-size: 26px; letter-spacing: 3px; }
+  #app { padding: 14px 12px 48px; }
+  .theme-switcher {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .theme-btn {
+    justify-content: center;
+    min-width: 0;
+    font-size: 12px;
+    padding: 7px 5px;
+  }
+  .mast-badge {
+    position: static;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+  .masthead h1 { font-size: 28px; letter-spacing: 1px; }
   .card { flex-direction: column; }
   .card-thumb {
     flex: none;
@@ -285,5 +462,8 @@ body::after {
     min-height: 0;
     aspect-ratio: 16 / 9;
   }
-  .detail h2 { font-size: 20px; }
+  .card-body h3 { font-size: 20px; }
+  .detail h2 { font-size: 22px; }
+  .detail .body { font-size: 17px; }
+  .detail .source { flex-direction: column; }
 }
