@@ -8,7 +8,7 @@ let issue = null;      // 当前阅读中的刊
 let latestDay = null;  // 最新一期日期
 let status = null;
 let askArticle = null;
-let askHistory = [];
+let askController = null;
 
 /* ---------------- 主题 ---------------- */
 
@@ -33,106 +33,86 @@ function setTheme(id, { rerender = true } = {}) {
 /* ---------------- 随读问答 ---------------- */
 
 function askAssistantHtml() {
-  return `<button type="button" class="ask-launcher" id="ask-launcher" aria-controls="ask-drawer" aria-expanded="false">问问这条</button>
-    <div class="ask-scrim" id="ask-scrim" hidden></div>
-    <aside class="ask-drawer" id="ask-drawer" aria-hidden="true" aria-label="AI 随读问答">
-      <header class="ask-head">
-        <div><strong>随读问答</strong><span>由百炼提供回答</span></div>
-        <button type="button" class="ask-close" id="ask-close" aria-label="关闭问答助手">关闭</button>
-      </header>
-      <div class="ask-context"><span>正在读</span><strong>${esc(askArticle?.title || "当前新闻")}</strong></div>
-      <div class="ask-messages" id="ask-messages" aria-live="polite">
-        <div class="ask-message assistant">遇到不懂的词，直接问我。我会结合这条新闻解释。</div>
-      </div>
-      <div class="ask-prompts" id="ask-prompts">
-        <button type="button">这条新闻在说什么？</button>
-        <button type="button">这里最关键的术语是什么？</button>
-        <button type="button">这对普通用户有什么影响？</button>
-      </div>
-      <form class="ask-form" id="ask-form">
-        <label for="ask-input">你的问题</label>
-        <div class="ask-compose">
-          <textarea id="ask-input" rows="2" maxlength="500" placeholder="例如：什么是 Agentic AI？" required></textarea>
-          <button type="submit" id="ask-send">发送</button>
-        </div>
-        <p class="ask-helper">回答仅用于理解新闻，请以原始来源为准。</p>
-      </form>
+  return `<button type="button" class="selection-ask" id="selection-ask" hidden>说人话</button>
+    <aside class="selection-answer" id="selection-answer" hidden aria-live="polite">
+      <button type="button" class="selection-close" id="selection-close" aria-label="关闭解读">×</button>
+      <div class="selection-quote" id="selection-quote"></div>
+      <div class="selection-result" id="selection-result"></div>
+      <small>随读解读</small>
     </aside>`;
 }
 
-function openAskAssistant() {
-  const drawer = document.getElementById("ask-drawer");
-  const scrim = document.getElementById("ask-scrim");
-  const launcher = document.getElementById("ask-launcher");
-  if (!drawer || !scrim || !launcher) return;
-  drawer.classList.add("open");
-  drawer.setAttribute("aria-hidden", "false");
-  launcher.setAttribute("aria-expanded", "true");
-  scrim.hidden = false;
-  requestAnimationFrame(() => scrim.classList.add("open"));
-  setTimeout(() => document.getElementById("ask-input")?.focus(), 180);
-}
-
-function closeAskAssistant() {
-  const drawer = document.getElementById("ask-drawer");
-  const scrim = document.getElementById("ask-scrim");
-  const launcher = document.getElementById("ask-launcher");
-  if (!drawer || !scrim || !launcher) return;
-  drawer.classList.remove("open");
-  drawer.setAttribute("aria-hidden", "true");
-  launcher.setAttribute("aria-expanded", "false");
-  scrim.classList.remove("open");
-  setTimeout(() => { scrim.hidden = true; }, 180);
-  launcher.focus();
-}
-
-function addAskMessage(role, content, state = "") {
-  const list = document.getElementById("ask-messages");
-  if (!list) return null;
-  const el = document.createElement("div");
-  el.className = `ask-message ${role}${state ? ` ${state}` : ""}`;
-  el.textContent = content;
-  list.appendChild(el);
-  list.scrollTop = list.scrollHeight;
-  return el;
-}
-
-async function submitAsk(question) {
-  const input = document.getElementById("ask-input");
-  const send = document.getElementById("ask-send");
-  const prompts = document.getElementById("ask-prompts");
-  const text = String(question || input?.value || "").trim();
-  if (!text || !askArticle || send?.disabled) return;
-  if (input) input.value = "";
-  if (prompts) prompts.hidden = true;
-  addAskMessage("user", text);
-  const waiting = addAskMessage("assistant", "正在结合这条新闻想一想…", "loading");
-  if (send) { send.disabled = true; send.textContent = "回答中"; }
+async function explainSelection(text, rect) {
+  const trigger = document.getElementById("selection-ask");
+  const panel = document.getElementById("selection-answer");
+  const quote = document.getElementById("selection-quote");
+  const result = document.getElementById("selection-result");
+  if (!text || !askArticle || !panel || !quote || !result) return;
+  trigger.hidden = true;
+  quote.textContent = `“${text}”`;
+  result.textContent = "正在结合这条新闻解释…";
+  result.className = "selection-result loading";
+  panel.hidden = false;
+  placeSelectionUi(panel, rect);
   try {
-    const data = await apiPost("/api/ask", { question: text, article: askArticle, history: askHistory });
-    if (waiting) { waiting.textContent = data.answer; waiting.classList.remove("loading"); }
-    askHistory.push({ role: "user", content: text }, { role: "assistant", content: data.answer });
-    askHistory = askHistory.slice(-6);
+    const question = `请用简单的话解读我选中的内容“${text}”，并说明它在这条新闻里是什么意思。`;
+    const data = await apiPost("/api/ask", { question, article: askArticle, history: [] });
+    result.textContent = data.answer;
+    result.className = "selection-result";
   } catch (e) {
-    if (waiting) { waiting.textContent = e.message || "暂时回答不了，请稍后再试"; waiting.classList.remove("loading"); waiting.classList.add("error"); }
-  } finally {
-    if (send) { send.disabled = false; send.textContent = "发送"; }
-    input?.focus();
+    result.textContent = e.message || "暂时解读不了，请稍后再试";
+    result.className = "selection-result error";
   }
 }
 
+function placeSelectionUi(el, rect) {
+  const margin = 12;
+  const width = el.offsetWidth || 300;
+  const viewportLeft = Math.min(window.innerWidth - width - margin, Math.max(margin, rect.left + rect.width / 2 - width / 2));
+  const below = rect.bottom + 10;
+  const viewportTop = below + (el.offsetHeight || 48) > window.innerHeight
+    ? Math.max(margin, rect.top - (el.offsetHeight || 48) - 10)
+    : below;
+  el.style.left = `${window.scrollX + viewportLeft}px`;
+  el.style.top = `${window.scrollY + viewportTop}px`;
+}
+
 function setupAskAssistant() {
-  document.getElementById("ask-launcher")?.addEventListener("click", openAskAssistant);
-  document.getElementById("ask-close")?.addEventListener("click", closeAskAssistant);
-  document.getElementById("ask-scrim")?.addEventListener("click", closeAskAssistant);
-  document.getElementById("ask-form")?.addEventListener("submit", (e) => { e.preventDefault(); submitAsk(); });
-  document.getElementById("ask-input")?.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submitAsk(); }
-  });
-  document.querySelectorAll("#ask-prompts button").forEach((btn) => btn.addEventListener("click", () => submitAsk(btn.textContent)));
-  document.getElementById("ask-drawer")?.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && document.getElementById("ask-drawer")?.classList.contains("open")) closeAskAssistant();
-  });
+  askController?.abort();
+  askController = new AbortController();
+  const { signal } = askController;
+  const body = document.querySelector(".detail .body");
+  const trigger = document.getElementById("selection-ask");
+  const panel = document.getElementById("selection-answer");
+  let selectedText = "";
+  let selectedRect = null;
+  const hide = () => { trigger.hidden = true; panel.hidden = true; };
+  body?.addEventListener("pointerup", () => setTimeout(() => {
+    const selection = window.getSelection();
+    const text = selection?.toString().trim().replace(/\s+/g, " ").slice(0, 160);
+    if (!text || !selection.rangeCount || !body.contains(selection.anchorNode)) {
+      trigger.hidden = true;
+      return;
+    }
+    selectedText = text;
+    selectedRect = selection.getRangeAt(0).getBoundingClientRect();
+    panel.hidden = true;
+    trigger.hidden = false;
+    placeSelectionUi(trigger, selectedRect);
+  }, 0), { signal });
+  trigger?.addEventListener("pointerdown", (e) => e.preventDefault(), { signal });
+  trigger?.addEventListener("click", () => explainSelection(selectedText, selectedRect), { signal });
+  document.getElementById("selection-close")?.addEventListener("click", hide, { signal });
+  document.addEventListener("selectionchange", () => {
+    const selection = window.getSelection();
+    if (!selection || selection.isCollapsed || !selection.toString().trim()) trigger.hidden = true;
+  }, { signal });
+  document.addEventListener("pointerdown", (e) => {
+    if (!trigger?.contains(e.target) && !panel?.contains(e.target) && !body?.contains(e.target)) hide();
+  }, { signal });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") hide();
+  }, { signal });
 }
 
 function themeSwitch() {
@@ -979,7 +959,6 @@ async function itemView(idx, date) {
     source_title: it.source_title || "",
     source_url: it.source_url || "",
   };
-  askHistory = [];
   const backHref = date && latestDay && date !== latestDay ? `#/issue/${date}` : "#/";
   const comic = it.image
     ? `<div class="comic-zone"><img src="/images/${esc(it.image)}" alt="八卦漫画"></div>`
