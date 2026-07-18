@@ -1,0 +1,218 @@
+{
+  "date": "2026-07-15",
+  "mode": "轻八卦模式·独立成篇",
+  "generated_at": "2026-07-15T20:08:32",
+  "items": [
+    {
+      "slug": "apple-ali-alliance",
+      "melon_level": 3,
+      "title": "苹果深夜官宣‘Apple智能’在华备案，合作方竟是阿里——而华为小艺刚发完发布会",
+      "body": "Apple智能7月8日悄悄完成备案，7月15日中午‘网信中国’一纸公告引爆全网——最炸的不是它上线，而是合作方写着‘阿里巴巴’。三天前（7月12日）华为刚在上海举办‘小艺Pro’全栈自研发布会，现场PPT打出‘端云协同零依赖第三方’；昨早（7月14日）阿里云峰会，蔡崇信被追问‘是否接了苹果单’，只笑答‘有些事，备案了才算数’。翻译成人话：苹果没选华为、没选腾讯、没选百度，偏偏挑在国产OS阵营最绷紧神经时，把中国AI最硬的‘端侧入口’交给了电商起家的阿里。这波操作，让华为终端高管朋友圈集体静默，小米公关连夜撤下原定今日发布的‘澎湃OS 3.5 AI升级预告’。",
+      "hook": "苹果把‘国行AI’交给阿里那天，华为发布会大屏还没关灯。",
+      "characters": [
+        "Apple",
+        "阿里巴巴",
+        "华为"
+      ],
+      "source_title": "国行苹果AI功能完成备案,合作方包括阿里",
+      "source_url": "http://finance.sina.com.cn/wm/2026-07-15/doc-inihwrqy7958055.shtml",
+      "scene": "网信中国公众号后台编辑点击发布按钮，手机弹出华为小艺发布会直播未关闭的浮窗",
+      "poll": {
+        "question": "苹果选阿里而非华为，是技术妥协还是地缘算盘？",
+        "options": [
+          "技术适配不足",
+          "中美合规优先"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：苹果没选华为、没选腾讯、没选百度，偏偏挑在国产OS阵营最绷紧神经时，"
+      },
+      "image": "2026-07-15-01-apple-ali-alliance-single-manga.png"
+    },
+    {
+      "slug": "minimax-rebound",
+      "melon_level": 2,
+      "title": "MiniMax股价暴跌七成后突然暴涨13%，股民发现：涨当天它刚被踢出‘AI双雄’群聊",
+      "body": "今早港股收盘，MiniMax（00100.HK）涨13.2%，报230港元——但没人欢呼。因为就在同一小时，某头部VC内部群截图流出：管理员将MiniMax从‘大模型双雄（MiniMax+百川）’群名里悄悄删去，改名‘百川+智谱’。三天前（7月12日），券商中金下调其目标价至180港元，理由是‘M3定价遭中小客户集体弃用’；昨夜（7月14日）财报电话会，CFO回避毛利率提问，只强调‘Q3将推轻量化版本’。翻译成人话：股价反弹不是基本面好转，而是超跌筹码松动+监管备案名单意外带火——它和苹果、华为同批上榜，成了‘幸存者符号’。可当同行都在晒Agent OS、多智能体协同时，MiniMax官网首页仍挂着半年前的M3宣传图。",
+      "hook": "MiniMax涨停那天，它被VC群永久移出了‘双雄’头衔。",
+      "characters": [
+        "MiniMax",
+        "百川",
+        "智谱"
+      ],
+      "source_title": "港股收评:恒指涨1.4% 科指涨1.3% 科网股、AI应用股普涨 生物医药股强势 MINIMAX涨超13%",
+      "source_url": "http://finance.sina.com.cn/stock/hkstock/marketalerts/2026-07-15/doc-inihwrqy7941599.shtml",
+      "scene": "港股交易员盯着MiniMax分时图狂按刷新键，微信弹出VC群改名通知红点",
+      "poll": {
+        "question": "MiniMax这波反弹能撑过下周解禁潮吗？",
+        "options": [
+          "撑不住",
+          "勉强稳住"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：股价反弹不是基本面好转，而是超跌筹码松动+监管备案名单意外带火——它"
+      },
+      "image": "2026-07-15-02-minimax-rebound-single-manga.png"
+    },
+    {
+      "slug": "ibm-crash",
+      "melon_level": 3,
+      "title": "IBM单日暴跌25%，CEO承认‘客户全跑去买英伟达服务器’——而法国反垄断罚单正飞来",
+      "body": "美东时间7月14日收盘，IBM股价暴跌25.3%，创1987年以来最大单日跌幅。导火索是盘后预警：Q2营收同比下滑11%，主因‘企业客户支出转向GPU服务器与定制芯片’。更致命的是，同日法国竞争管理局确认：对英伟达的反垄断调查已进入终审阶段，最高或罚216亿美元——而IBM正是该调查关键证人，去年向欧盟提交了37页英伟达‘捆绑销售AI芯片+软件’证据。翻译成人话：IBM不是输给了AI，是输给了自己押错的赛道——它还在卖Power架构老服务器，客户却已用英伟达盒子跑通了Llama-4推理。现在，它既拿不到罚单分成，又丢了老客户信任，连财报电话会都不敢提‘Watsonx’三个字。",
+      "hook": "IBM暴跌那天，它给法国监管局写的举报信，正变成自己的讣告。",
+      "characters": [
+        "IBM",
+        "英伟达",
+        "法国竞争管理局"
+      ],
+      "source_title": "IBM股价暴跌 OpenAI正开发AI智能音箱",
+      "source_url": "http://finance.sina.com.cn/stock/usstock/c/2026-07-15/doc-inihvqct7916461.shtml",
+      "scene": "IBM CEO在空荡会议室面对镜头苦笑，背后PPT写着‘Watsonx Q2进展’但页面被临时遮挡",
+      "poll": {
+        "question": "IBM会砍掉Watsonx团队自救吗？",
+        "options": [
+          "会，年底前",
+          "不会，硬撑"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：IBM不是输给了AI，是输给了自己押错的赛道——它还在卖Power架"
+      },
+      "image": "2026-07-15-03-ibm-crash-single-manga.png"
+    },
+    {
+      "slug": "ai-puppet-regulation",
+      "melon_level": 3,
+      "title": "中国首部AI拟人化监管今生效，豆包/千问连夜下线自定义智能体——网易妙时昨夜停运",
+      "body": "7月15日零点，《人工智能拟人化互动服务管理暂行办法》正式施行。上午9点，字节跳动豆包、阿里通义千问同步发布公告：下线‘用户自定义智能体’功能；10点，网易‘妙时’APP弹出最终通知：‘服务将于今日24时终止’。而就在6月30日，腾讯元宝已提前关闭同类功能。翻译成人话：这不是技术迭代，是六条红线集体亮剑——禁止情感操纵、禁止诱导沉迷、强制AI身份披露……过去靠‘陪你聊天到凌晨三点’换来的DAU，今天全得按‘未成年人防沉迷弹窗’重写代码。最讽刺的是，上海网信办6月通报显示：被下架的1.4万个违规智能体里，TOP3全是‘虚拟恋人’‘AI男友’‘仿明星陪聊’。",
+      "hook": "新规生效第一小时，全国AI情感APP集体进入‘守丧模式’。",
+      "characters": [
+        "字节跳动",
+        "阿里巴巴",
+        "网易",
+        "腾讯"
+      ],
+      "source_title": "2026年7月15日,中国AI产业的分水岭:首部AI拟人化监管落地深度分析",
+      "source_url": "http://finance.sina.com.cn/tech/discovery/2026-07-15/doc-inihvcpx7964059.shtml",
+      "scene": "网易工程师凌晨三点手动关停‘妙时’服务器，后台最后一条日志是‘用户ID_88921723请求续费虚拟男友三年包’",
+      "poll": {
+        "question": "哪家公司会第一个推出‘合规版虚拟伴侣’？",
+        "options": [
+          "字节",
+          "阿里"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：这不是技术迭代，是六条红线集体亮剑——禁止情感操纵、禁止诱导沉迷、强"
+      },
+      "image": "2026-07-15-04-ai-puppet-regulation-single-manga.png"
+    },
+    {
+      "slug": "oppo-alipay-alliance",
+      "melon_level": 2,
+      "title": "OPPO联手支付宝推‘一句话办事’，小布助手刚打通200项服务——华为鸿蒙NEXT还在测闭环",
+      "body": "7月14日深夜，OPPO与支付宝联合发布多智能体协同方案：用户对小布说‘帮我订今晚《抓娃娃》电影票’，小布即联动阿宝完成选座支付。而就在同一天，华为开发者大会闭门会上，鸿蒙NEXT被曝仍卡在‘系统级Agent权限沙盒’测试环节——需用户逐项授权，无法像OPPO那样‘一句话直达履约’。翻译成人话：OPPO用开放生态抢跑‘AI办事流’，华为却在死磕‘安全闭环’。更微妙的是，支付宝此番未与微信支付联动，但接入了OPPO、vivo、小米三家安卓阵营——唯独缺席华为。业内传言：鸿蒙支付接口谈判已僵持三个月，而OPPO这笔合作，签约仅用11天。",
+      "hook": "OPPO让小布一句话订电影票那天，华为鸿蒙NEXT还在等一个授权弹窗。",
+      "characters": [
+        "OPPO",
+        "支付宝",
+        "华为"
+      ],
+      "source_title": "OPPO携手支付宝落地多智能体协同,加速构建开放AI智能体生态",
+      "source_url": "http://finance.sina.com.cn/tech/roll/2026-07-15/doc-inihwezm7921856.shtml",
+      "scene": "OPPO产品经理演示‘一句话订票’成功瞬间，旁边华为工程师手机弹出鸿蒙NEXT测试版授权失败提示",
+      "poll": {
+        "question": "华为会向支付宝开放鸿蒙支付接口吗？",
+        "options": [
+          "会，迫于压力",
+          "不会，坚持自建"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：OPPO用开放生态抢跑‘AI办事流’，华为却在死磕‘安全闭环’。"
+      },
+      "image": "2026-07-15-05-oppo-alipay-alliance-single-manga.png"
+    },
+    {
+      "slug": "india-turns-china-ai",
+      "melon_level": 2,
+      "title": "印度科技公司集体‘叛逃’美国AI：成本降十倍，DeepSeek成新宠——OpenAI刚起诉苹果窃密",
+      "body": "7月13日，《日经亚洲评论》爆料：未来资产创投印度CEO证实，自2025年中起，其接触的多数印初创正弃用GPT-4 Turbo，转用DeepSeek-V2开源模型——成本直降‘一个数量级’。而就在两天前（7月11日），苹果刚起诉OpenAI窃取硬件机密，指控其首席硬件官Tang Tan‘带走未发布产品图纸’。翻译成人话：当美国巨头忙着法庭互撕时，印度开发者已用中国开源模型跑通SaaS业务——不用API密钥、不付token费用、本地部署还能改代码。更扎心的是，印度《泰卢固时报》标题直呼‘悄然转向’，配图却是孟买程序员电脑桌面：左侧OpenAI控制台灰显，右侧DeepSeek训练日志滚动刷屏。",
+      "hook": "印度开发者换掉OpenAI那天，苹果和OpenAI的律师函正在太平洋上空快递。",
+      "characters": [
+        "印度科技公司",
+        "DeepSeek",
+        "OpenAI",
+        "苹果"
+      ],
+      "source_title": "印媒:“悄然转向”,印度企业青睐中国AI大模型",
+      "source_url": "http://finance.sina.com.cn/roll/2026-07-15/doc-inihvqcq4957964.shtml",
+      "scene": "孟买程序员双屏办公：左屏OpenAI API错误提示闪烁，右屏DeepSeek-V2训练loss曲线持续下降",
+      "poll": {
+        "question": "美国AI厂商会降价应对印度市场流失吗？",
+        "options": [
+          "会，三个月内",
+          "不会，坚守高端"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：当美国巨头忙着法庭互撕时，印度开发者已用中国开源模型跑通SaaS业务"
+      },
+      "image": "2026-07-15-06-india-turns-china-ai-single-manga.png"
+    },
+    {
+      "slug": "apple-vs-openai-lawsuit",
+      "melon_level": 3,
+      "title": "苹果周五晚突袭起诉OpenAI，索赔+要求重做产品——被告里竟有前苹果硬件VP",
+      "body": "7月11日周五晚，苹果向加州北区联邦法院递交诉状，指控OpenAI窃取未发布硬件商业机密，并将前苹果产品设计副总裁Tang Tan列为共同被告——此人2025年3月跳槽OpenAI任首席硬件官。诉状附件曝光：OpenAI正在开发的AI智能音箱内部代号‘Project Echo’，其麦克风阵列布局与苹果未发布的HomePod Pro原型图高度重合。更戏剧性的是，就在起诉前48小时（7月9日），OpenAI刚宣布Fidji Simo因病转任顾问，安全负责人Johannes Heidecke确认离职。翻译成人话：苹果选在对手‘高管地震+产品真空期’精准出手，不是为钱，是要把OpenAI首款硬件钉死在‘抄袭’标签上——毕竟，谁敢买一个被前东家起诉‘偷图纸’的AI音箱？",
+      "hook": "苹果起诉OpenAI那天，对方首席硬件官的工牌还没换掉苹果Logo。",
+      "characters": [
+        "苹果",
+        "OpenAI",
+        "Tang Tan"
+      ],
+      "source_title": "苹果起诉 OpenAI 窃取硬件商业机密,索赔并要求重新设计产品",
+      "source_url": "http://finance.sina.com.cn/jjxw/2026-07-15/doc-inihvcpu5064518.shtml",
+      "scene": "苹果法务部打印诉状时，打印机旁放着Tang Tan离开苹果时获赠的刻字纪念牌",
+      "poll": {
+        "question": "OpenAI会和解还是硬刚到底？",
+        "options": [
+          "和解，改设计",
+          "硬刚，反诉"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：苹果选在对手‘高管地震+产品真空期’精准出手，不是为钱，是要把Ope"
+      },
+      "image": "2026-07-15-07-apple-vs-openai-lawsuit-single-manga.png"
+    },
+    {
+      "slug": "ma-zu-global-warning",
+      "melon_level": 2,
+      "title": "中国‘妈祖’大模型登上央视联播：帮巴基斯坦预警季风，名字暗藏四重玄机",
+      "body": "7月14日央视《新闻联播》罕见插播30秒：巴基斯坦气象局正用中国‘妈祖’大模型提前48小时预警季风雨。这个7月10日在WAIC预热发布的大模型，英文缩写MAZU实为Multi-hazard（多灾种）、Alert（预警）、Zero-gap（零差距）、Universal（普惠）——而‘妈祖’之名，源自东南沿海护航女神。有趣的是，就在同日，英国宣布将AWS/Azure/Google Cloud纳入金融‘关键第三方’监管，法国则对英伟达开出216亿美元罚单预备令。翻译成人话：当欧美还在吵‘AI要不要管’时，中国AI已化身气象卫星，在异国农田里预报暴雨——不炫技、不聊天、不拟人，就干一件事：救命。",
+      "hook": "‘妈祖’帮巴基斯坦躲过洪水那天，英美监管机构正为AI吵架吵破音。",
+      "characters": [
+        "中国气象局",
+        "巴基斯坦气象局",
+        "英国财政部",
+        "法国竞争管理局"
+      ],
+      "source_title": "中国开源AI全球领跑!“妈祖”大模型助力多国季风预警",
+      "source_url": "http://finance.sina.com.cn/tech/discovery/2026-07-15/doc-inihvcpx7964059.shtml",
+      "scene": "巴基斯坦乡村小学教室，教师指着投影幕布上‘妈祖预警’地图，窗外乌云翻滚但校舍安然",
+      "poll": {
+        "question": "下一个用‘妈祖’的国家会是？",
+        "options": [
+          "越南",
+          "肯尼亚"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：当欧美还在吵‘AI要不要管’时，中国AI已化身气象卫星，在异国农田里"
+      },
+      "image": "2026-07-15-08-ma-zu-global-warning-single-manga.png"
+    }
+  ]
+}
