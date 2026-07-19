@@ -13,10 +13,10 @@ let askController = null;
 /* ---------------- 主题 ---------------- */
 
 const THEMES = [
-  { id: "pixel",   label: "👾 像素夜刊" },
-  { id: "tabloid", label: "🗞️ 复古小报" },
-  { id: "candy",   label: "🍭 糖果粗野" },
-  { id: "mag",     label: "📖 轻杂志" },
+  { id: "pixel",   label: "夜刊", icon: "👾" },
+  { id: "tabloid", label: "小报", icon: "🗞️" },
+  { id: "candy",   label: "糖果", icon: "🍭" },
+  { id: "mag",     label: "杂志", icon: "📖" },
 ];
 
 function currentTheme() {
@@ -117,9 +117,11 @@ function setupAskAssistant() {
 
 function themeSwitch() {
   return `<div class="theme-switch">
-    ${THEMES.map((t) =>
+    ${THEMES.map((t, idx) =>
       `<button type="button" class="theme-chip${t.id === currentTheme() ? " active" : ""}"
-         onclick="setTheme('${t.id}')">${t.label}</button>`
+         onclick="setTheme('${t.id}')" title="快捷键 ${idx + 1}">
+         <span class="theme-key">${idx + 1}</span><span class="theme-icon">${t.icon}</span>${t.label}
+       </button>`
     ).join("")}
   </div>`;
 }
@@ -880,6 +882,7 @@ function cardsHtml(date, kingIdx = -1) {
           <div class="hook">${esc(it.hook)}</div>
           <div class="chars">出场：${esc((it.characters || []).join(" · "))}</div>
           ${voteHintHtml(date, i)}
+          <div class="read-more">阅读全文</div>
         </div>
       </article>`;
     })
@@ -987,7 +990,10 @@ async function itemView(idx, date) {
         <button type="button" class="pixel-btn small" onclick="copyGossip('${esc(viewingDate)}', ${idx})">复制吃瓜</button>
         <button type="button" class="pixel-btn small" onclick="shareCard('${esc(viewingDate)}', ${idx})">下载分享图</button>
       </div>
-      <div class="source">来源：<a href="${esc(it.source_url)}" target="_blank" rel="noopener">${esc(it.source_title || it.source_url)}</a></div>
+      <div class="source">
+        <span>来源</span>
+        <a href="${esc(it.source_url)}" target="_blank" rel="noopener">${esc(it.source_title || it.source_url)}</a>
+      </div>
     </div>
     ${foot()}
     ${askAssistantHtml()}`;
@@ -1105,6 +1111,7 @@ function setupKeyboardMelon() {
     if (e.key === "1") { e.preventDefault(); setTheme("pixel"); toast("👾 像素夜刊"); }
     if (e.key === "2") { e.preventDefault(); setTheme("tabloid"); toast("🗞️ 复古小报"); }
     if (e.key === "3") { e.preventDefault(); setTheme("candy"); toast("🍭 糖果粗野"); }
+    if (e.key === "4") { e.preventDefault(); setTheme("mag"); toast("📖 轻杂志"); }
     if (e.key === "Enter" && onHome && issue?.items?.length) {
       e.preventDefault();
       const d = issue.date;
