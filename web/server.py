@@ -40,6 +40,8 @@ IMAGE_SIZE = os.getenv("IMAGE_SIZE", "1280*720")
 NEWS_COUNT = int(os.getenv("NEWS_COUNT", "8"))
 UPDATE_TIMES = os.getenv("UPDATE_TIMES", "08:05,20:05")
 ADMIN_TOKEN = os.getenv("ADMIN_TOKEN", "melon-admin")
+# Google Analytics 4 Measurement ID（形如 G-XXXXXXXX）。空则不加载统计脚本。
+GA_MEASUREMENT_ID = os.getenv("GA_MEASUREMENT_ID", "").strip()
 
 DATA_DIR = ROOT / "data"
 ISSUE_DIR = DATA_DIR / "issues"
@@ -508,6 +510,12 @@ def get_latest_issue():
 @app.get("/api/issues/{day}")
 def get_issue(day: str):
     return load_issue(resolve_day(day))
+
+
+@app.get("/api/public-config")
+def public_config():
+    """前端可读的公开配置（不含密钥）。用于注入 GA 等统计。"""
+    return {"gaMeasurementId": GA_MEASUREMENT_ID}
 
 
 @app.get("/api/status")
