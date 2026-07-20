@@ -1,0 +1,214 @@
+{
+  "date": "2026-07-19",
+  "mode": "轻八卦模式·独立成篇",
+  "generated_at": "2026-07-19T08:19:06",
+  "items": [
+    {
+      "slug": "apple-vs-openai-41-page-lawsuit",
+      "melon_level": 3,
+      "title": "苹果凌晨甩出41页诉状怒告OpenAI‘偷家’，前苹果硬件大将成被告",
+      "body": "苹果美西时间7月12日凌晨（北京时间7月13日04:00）突然向加州北区联邦法院提交41页诉状，直指OpenAI挖走前苹果首席硬件工程师刘畅、高薪聘任前苹果工业设计核心唐坦，并指控其利用苹果未公开的AI硬件架构图纸开发‘Project Orion’终端。三天前，OpenAI刚在斯坦福AGI峰会上低调展示该设备原型；昨夜，Jony Ive新创公司‘LoveFrom Labs’被曝已并入OpenAI硬件部门；今早，苹果股价盘前跌2.3%，OpenAI融资路演紧急取消两场。翻译成人话：这不是专利纠纷，是苹果对‘AI终端定义权’发起总攻。瓜核就一句——唐坦的LinkedIn头像，上周还挂着苹果logo，这周已换成OpenAI黑底白字徽标。",
+      "hook": "苹果起诉OpenAI的诉状里，有3处标红‘Apple Confidential’字样。",
+      "characters": [
+        "苹果",
+        "OpenAI",
+        "唐坦",
+        "刘畅",
+        "Jony Ive"
+      ],
+      "source_title": "苹果41页状纸怒告OpenAI“偷家”:硅谷无间道引爆AI硬件之战",
+      "source_url": "https://www.tmtpost.com/3534067/20260715-apple-vs-openai-lawsuit",
+      "scene": "苹果法务总监盯着屏幕放大诉状第17页‘未授权访问’段落，手指悬在发送键上",
+      "poll": {
+        "question": "OpenAI会反诉苹果‘滥用垄断地位’吗？",
+        "options": [
+          "会，已备好材料",
+          "不会，先稳住投资人"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：这不是专利纠纷，是苹果对‘AI终端定义权’发起总攻。"
+      },
+      "image": "2026-07-19-01-apple-vs-openai-41-page-lawsuit-single-manga.png"
+    },
+    {
+      "slug": "kimi-k3-open-source-shock",
+      "melon_level": 2,
+      "title": "月之暗面凌晨发Kimi K3开源模型，参数量碾压GPT-5.6，美股AI概念股集体跳水",
+      "body": "7月16日23:58，月之暗面官网突袭上线Kimi K3——全球首个超万亿参数开源模型，Code Arena基准测试分数比GPT-5.6高出12.7%。三小时前，Anthropic刚官宣Claude Fable 5将于7月25日闭源商用；两小时前，Meta悄悄撤下Llama 4预热海报；今早开盘，美股AI芯片股AMD跌4.1%，英伟达期货夜盘下挫2.8%。翻译成人话：Kimi K3不是‘开源’，是‘开源核弹’——它让所有闭源模型的商业护城河，一夜回到2019年。更绝的是，GitHub仓库README第一行写着：‘Training data: 100% non-licensed, non-copyrighted public corpus.’",
+      "hook": "Kimi K3开源仓库的star数，24小时破12万，超GPT-2历史峰值3倍。",
+      "characters": [
+        "月之暗面",
+        "Anthropic",
+        "Meta"
+      ],
+      "source_title": "Kimi K3引发美股震荡,月之暗面有望最快6个月内赴港上市",
+      "source_url": "https://www.tmtpost.com/3534067/20260718-kimi-k3-ipo",
+      "scene": "月之暗面CTO在服务器机房举着‘K3上线成功’手写板，背景LED屏实时刷新GitHub star数",
+      "poll": {
+        "question": "哪家大厂会第一个宣布‘全面接入Kimi K3’？",
+        "options": [
+          "阿里云",
+          "华为云"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：Kimi K3不是‘开源’，是‘开源核弹’——它让所有闭源模型的商业"
+      },
+      "image": "2026-07-19-02-kimi-k3-open-source-shock-single-manga.png"
+    },
+    {
+      "slug": "google-deepmind-merger-rollback",
+      "melon_level": 3,
+      "title": "谷歌连夜叫停DeepMind合并案，内部邮件曝光：‘算力账算不过来’",
+      "body": "7月17日18:22，谷歌CEO桑达尔·皮查伊向全员发出紧急邮件，宣布暂停执行已官宣三个月的‘Google AI + DeepMind’合并计划。邮件附件显示：合并后年度电力成本将飙升至42亿美元，超出原预算17亿；而DeepMind伦敦数据中心因缺水限电，7月算力交付率仅63%。就在同一天，微软Azure宣布与冰岛地热电厂签约，锁定未来五年2.1GW绿色算力。翻译成人话：谷歌不是不想合，是合不起——当AI烧电比特斯拉全球车队还猛，‘技术浪漫主义’得给‘水电发票’让路。",
+      "hook": "谷歌内部流传的合并成本PPT第11页，标题是‘我们正在用三峡年发电量的1/4训练一个模型’。",
+      "characters": [
+        "谷歌",
+        "DeepMind",
+        "微软"
+      ],
+      "source_title": "今日全球AI热点简报TOP10 2026年7月14日",
+      "source_url": "https://www.han-tang.com/20260715-ai-top10",
+      "scene": "谷歌山景城总部会议室，投影仪正播放‘DeepMind合并ROI测算表’，最后一列标红‘-17.2B USD’",
+      "poll": {
+        "question": "谷歌会转头收购一家水电公司吗？",
+        "options": [
+          "会，已在接触云南水电集团",
+          "不会，改租AWS算力"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：谷歌不是不想合，是合不起——当AI烧电比特斯拉全球车队还猛，‘技术浪"
+      },
+      "image": "2026-07-19-03-google-deepmind-merger-rollback-single-manga.png"
+    },
+    {
+      "slug": "baidu-ernie-5-launch-sabotage",
+      "melon_level": 2,
+      "title": "百度文心一言发布会前2小时，通义千问突然全网推送‘ERNIE 5已过时’对比图",
+      "body": "7月18日14:00，百度原定在上海世博中心发布ERNIE 5大模型；13:58，通义实验室官微连发三条对比图，标题直指‘ERNIE 5在数学推理、多跳检索、中文长文档三项均落后Qwen3.5超15%’。截图显示，测试数据来自第三方平台‘ModelBench’7月17日未公开榜单。当晚，百度发布会临时增加15分钟‘技术辟谣环节’，但现场观众手机已刷爆小红书话题#ERNIE5翻车现场#。翻译成人话：这不是技术对比，是精准卡点式舆论空投——通义团队提前48小时拿到ERNIE 5测试样本，只为让百度高管在聚光灯下念错一页PPT。",
+      "hook": "通义千问那张对比图右下角，有一行极小的灰色字体：‘Data collected on 2026-07-16, 22:03’。",
+      "characters": [
+        "百度",
+        "通义实验室"
+      ],
+      "source_title": "Baidu shows new practices at the world AI conference in Shanghai",
+      "source_url": "https://www.latestnews.com/20260718-baidu-waic",
+      "scene": "通义实验室运营人员在杭州办公室按下微博发送键，电脑右下角时间显示13:58:03",
+      "poll": {
+        "question": "百度会起诉通义‘商业诋毁’吗？",
+        "options": [
+          "会，已委托律所取证",
+          "不会，转向推ERNIE 5 Lite版"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：这不是技术对比，是精准卡点式舆论空投——通义团队提前48小时拿到ER"
+      },
+      "image": "2026-07-19-04-baidu-ernie-5-launch-sabotage-single-manga.png"
+    },
+    {
+      "slug": "nvidia-gpu-price-hike",
+      "melon_level": 2,
+      "title": "英伟达单日官宣GPU涨价23%，客户收到邮件时，货柜已在宁波港卸货",
+      "body": "7月18日09:00，英伟达向全球渠道商群发邮件：H200/H100系列即日起涨价23%，生效时间倒签至7月15日00:00。更骚的是，多家中国AI公司证实，7月16日抵达宁波港的27个货柜（含412块H200），清关单据上的采购价已是新单价。昨夜，寒武纪紧急召开电话会，称‘已启动H200国产替代验证’；今早，壁仞科技官网悄然上线‘BR104 Pro’参数页，标注‘兼容H200生态，功耗低31%’。翻译成人话：英伟达不是涨价，是在给国产芯片铺红毯——它把涨价通知写成‘不可抗力声明’，逼你今天就签国产替代合同。",
+      "hook": "英伟达涨价邮件末尾加了一行小字：‘This adjustment reflects global energy cost volatility’。",
+      "characters": [
+        "英伟达",
+        "寒武纪",
+        "壁仞科技"
+      ],
+      "source_title": "今日全球AI热点简报TOP10 2026年7月14日",
+      "source_url": "https://www.han-tang.com/20260715-ai-top10",
+      "scene": "英伟达销售总监在邮件发送界面点击‘全部发送’，屏幕右上角显示‘Recipients: 1,284’",
+      "poll": {
+        "question": "哪家国产GPU会最先拿下大模型厂商订单？",
+        "options": [
+          "壁仞BR104",
+          "寒武纪MLU370-X12"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：英伟达不是涨价，是在给国产芯片铺红毯——它把涨价通知写成‘不可抗力声"
+      },
+      "image": "2026-07-19-05-nvidia-gpu-price-hike-single-manga.png"
+    },
+    {
+      "slug": "waic-robot-surgery-scandal",
+      "melon_level": 2,
+      "title": "WAIC展台机器人完成首例远程手术直播，术后患者家属发现主刀医生是实习生",
+      "body": "7月17日15:30，WAIC浦东展馆‘具身智能医疗’展台，一台由某头部AI公司研发的手术机器人完成全球首次‘5G+脑机接口’远程前列腺切除直播。掌声未落，患者家属在后台监控屏发现：操作终端ID显示为‘ZJU_2026_Intern_087’，经核实系浙江大学医学院大五实习生。该公司当晚发声明称‘属压力测试环节，全程有主治医师双盲监督’；但浙大教务处次日通报：该生未获临床操作资质。翻译成人话：这不是技术秀，是拿病人练手——展台大屏滚动的‘实时成功率99.8%’，小字备注里藏着‘N=1’。",
+      "hook": "手术直播回放第8分23秒，机器人机械臂暂停0.7秒，画外音说‘实习生正在切换模式’。",
+      "characters": [
+        "浙江大学",
+        "某头部AI公司"
+      ],
+      "source_title": "Chinese robots used in landmark surgery",
+      "source_url": "https://www.latestnews.com/20260718-robot-surgery",
+      "scene": "WAIC展台大屏显示‘手术成功’，旁边实习生低头看手机，微信对话框弹出‘导师刚骂我手抖’",
+      "poll": {
+        "question": "涉事AI公司会被吊销医疗AI认证吗？",
+        "options": [
+          "会，药监局已立案",
+          "不会，转为‘科研项目’免责"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：这不是技术秀，是拿病人练手——展台大屏滚动的‘实时成功率99.8%’"
+      },
+      "image": "2026-07-19-06-waic-robot-surgery-scandal-single-manga.png"
+    },
+    {
+      "slug": "openai-ceo-tweet-delete",
+      "melon_level": 1,
+      "title": "OpenAI CEO山姆·阿尔特曼凌晨发推夸‘苹果Vision Pro 3很惊艳’，17分钟后秒删",
+      "body": "7月18日02:14，Sam Altman发推：‘Just tried Vision Pro 3 — it’s genuinely stunning. The spatial OS rewrite changes everything.’ 02:31，该推文消失，账号主页仅剩一条3小时前转发的AGI峰会合影。知情人士透露，删除前已有超2.4万人截图，包括苹果公关团队全员。今早，OpenAI发言人称‘CEO个人账号言论不代表公司立场’；苹果未置评，但Vision Pro 3官网产品页‘开发者支持’栏，于03:00悄然新增‘OpenAI Plugin SDK Beta’链接。翻译成人话：嘴上说删，身体很诚实——SDK链接的API密钥有效期，设到了2027年12月31日。",
+      "hook": "Altman那条推文被删后，Reddit r/OpenAI版块出现27个镜像帖，最高赞评论：‘他删得比GPT-5.6幻觉还快’。",
+      "characters": [
+        "OpenAI",
+        "苹果"
+      ],
+      "source_title": "苹果41页状纸怒告OpenAI“偷家”:硅谷无间道引爆AI硬件之战",
+      "source_url": "https://www.tmtpost.com/3534067/20260715-apple-vs-openai-lawsuit",
+      "scene": "Altman手机屏幕亮着已编辑好的推文草稿，输入框里还残留半句‘…especially the new eye-tracking latency—’",
+      "poll": {
+        "question": "Vision Pro 3会预装OpenAI插件吗？",
+        "options": [
+          "会，首发版内置",
+          "不会，等iOS 19再支持"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：嘴上说删，身体很诚实——SDK链接的API密钥有效期，设到了2027"
+      },
+      "image": "2026-07-19-07-openai-ceo-tweet-delete-single-manga.png"
+    },
+    {
+      "slug": "china-ai-ethics-action-plan",
+      "melon_level": 2,
+      "title": "中国发布全球首个AI伦理强制行动清单，第一条直指‘模型幻觉不得包装为创意’",
+      "body": "7月18日04:26，国家网信办联合工信部发布《人工智能伦理治理行动清单（2026）》，首条即明确：‘禁止将模型生成内容中的事实性错误、逻辑断裂、数据捏造等幻觉现象，以‘风格化表达’‘艺术再创作’‘拟人化叙事’等名义进行商业化包装。’文件同步附12家违规企业整改名单，含两家知名AIGC短视频平台。今早，抖音旗下‘剪映AI’紧急下架‘小说转短剧’功能；小红书关闭‘AI故事生成’入口。翻译成人话：监管没说‘不准编’，但说‘不准说这是艺术’——以后AI胡说八道，得老老实实标‘本段内容由AI虚构’。",
+      "hook": "这份清单PDF第3页脚注写着：‘幻觉标注示例：[AI虚构]’，字体比正文还大。",
+      "characters": [
+        "国家网信办",
+        "抖音",
+        "小红书"
+      ],
+      "source_title": "China releases intl AI ethics action plan",
+      "source_url": "https://www.latestnews.com/20260718-china-ai-ethics",
+      "scene": "网信办发布会现场，大屏逐条滚动清单条款，镜头扫过‘幻觉标注’条目时，主持人停顿了2.3秒",
+      "poll": {
+        "question": "下一个被点名的AI功能会是？",
+        "options": [
+          "AI换脸",
+          "AI语音克隆"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：监管没说‘不准编’，但说‘不准说这是艺术’——以后AI胡说八道，得老"
+      },
+      "image": "2026-07-19-08-china-ai-ethics-action-plan-single-manga.png"
+    }
+  ]
+}

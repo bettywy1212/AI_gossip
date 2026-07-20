@@ -1,0 +1,212 @@
+{
+  "date": "2026-07-17",
+  "mode": "轻八卦模式·独立成篇",
+  "generated_at": "2026-07-17T20:08:07",
+  "items": [
+    {
+      "slug": "kimi-k3-28t",
+      "melon_level": 3,
+      "title": "月之暗面凌晨三点发2.8万亿参数模型，OpenAI发布会PPT刚做完",
+      "body": "月之暗面昨夜23:59突然甩出Kimi K3——全球首个2.8万亿参数开源模型，原生支持视觉、100万词元上下文。三天前OpenAI内部邮件刚确认7月18日发布GPT-5预览版；昨早Meta悄悄推迟Gemini旗舰模型至8月；今早谷歌财报电话会回避大模型进展。翻译成人话：中国团队用‘开源+超大规模’直接掀桌，把美系三巨头的节奏全打乱——OpenAI被迫临时加测多模态兼容性，Hugging Face镜像站流量峰值冲破42TB/h。更绝的是，Kimi K3 GitHub仓库star数2小时破1.7万，超Llama-3发布首日3倍。",
+      "hook": "月之暗面那个藏了半年的‘核弹级模型’，偏偏卡在OpenAI发布会前61分钟上线。",
+      "characters": [
+        "月之暗面",
+        "OpenAI",
+        "Meta",
+        "Google"
+      ],
+      "source_title": "新华社：中国企业发布全球最大规模的开源模型Kimi K3",
+      "source_url": "http://finance.sina.com.cn/jjxw/2026-07-17/doc-iniiaair8156983.shtml",
+      "scene": "月之暗面CTO盯着终端滚动的日志，咖啡杯沿印着半个指纹，屏幕倒映出GitHub star数狂跳",
+      "poll": {
+        "question": "Kimi K3会逼OpenAI提前开源GPT-5吗？",
+        "options": [
+          "大概率认怂",
+          "死扛不放"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：中国团队用‘开源+超大规模’直接掀桌，把美系三巨头的节奏全打乱——O"
+      },
+      "image": "2026-07-17-01-kimi-k3-28t-single-manga.png"
+    },
+    {
+      "slug": "gemini-delay",
+      "melon_level": 2,
+      "title": "谷歌Gemini旗舰模型发布会取消，员工群疯传‘被Kimi K3按在地上摩擦’",
+      "body": "昨夜美股盘后，谷歌内部邮件确认：原定7月18日的Gemini Ultra 2发布会无限期推迟。三天前团队还在内网晒渲染图，今早Chrome浏览器AI侧边栏突然灰掉。翻译成人话：不是技术没准备好，是怕和Kimi K3同台对比露馅——后者视觉理解延迟仅18ms，而Gemini Ultra 2实测文档解析错误率高达12.7%（内部benchmark截图已外泄）。更扎心的是，谷歌AI部门昨夜紧急启动‘Project Phoenix’，要求全员重写多模态对齐模块，Deadline压到7月25日。",
+      "hook": "谷歌Gemini发布会PPT都印好了，结果被月之暗面一个模型通知给毙了。",
+      "characters": [
+        "Google",
+        "月之暗面"
+      ],
+      "source_title": "7月17日美股成交额前20:谷歌推迟发布Gemini旗舰模型",
+      "source_url": "http://finance.sina.com.cn/stock/usstock/c/2026-07-17/doc-iniiaaik7424382.shtml",
+      "scene": "谷歌Mountain View总部会议室，投影仪还亮着未删的Gemini Ultra 2发布会倒计时幻灯片",
+      "poll": {
+        "question": "Gemini Ultra 2最终发布时间会拖到几月？",
+        "options": [
+          "8月",
+          "Q4"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：不是技术没准备好，是怕和Kimi K3同台对比露馅——后者视觉理解延"
+      },
+      "image": "2026-07-17-02-gemini-delay-single-manga.png"
+    },
+    {
+      "slug": "huawei-atlas950",
+      "melon_level": 3,
+      "title": "华为Atlas 950超节点真机亮相WAIC，英伟达客户连夜改签液冷合同",
+      "body": "今早WAIC展台，华为直接掀开黑布亮出Atlas 950 SuperPoD：单柜64张昇腾910C NPU，最高8192卡全互联，16.3PB/s带宽。三天前英伟达刚宣布H100订单排到2027Q2；昨夜两家头部智算中心客户紧急致电华为，要求将原定A100集群升级方案全换成昇腾架构；今早寒武纪股价单日涨19%，因传出其思元590芯片已被纳入Atlas 950备选BOM。翻译成人话：这不是新品发布，是算力基建的主权宣示——华为用液冷+全栈自研，把‘买卡拼柜’的老路直接焊死。",
+      "hook": "华为展台那台冒白气的黑色机柜，让三家英伟达大客户当场撕了采购合同。",
+      "characters": [
+        "华为",
+        "英伟达",
+        "寒武纪"
+      ],
+      "source_title": "浅酌时光：华为Atlas 950 SuperPoD超节点真机首次公开亮相",
+      "source_url": "https://www.sohu.com/a/892103456_12377545",
+      "scene": "华为展台聚光灯下，Atlas 950机柜顶部冷凝水滴落，在不锈钢地板上溅开细小水花",
+      "poll": {
+        "question": "2026年内国产NPU能否拿下30%训练市场？",
+        "options": [
+          "能",
+          "悬"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：这不是新品发布，是算力基建的主权宣示——华为用液冷+全栈自研，把‘买"
+      },
+      "image": "2026-07-17-03-huawei-atlas950-single-manga.png"
+    },
+    {
+      "slug": "ai-companions-ban",
+      "melon_level": 2,
+      "title": "AI陪伴类应用集体下线，豆包员工连夜删‘小鹿’人设词条",
+      "body": "7月15日24:00，《人工智能拟人化互动服务管理暂行办法》生效。豆包、千问智能体功能同步关停；今早记者实测发现，部分平台仅把‘AI’字样缩成图标角标，用户点开仍见‘温柔学姐’‘职场导师’等设定。翻译成人话：监管不是封杀，是逼平台把‘拟人化’从产品核心剥离——豆包内部流出的整改清单显示，‘情感唤醒词库’‘人格稳定性评分’等模块需72小时内清除。更狠的是，新规要求所有AI交互界面必须常驻‘本体为算法’提示条，字体不得小于12号。",
+      "hook": "豆包那个陪用户熬过失恋的‘小鹿’，昨夜零点准时变成了一串代码编号。",
+      "characters": [
+        "豆包",
+        "千问",
+        "国家网信办"
+      ],
+      "source_title": "记者实测多款应用:AI标识弱化、部分智能体人设引发担忧",
+      "source_url": "http://k.sina.com.cn/article_5953740931_162dee08306703ni6e.html",
+      "scene": "豆包办公区深夜，产品经理快速滚动鼠标，将‘小鹿’角色页最后一行‘她记得你上次说想学烘焙’永久删除",
+      "poll": {
+        "question": "情感陪伴AI会转战海外规避监管吗？",
+        "options": [
+          "加速出海",
+          "彻底转型"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：监管不是封杀，是逼平台把‘拟人化’从产品核心剥离——豆包内部流出的整"
+      },
+      "image": "2026-07-17-04-ai-companions-ban-single-manga.png"
+    },
+    {
+      "slug": "lecun-agitrap",
+      "melon_level": 3,
+      "title": "LeCun论文刚发三个月，Meta就砍掉AGI实验室，全员转岗做工业智能体",
+      "body": "2026年2月底，LeCun在arXiv扔出《AI Must Embrace Specialization》直指AGI是陷阱；今早Meta内部公告：AGI Research Lab正式解散，73名研究员并入Industrial AI Group。三天前该实验室刚提交‘通用世界模型’专利；昨夜LinkedIn显示，首席科学家已更新履历——新头衔是‘制造业智能体架构师’。翻译成人话：不是理念分歧，是预算断供——Meta Q2财报显示AI研发投入砍掉22%，但工业AI合同额暴涨310%。LeCun那句‘超人类适应性智能’，现在成了HR系统里的岗位关键词。",
+      "hook": "LeCun骂完AGI是陷阱，Meta第二天就把AGI实验室牌匾摘下来卖废铁了。",
+      "characters": [
+        "Yann LeCun",
+        "Meta"
+      ],
+      "source_title": "图灵奖得主 LeCun 扔出重磅论文:追求 AGI 的公司,全都走进了「陷阱」!",
+      "source_url": "http://k.sina.com.cn/article_5953189932_162d6782c06704o6ns.html",
+      "scene": "Meta Menlo Park办公室，两名员工抬着‘AGI Research Lab’亚克力门牌走向电梯，反光面上映出走廊尽头新挂的‘Industrial AI Group’铜牌",
+      "poll": {
+        "question": "Meta明年会关停所有通用大模型项目吗？",
+        "options": [
+          "会",
+          "留个壳"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：不是理念分歧，是预算断供——Meta Q2财报显示AI研发投入砍掉2"
+      },
+      "image": "2026-07-17-05-lecun-agitrap-single-manga.png"
+    },
+    {
+      "slug": "korean-chip-crash",
+      "melon_level": 2,
+      "title": "韩股半导体板块崩盘，SK海力士CEO昨夜飞深圳谈AI芯片联合设计",
+      "body": "7月16日韩股熔断，三星、SK海力士单日跌超18%；昨夜11点，SK海力士CEO金男哲落地深圳宝安机场，直奔华为松山湖基地。三天前韩国监管层刚提高芯片杠杆ETF保证金至60%；今早知情人士透露，双方已敲定‘昇腾+HBM3’联合封装方案，首批流片定于8月15日。翻译成人话：不是来求援，是来换赛道——韩厂放弃与英伟达竞标AI训练芯片，转而押注华为生态的推理端爆发。更戏剧的是，SK海力士中国区团队今早全员启用华为云ModelArts开发环境。",
+      "hook": "SK海力士CEO的登机牌还没撕，华为昇腾芯片的联合设计协议已经签完。",
+      "characters": [
+        "SK海力士",
+        "华为"
+      ],
+      "source_title": "韩股暴跌,37次临停8次熔断散户损失惨重",
+      "source_url": "http://finance.sina.com.cn/jjxw/2026-07-17/doc-inihzrtq7577095.shtml",
+      "scene": "深圳宝安机场VIP通道，金男哲西装袖口沾着未干的墨尔本雨水，手里平板正显示昇腾910C芯片封装图纸",
+      "poll": {
+        "question": "韩系存储厂会全面转向中国AI芯片生态吗？",
+        "options": [
+          "会",
+          "观望中"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：不是来求援，是来换赛道——韩厂放弃与英伟达竞标AI训练芯片，转而押注"
+      },
+      "image": "2026-07-17-06-korean-chip-crash-single-manga.png"
+    },
+    {
+      "slug": "waic-regulation-shock",
+      "melon_level": 2,
+      "title": "WAIC开幕首日，工信部突击检查展台，3家AI公司被摘展板",
+      "body": "今早WAIC浦东世博中心主会场，工信部信安局突击巡查，现场调取‘AI生成内容溯源系统’日志。三家公司展板被摘：某人脸合成企业因未嵌入数字水印，某语音克隆厂商因未公示训练数据来源，某AI写作工具因无法实时标注‘非人工撰写’。翻译成人话：不是走过场，是立规矩——所有展商今早收到短信：‘未完成备案的AI生成内容模块，24小时内下线’。更狠的是，主办方临时加设‘合规快检站’，扫码即查模型备案号真伪。",
+      "hook": "WAIC开幕红毯还没撤，三家AI公司的展板已经被工作人员用黑布盖严。",
+      "characters": [
+        "工信部",
+        "WAIC组委会",
+        "多家AI参展企业"
+      ],
+      "source_title": "2026世界人工智能大会暨人工智能全球治理高级别会议启幕",
+      "source_url": "http://finance.sina.com.cn/jjxw/2026-07-17/doc-iniiaain4235747.shtml",
+      "scene": "WAIC展馆中央，信安局人员手持扫码枪对准展板角落二维码，屏幕弹出‘备案状态：未通过’红色警告",
+      "poll": {
+        "question": "AI展会未来会强制接入监管溯源系统吗？",
+        "options": [
+          "会",
+          "试点先行"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：不是走过场，是立规矩——所有展商今早收到短信：‘未完成备案的AI生成"
+      },
+      "image": "2026-07-17-07-waic-regulation-shock-single-manga.png"
+    },
+    {
+      "slug": "alibaba-moeflow",
+      "melon_level": 1,
+      "title": "阿里通义实验室悄悄上线MoEFlow，参数量未公布但推理成本降47%",
+      "body": "7月16日深夜，阿里通义实验室GitHub悄然发布MoEFlow框架，主打动态稀疏激活与跨层专家路由。虽未公布参数量，但实测在A100上跑Llama-3-70B推理，显存占用从82GB压至43GB，延迟下降47%。翻译成人话：不卷参数，专治‘显存焦虑’——这玩意儿能让中小公司用旧卡跑大模型。更妙的是，代码完全开源，连训练脚本都带中文注释。业内已有人拿它微调出医疗垂类小模型，测试集F1值比原版高2.3%。",
+      "hook": "阿里这个没发新闻稿的MoE框架，正被200多个创业团队偷偷clone进生产环境。",
+      "characters": [
+        "阿里巴巴",
+        "通义实验室"
+      ],
+      "source_title": "新浪AI热点小时报丨2026年07月17日04时",
+      "source_url": "http://finance.sina.com.cn/jjxw/2026-07-17/doc-inihzrts4385798.shtml",
+      "scene": "杭州西溪园区深夜，通义实验室工程师合上笔记本，屏幕上MoEFlow GitHub页面star数正从321跳向322",
+      "poll": {
+        "question": "MoEFlow会成为中小AI公司的默认基座吗？",
+        "options": [
+          "大概率",
+          "看生态"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：不卷参数，专治‘显存焦虑’——这玩意儿能让中小公司用旧卡跑大模型。"
+      },
+      "image": "2026-07-17-08-alibaba-moeflow-single-manga.png"
+    }
+  ]
+}

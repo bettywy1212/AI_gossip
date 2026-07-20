@@ -661,6 +661,11 @@ def admin_rebuild(token: str = ""):
 # ---------------------------------------------------------------- 静态资源
 app.mount("/images", StaticFiles(directory=IMAGE_DIR), name="images")
 
+# 编辑部传播入口（repo/entry）→ /entry/ ，与特刊同源，便于内网穿透只开一条隧道
+ENTRY_DIR = ROOT.parent / "entry"
+if ENTRY_DIR.is_dir():
+    app.mount("/entry", StaticFiles(directory=ENTRY_DIR, html=True), name="entry")
+
 
 @app.get("/")
 def index():

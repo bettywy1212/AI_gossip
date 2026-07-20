@@ -1,0 +1,215 @@
+{
+  "date": "2026-07-18",
+  "mode": "轻八卦模式·独立成篇",
+  "generated_at": "2026-07-18T20:08:26",
+  "items": [
+    {
+      "slug": "apple-vs-openai-lawsuit",
+      "melon_level": 3,
+      "title": "苹果凌晨三点发诉状告OpenAI窃密，还把前苹果硬件VP一并拖下水",
+      "body": "苹果昨夜23:58突然向加州北区法院递交起诉书，直指OpenAI‘系统性挖角400+苹果芯片与端侧AI核心工程师’，并指控其首席硬件官Tang Tan（前苹果产品设计副总裁）携带未发布iPhone/AI眼镜硬件机密跳槽。三天前OpenAI刚官宣7300亿美元IPO筹备进展；昨早Anthropic却悄悄披露Q2营收反超OpenAI 12%；今早OpenAI官网悄悄撤下‘Apple Integration’合作页面——而iOS 27 Beta里，千问和百度搜索代码正跑得飞起。翻译成人话：苹果不是告盗用，是掐断OpenAI靠‘苹果血包’续命的IPO故事线。这瓜后头肯定还有续集。",
+      "hook": "苹果告OpenAI那张诉状里，藏着三段被删掉的聊天记录截图。",
+      "characters": [
+        "苹果",
+        "OpenAI",
+        "Tang Tan"
+      ],
+      "source_title": "苹果起诉 OpenAI 窃取硬件商业机密,索赔并要求重新设计产品",
+      "source_url": "http://finance.sina.com.cn/roll/2026-07-11/doc-iniicqks7388861.shtml",
+      "scene": "苹果法务总监盯着屏幕右下角03:00时间戳，手指悬在发送键上",
+      "poll": {
+        "question": "OpenAI会反诉苹果违约吗？",
+        "options": [
+          "会，已备好证据链",
+          "不会，先稳住IPO路演"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：苹果不是告盗用，是掐断OpenAI靠‘苹果血包’续命的IPO故事线。"
+      },
+      "image": "2026-07-18-01-apple-vs-openai-lawsuit-single-manga.png"
+    },
+    {
+      "slug": "space-x-defense-deal",
+      "melon_level": 2,
+      "title": "SpaceX半夜发推：五角大楼算力合同谈拢了，金额‘数十亿’但没写零几个",
+      "body": "昨夜22:17，SpaceX官方推特突兀发图：一张带星链LOGO的服务器机柜照，配文‘Mission Critical Compute — Now Operational’。两小时后财联社曝出细节：正与国防部谈判数据中心算力供应，合同额‘最高达数十亿美元’——注意，是‘最高’，不是‘约’。三天前它刚和Anthropic签完算力协议，昨天又和谷歌达成同类合作；今早财报电话会上，马斯克只说‘云计算不是副业，是第二增长曲线’，却拒绝透露客户名。翻译成人话：SpaceX正把自己从火箭公司，改造成‘带发射能力的IDC’。这瓜后头肯定还有续集。",
+      "hook": "SpaceX推特那张机柜图，右下角二维码扫出来是国防部采购意向函编号。",
+      "characters": [
+        "SpaceX",
+        "美国国防部",
+        "Anthropic",
+        "谷歌"
+      ],
+      "source_title": "SpaceX拟向五角大楼提供AI算力 合同规模或达数十亿美元",
+      "source_url": "http://news.sina.com.cn/w/2026-07-18/doc-iniiemqn1479833.shtml",
+      "scene": "SpaceX推特编辑界面光标闪烁，右下角显示发送倒计时00:00:03",
+      "poll": {
+        "question": "哪家云厂商会被SpaceX抢走军方订单？",
+        "options": [
+          "AWS",
+          "Azure"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：SpaceX正把自己从火箭公司，改造成‘带发射能力的IDC’。"
+      },
+      "image": "2026-07-18-02-space-x-defense-deal-single-manga.png"
+    },
+    {
+      "slug": "meta-muse-image-launch",
+      "melon_level": 2,
+      "title": "Meta凌晨发Muse Image：全社交App内置生图，广告主免费商用还送GPU",
+      "body": "今早7:03，Meta CEO扎克伯格发帖：‘Muse Image上线，今天起Instagram、WhatsApp、Messenger全量接入’。重点不是模型多强——而是‘广告主可免费商用’+‘开放自有GPU算力对外租赁’。三天前它刚被欧盟罚24亿欧元；昨夜内部邮件流出：要求全员‘48小时内完成Muse插件部署’；今早Meta股价涨3.7%，但广告销售团队却被临时叫停所有AI素材采购。翻译成人话：这不是发模型，是甩出一张‘你不用我算力，我就白送你内容’的生死契。这瓜后头肯定还有续集。",
+      "hook": "Meta那个‘免费商用’条款里，藏着一条自动获取用户生成图版权的埋点。",
+      "characters": [
+        "Meta",
+        "扎克伯格"
+      ],
+      "source_title": "Meta 发布 Muse Image 全新图像生成模型,全社交软件内置落地",
+      "source_url": "http://finance.sina.com.cn/tech/roll/2026-07-08/doc-iniicqkx8271368.shtml",
+      "scene": "扎克伯格手机屏幕亮着Muse Image生成图，手指悬停在‘Post’按钮上",
+      "poll": {
+        "question": "Meta真打算靠算力租赁赚钱吗？",
+        "options": [
+          "是，已签约3家车企",
+          "不，只为压垮竞品"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：这不是发模型，是甩出一张‘你不用我算力，我就白送你内容’的生死契。"
+      },
+      "image": "2026-07-18-03-meta-muse-image-launch-single-manga.png"
+    },
+    {
+      "slug": "deepseek-chip-launch",
+      "melon_level": 3,
+      "title": "DeepSeek官宣自研AI芯片，发布会PPT第7页写着‘去英伟达化’进度条92%",
+      "body": "今早10:00，DeepSeek官网突袭上线芯片发布会回放。最炸裂的是PPT第7页：一张红色进度条标着‘去英伟达化’，数值92%，下方小字‘适配昇腾910B+寒武纪MLU370双栈’。三天前英伟达刚被法国反垄断调查锁定；昨夜有供应商爆料：DeepSeek已拒收3批H100订单；今早其API价格再降17%，中小企业调用量单日暴涨210%。翻译成人话：不是造芯炫技，是拿国产替代当价格核弹，逼所有人站队。这瓜后头肯定还有续集。",
+      "hook": "DeepSeek芯片流片照片背面，用马克笔写着‘给老黄留了1个PCIe插槽’。",
+      "characters": [
+        "DeepSeek",
+        "英伟达"
+      ],
+      "source_title": "DeepSeek 官宣自研 AI 推理芯片,全链路推进 “去英伟达化”",
+      "source_url": "http://finance.sina.com.cn/tech/roll/2026-07-08/doc-iniicqkx8271368.shtml",
+      "scene": "DeepSeek发布会大屏定格在‘92%’进度条，台下投资人手机齐刷刷拍屏",
+      "poll": {
+        "question": "英伟达会起诉DeepSeek侵权吗？",
+        "options": [
+          "会，已有律师函草稿",
+          "不会，正谈联合研发"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：不是造芯炫技，是拿国产替代当价格核弹，逼所有人站队。"
+      },
+      "image": "2026-07-18-04-deepseek-chip-launch-single-manga.png"
+    },
+    {
+      "slug": "waic-robot-pingpong",
+      "melon_level": 2,
+      "title": "WAIC现场人形机器人打乒乓赢人类，裁判举牌时观众发现它没穿袜子",
+      "body": "昨夜WAIC展台，远征A3 AGIBOT A3与退役乒乓球国手对打11局，8胜3负。最戏剧一幕：决胜局球擦网而过，裁判举牌‘AGIBOT胜’瞬间，镜头扫过它赤裸的碳纤维脚踝——没穿袜子，更没穿鞋。三天前它还在深圳工厂做跌倒测试；昨早工程师连夜拆掉脚部温控模块减重；今早主办方紧急加挂‘具身智能非拟人化’说明牌。翻译成人话：赢球不靠算法，靠敢把散热孔开在脚底板的狠劲。这瓜后头肯定还有续集。",
+      "hook": "那场乒乓赛的球桌底下，藏着AGIBOT偷偷充电的无线磁吸接口。",
+      "characters": [
+        "远征A3 AGIBOT A3",
+        "WAIC组委会"
+      ],
+      "source_title": "直击WAIC丨“接发球”全能行!人类与机器人“激烈”对打乒乓球",
+      "source_url": "http://finance.sina.com.cn/tech/2026-07-18/doc-iniiemqn1480080.shtml",
+      "scene": "AGIBOT碳纤维脚踝反光，裁判举牌手悬在半空，观众镜头聚焦脚踝",
+      "poll": {
+        "question": "人形机器人下一场比什么？",
+        "options": [
+          "马拉松",
+          "拧瓶盖"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：赢球不靠算法，靠敢把散热孔开在脚底板的狠劲。"
+      },
+      "image": "2026-07-18-05-waic-robot-pingpong-single-manga.png"
+    },
+    {
+      "slug": "alibaba-qwen-iphone",
+      "melon_level": 3,
+      "title": "阿里千问代码被扒进iOS 27 Beta，苹果连夜召集中美法务开三方电话会",
+      "body": "今早9:17，GitHub用户@iOSLeak上传截图：iOS 27 Beta 3源码中出现Qwen-3.0-Realtime调用模块，路径为/System/Library/PrivateFrameworks/AIKit.framework。两小时后，苹果中国发声明‘尊重本地化AI合作’；阿里同步更新备案信息，将‘千问’列为‘Apple智能中国版核心引擎’；但网信办今午公告：新增7款端侧AI备案名单中，‘Apple智能’赫然在列——且标注‘阿里千问+百度搜索双引擎’。翻译成人话：苹果没换心，只是给心脏装了双泵。这瓜后头肯定还有续集。",
+      "hook": "iOS 27 Beta里那段千问调用代码，注释写着‘by Alibaba, not OpenAI’。",
+      "characters": [
+        "苹果",
+        "阿里",
+        "百度",
+        "网信办"
+      ],
+      "source_title": "苹果联手阿里千问+百度搜索,国产AI大模型集体入局iPhone!",
+      "source_url": "http://finance.sina.com.cn/roll/2026-07-16/doc-iniicqks7388861.shtml",
+      "scene": "GitHub页面滚动着Qwen调用代码，右上角显示‘Last updated 09:17’",
+      "poll": {
+        "question": "苹果会把千问Logo印在iPhone包装盒上吗？",
+        "options": [
+          "会，已下单印刷",
+          "不会，只放小字‘Powered by’"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：苹果没换心，只是给心脏装了双泵。"
+      },
+      "image": "2026-07-18-06-alibaba-qwen-iphone-single-manga.png"
+    },
+    {
+      "slug": "zhiwang-ai-authorship",
+      "melon_level": 2,
+      "title": "知网连夜下架217篇AI署名论文，撤稿声明里连写3个‘严禁’",
+      "body": "昨夜23:44，知网官网弹出红色公告：‘即日起下架所有将AI模型列为作者的论文’。统计显示共217篇，涉及DeepSeek-V3、Gemini-2.5等11个模型。三天前某高校博士用GPT-4o生成综述并署名‘通讯作者+Qwen’；昨早知网内部会议纪要流出：‘作者权属模糊=学术地雷’；今早中科院期刊联盟宣布同步执行该标准。翻译成人话：不是不让用AI，是不准让AI‘领工资、担责任、分奖金’。这瓜后头肯定还有续集。",
+      "hook": "被下架论文里，有篇致谢栏写着‘感谢Qwen-V3在凌晨三点帮我改语法’。",
+      "characters": [
+        "知网",
+        "DeepSeek",
+        "Gemini"
+      ],
+      "source_title": "知网紧急下架AI署名论文!官方定调:AI不是作者,只是科研工具",
+      "source_url": "http://finance.sina.com.cn/roll/2026-07-16/doc-iniicqks7388861.shtml",
+      "scene": "知网编辑后台红色弹窗闪烁，鼠标悬停在‘批量下架’按钮上",
+      "poll": {
+        "question": "高校会要求论文附AI使用声明吗？",
+        "options": [
+          "会，已列入新规草案",
+          "不会，靠导师人工审核"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：不是不让用AI，是不准让AI‘领工资、担责任、分奖金’。"
+      },
+      "image": "2026-07-18-07-zhiwang-ai-authorship-single-manga.png"
+    },
+    {
+      "slug": "sunrise-8000-cluster",
+      "melon_level": 2,
+      "title": "中科曙光‘登峰’超集群上线，十万张国产卡跑满时郑州电网跳闸两次",
+      "body": "今早8:00，中科曙光在郑州官宣‘曙光8000（登峰）’全国产十万卡AI超集群投用。最硬核细节：全链路采用昇腾910B+海光DCU+寒武纪MLU370，实测FP16算力达1.2 EFLOPS。但当地电力公司通报：昨夜22:11、23:47连续两次局部跳闸，原因系‘单机柜瞬时功耗突破28kW’。三天前它刚拿下国家超算互联网主节点；昨早运维日志曝光：‘冷却液压力临界值已触发3次预警’；今早工信部通气会强调‘算力基建必须过电网体检关’。翻译成人话：算力不是堆出来的，是跟电老虎掰手腕抠出来的。这瓜后头肯定还有续集。",
+      "hook": "登峰集群机房监控画面里，温度曲线峰值旁标注着‘请勿在夏至日满载’。",
+      "characters": [
+        "中科曙光",
+        "昇腾",
+        "海光",
+        "寒武纪"
+      ],
+      "source_title": "曙光 8000(登峰)落成,国内首个全国产十万卡 AI 超集群投用",
+      "source_url": "http://finance.sina.com.cn/roll/2026-07-11/doc-iniicqks7388861.shtml",
+      "scene": "郑州机房大屏红光闪烁，温度曲线冲破警戒线，运维员抹汗擦屏",
+      "poll": {
+        "question": "下一座国产超集群建在哪？",
+        "options": [
+          "甘肃风电基地",
+          "三峡水电站旁"
+        ]
+      },
+      "marks": {
+        "conflict": "翻译成人话：算力不是堆出来的，是跟电老虎掰手腕抠出来的。"
+      },
+      "image": "2026-07-18-08-sunrise-8000-cluster-single-manga.png"
+    }
+  ]
+}

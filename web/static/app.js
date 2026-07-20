@@ -25,9 +25,32 @@ function currentTheme() {
 }
 
 function setTheme(id, { rerender = true } = {}) {
+  if (!THEMES.some((t) => t.id === id)) return;
   localStorage.setItem("gossip-theme", id);
   document.body.dataset.theme = id;
   if (rerender) render();
+}
+
+/** 入口页跨端口跳转：?theme=tabloid&reader=format → 套用主题 / 读者类型后清掉 query */
+function bootFromEntryParams() {
+  const params = new URLSearchParams(location.search);
+  const theme = params.get("theme");
+  const reader = params.get("reader");
+  let touched = false;
+  if (theme && THEMES.some((t) => t.id === theme)) {
+    setTheme(theme, { rerender: false });
+    touched = true;
+  }
+  if (reader) {
+    applyReader(reader);
+    touched = true;
+  }
+  if (!touched) return;
+  const url = new URL(location.href);
+  url.searchParams.delete("theme");
+  url.searchParams.delete("reader");
+  const clean = url.pathname + (url.searchParams.toString() ? `?${url.searchParams}` : "") + url.hash;
+  history.replaceState(null, "", clean);
 }
 
 /* ---------------- 随读问答 ---------------- */
@@ -126,7 +149,6 @@ function themeSwitch() {
   </div>`;
 }
 
-document.body.dataset.theme = currentTheme();
 window.setTheme = setTheme;
 
 /* ---------------- 读者类型（测验结果） ---------------- */
@@ -179,6 +201,9 @@ function applyReader(typeId) {
 
 const savedReader = currentReader();
 if (savedReader) document.body.dataset.reader = savedReader.id;
+
+bootFromEntryParams();
+document.body.dataset.theme = currentTheme();
 
 const MELON = { 1: "🍉", 2: "🍉🍉", 3: "🍉🍉🍉" };
 const MELON_LABEL = { 1: "小瓜", 2: "中瓜", 3: "大瓜" };
