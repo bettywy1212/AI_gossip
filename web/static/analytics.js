@@ -58,8 +58,8 @@
       ready = true;
       trackPageView();
       if (isMainSpa()) {
-        window.addEventListener("hashchange", function () {
-          trackPageView();
+        window.addEventListener("gossip:route-rendered", function (event) {
+          trackPageView(event.detail && event.detail.title);
         });
       }
     } catch (_) {
