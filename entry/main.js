@@ -2,6 +2,12 @@
  * 结构：冷开场 → 共情 → 承诺 → 对暗号 → 工牌揭晓 → 真实证据 → 传播闭环
  */
 
+function track(name, params) {
+  try {
+    window.gossipAnalytics && window.gossipAnalytics.trackEvent(name, params || {});
+  } catch (_) { /* 统计失败不影响流程 */ }
+}
+
 const CAST = {
   overload: {
     name: "电量见底记者",
@@ -222,6 +228,7 @@ function revealResult() {
     localStorage.setItem("aig-identity", info.name);
     localStorage.setItem("aig-type", winner);
   } catch { /* 隐私模式忽略 */ }
+  track("entry_quiz_complete", { reader_type: winner, reader_name: info.name });
   personalizeIntern(info.name);
   syncEnterLink();
 
@@ -250,33 +257,166 @@ function revealResult() {
   }, reduced ? 0 : 600);
 }
 
-/* ── 分享：下载工牌 + 复制暗号 ── */
-function downloadBadge(info) {
-  const a = document.createElement("a");
-  a.href = info.image;
-  a.download = `ai-gossip-${info.name}-badge.png`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
+/* ── 吹一口：满屏绒毛 → 种子卡 → 复制链接 ── */
+let blowBusy = false;
+
+function entryShareUrl() {
+  return location.href.split("#")[0].split("?")[0];
 }
 
-async function shareBadge(typeId) {
+const SEED_SPRITES = [
+  "assets/dandelion-soft-seed.png",
+  "assets/dandelion-soft-seed-drift-a.png",
+  "assets/dandelion-soft-seed-drift-b.png",
+];
+
+function spawnBlowSeeds(count = 64) {
+  const layer = $("blow-seeds");
+  if (!layer) return;
+  layer.innerHTML = "";
+  const frag = document.createDocumentFragment();
+  const vw = Math.max(window.innerWidth, 360);
+  const vh = Math.max(window.innerHeight, 480);
+
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement("span");
+    const pose = SEED_SPRITES[i % SEED_SPRITES.length];
+    el.className = "blow-seed"
+      + (Math.random() > 0.5 ? " lg" : "")
+      + (Math.random() > 0.5 ? " flip" : "");
+    const img = document.createElement("img");
+    img.src = pose;
+    img.alt = "";
+    img.draggable = false;
+    el.appendChild(img);
+
+    // 冲脸感：先 360° 铺满全屏散开，再慢慢往上飘
+    const angle = Math.random() * Math.PI * 2;
+    // 用视口对角线半径，保证能铺到四角
+    const diag = Math.hypot(vw, vh) * 0.5;
+    const burstR = diag * (0.55 + Math.random() * 0.55);
+    const bx = Math.cos(angle) * burstR * (0.85 + Math.random() * 0.35);
+    const by = Math.sin(angle) * burstR * (0.85 + Math.random() * 0.35);
+    const driftX = bx + (Math.random() - 0.5) * vw * 0.18;
+    const driftY = by - (vh * (0.18 + Math.random() * 0.28));
+    const settleX = driftX + (Math.random() - 0.5) * vw * 0.12;
+    const settleY = driftY - (vh * (0.14 + Math.random() * 0.26));
+
+    el.style.setProperty("--tx1", `${bx.toFixed(1)}px`);
+    el.style.setProperty("--ty1", `${by.toFixed(1)}px`);
+    el.style.setProperty("--tx2", `${driftX.toFixed(1)}px`);
+    el.style.setProperty("--ty2", `${driftY.toFixed(1)}px`);
+    el.style.setProperty("--tx3", `${settleX.toFixed(1)}px`);
+    el.style.setProperty("--ty3", `${settleY.toFixed(1)}px`);
+    el.style.setProperty("--dur", `${(3.8 + Math.random() * 1.5).toFixed(2)}s`);
+    el.style.setProperty("--delay", `${(Math.random() * 0.14).toFixed(2)}s`);
+    // 先略放大（冲过来），再随上飘略缩小
+    el.style.setProperty("--sc", `${(1.05 + Math.random() * 0.55).toFixed(2)}`);
+    el.style.setProperty("--sc0", `${(0.45 + Math.random() * 0.2).toFixed(2)}`);
+    const rot = -40 + Math.random() * 260;
+    el.style.setProperty("--rot1", `${(rot * 0.35).toFixed(0)}deg`);
+    el.style.setProperty("--rot2", `${(rot * 0.7).toFixed(0)}deg`);
+    el.style.setProperty("--rot3", `${rot.toFixed(0)}deg`);
+    // 口鼻前：屏幕中部偏下一点
+    el.style.left = `${46 + Math.random() * 8}%`;
+    el.style.top = `${48 + Math.random() * 10}%`;
+    frag.appendChild(el);
+  }
+  layer.appendChild(frag);
+}
+
+function closeSeedCard() {
+  const overlay = $("blow-overlay");
+  const wrap = $("seed-card-wrap");
+  if (!overlay || overlay.hidden) return;
+  wrap?.classList.remove("on");
+  wrap?.classList.add("leaving");
+  overlay.classList.remove("on", "settled");
+  const wait = reduced ? 0 : 480;
+  setTimeout(() => {
+    overlay.hidden = true;
+    overlay.setAttribute("aria-hidden", "true");
+    if (wrap) {
+      wrap.hidden = true;
+      wrap.classList.remove("leaving", "on");
+    }
+    $("blow-seeds").innerHTML = "";
+    blowBusy = false;
+    const label = $("seed-copy-label");
+    const btn = $("btn-seed-copy");
+    if (label) label.textContent = "复制给同伙";
+    btn?.classList.remove("copied");
+  }, wait);
+}
+
+function showSeedCard(typeId) {
   const info = CAST[typeId];
-  const text = `我被 AI 八卦特刊编辑部抓到了：\n【${info.name}】\n\n${info.share}\n\n你是哪位编辑部临时工？\n${location.href.split("#")[0]}`;
-  downloadBadge(info);
-  const note = $("result-share-note");
+  if (!info) return;
+  $("seed-role-name").textContent = info.name;
+  const wrap = $("seed-card-wrap");
+  const overlay = $("blow-overlay");
+  wrap.classList.remove("leaving", "on");
+  wrap.hidden = false;
+  overlay.classList.add("settled");
+  // 双帧确保从 opacity:0 过渡到 .on，避免直接跳显
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => wrap.classList.add("on"));
+  });
+  track("entry_seed_card_show", { reader_type: typeId, reader_name: info.name });
+}
+
+function blowAndShowSeed(typeId) {
+  if (blowBusy) return;
+  const info = CAST[typeId];
+  if (!info) return;
+  blowBusy = true;
+  track("entry_blow_start", { reader_type: typeId });
+
+  const overlay = $("blow-overlay");
+  const wrap = $("seed-card-wrap");
+  wrap.hidden = true;
+  wrap.classList.remove("on");
+  overlay.hidden = false;
+  overlay.setAttribute("aria-hidden", "false");
+  overlay.classList.remove("settled");
+
+  requestAnimationFrame(() => {
+    overlay.classList.add("on");
+    if (reduced) {
+      showSeedCard(typeId);
+      return;
+    }
+    spawnBlowSeeds(64);
+    // 四面散开看得见后就落卡，不必等大多飘出屏
+    setTimeout(() => showSeedCard(typeId), reduced ? 200 : 1650);
+  });
+}
+
+async function copySeedLink(typeId) {
+  const info = CAST[typeId] || CAST.format;
+  const text = `我被 AI 八卦特刊编辑部抓到了：【${info.name}】\n\n${info.share}\n\n你是哪位？吹一口试试 →\n${entryShareUrl()}`;
+  const label = $("seed-copy-label");
+  const btn = $("btn-seed-copy");
   try {
     await navigator.clipboard.writeText(text);
-    note.textContent = "工牌图已下载，暗号已复制，去抓下一个同伙。";
+    if (label) label.textContent = "已复制，去抓同伙";
+    btn?.classList.add("copied");
+    track("entry_seed_copy", { reader_type: typeId || "unknown", ok: true });
   } catch {
-    note.textContent = "工牌图已下载，暗号复制失败，请手动复制页面地址。";
+    if (label) label.textContent = "复制失败，请手动复制地址";
+    track("entry_seed_copy", { reader_type: typeId || "unknown", ok: false });
   }
-  note.hidden = false;
+  const note = $("result-share-note");
+  if (note) {
+    note.textContent = "种子已交给风。";
+    note.hidden = false;
+  }
 }
 
 /* ── 事件 ── */
 $("btn-start").addEventListener("click", () => {
   answers = [];
+  track("entry_quiz_start");
   swapQuizBody(renderQuestion);
 });
 $("btn-back").addEventListener("click", () => {
@@ -295,7 +435,17 @@ $("btn-retake").addEventListener("click", () => {
   setStep();
   $("s3").scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
 });
-$("btn-share").addEventListener("click", (e) => shareBadge(e.currentTarget.dataset.type));
+$("btn-share").addEventListener("click", (e) => blowAndShowSeed(e.currentTarget.dataset.type));
+$("btn-seed-copy")?.addEventListener("click", () => {
+  copySeedLink($("btn-share").dataset.type);
+});
+$("seed-close")?.addEventListener("click", closeSeedCard);
+$("blow-overlay")?.addEventListener("click", (e) => {
+  if (e.target === $("blow-overlay") || e.target === $("blow-seeds")) closeSeedCard();
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && !$("blow-overlay")?.hidden) closeSeedCard();
+});
 $("btn-cta-quiz").addEventListener("click", () => {
   $("s3").scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
 });
@@ -342,6 +492,10 @@ function syncEnterLink() {
 }
 
 $("btn-enter")?.addEventListener("click", (e) => {
+  track("entry_enter_magazine", {
+    mode: $("btn-enter").dataset.mode || "unknown",
+    reader_type: currentTypeId() || "none",
+  });
   if ($("btn-enter").dataset.mode !== "random") return;
   e.preventDefault();
   const url = magazineUrl();
@@ -373,7 +527,9 @@ const INTERN_LEAD = {
 
 function personalizeIntern(name) {
   const lead = $("intern-lead");
-  if (lead) lead.textContent = INTERN_LEAD[name] || "工牌不是纪念品。上岗第一单：在下面这条真实的瓜上，完成三件小事。";
+  if (!lead) return;
+  const map = typeof INTERN_LEAD !== "undefined" ? INTERN_LEAD : null;
+  lead.textContent = (map && map[name]) || "工牌不是纪念品。上岗第一单：在下面这条真实的瓜上，完成三件小事。";
 }
 personalizeIntern(identity());
 
@@ -383,10 +539,12 @@ let voteSide = null;
 function completeTask(key, li) {
   if (tasksDone[key]) return;
   tasksDone[key] = true;
+  track("entry_intern_task", { task: key });
   $(li).classList.add("done");
   const n = Object.values(tasksDone).filter(Boolean).length;
   $("task-count").textContent = `已完成 ${n} / 3`;
   if (n === 3) {
+    track("entry_intern_promote");
     const wrap = $("promote-wrap");
     wrap.hidden = false;
     const stamp = $("promote-stamp");
@@ -543,3 +701,18 @@ $("btn-taunt").addEventListener("click", async () => {
   note.hidden = false;
   completeTask("taunt", "task-taunt");
 });
+
+/* 预览：/entry/?preview=blow&type=format（须放在 INTERN_LEAD 等初始化之后） */
+(function previewBlow() {
+  const params = new URLSearchParams(location.search);
+  if (params.get("preview") !== "blow") return;
+  const type = params.get("type");
+  const typeId = CAST[type] ? type : "format";
+  answers = [typeId, typeId, typeId, typeId];
+  finishQuiz();
+  const kick = () => {
+    blowBusy = false;
+    blowAndShowSeed(typeId);
+  };
+  setTimeout(kick, reduced ? 200 : 2200);
+})();

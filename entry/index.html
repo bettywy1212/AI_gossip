@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI 八卦特刊 · 编辑部对暗号</title>
 <meta name="description" content="刷 AI 新闻总在半路溜走？编辑部四道暗号，当场发临时工牌，再给你看新闻被改写成瓜的样子。">
-<link rel="stylesheet" href="style.css?v=13">
-<script src="/static/analytics.js?v=1" defer></script>
+<link rel="stylesheet" href="style.css?v=24">
+<script src="/static/analytics.js?v=2" defer></script>
 </head>
 <body>
 
@@ -138,7 +138,11 @@
           <p id="result-assignment"></p>
         </div>
         <div class="result-actions">
-          <button type="button" class="ink-btn primary" id="btn-share">下载工牌发给同伙</button>
+          <button type="button" class="ink-btn primary btn-blow" id="btn-share">
+            <span>吹</span>
+            <img class="btn-blow-icon" src="assets/dandelion-soft-whole.png" alt="" width="36" height="36">
+            <span>一口试试</span>
+          </button>
           <button type="button" class="ink-btn" id="btn-retake">再对一次暗号</button>
         </div>
         <p class="result-note" id="result-share-note" hidden></p>
@@ -146,6 +150,22 @@
     </div>
   </div>
 </section>
+
+<!-- 吹一口：满屏绒毛 → 种子卡 -->
+<div id="blow-overlay" class="blow-overlay" hidden aria-hidden="true">
+  <div id="blow-seeds" class="blow-seeds" aria-hidden="true"></div>
+  <div id="seed-card-wrap" class="seed-card-wrap" hidden>
+    <article class="seed-card" role="dialog" aria-labelledby="seed-role-name" aria-modal="true">
+      <img class="seed-bookmark" src="assets/dandelion-bookmark-slender-newsprint.png?v=25" alt="" aria-hidden="true">
+      <button type="button" class="seed-close" id="seed-close" aria-label="关闭">×</button>
+      <p class="seed-role">你是：<strong id="seed-role-name"></strong></p>
+      <p class="seed-body">别只收藏，也吹给那个也读不完新闻的人——<br>种子落在谁身上，谁就是同伙。</p>
+      <button type="button" class="seed-copy-btn" id="btn-seed-copy">
+        <span id="seed-copy-label">复制给同伙</span>
+      </button>
+    </article>
+  </div>
+</div>
 
 <!-- 05 瓜田实习 -->
 <section class="scene" id="s5">
@@ -238,6 +258,6 @@
 
 </main>
 
-<script src="main.js?v=13"></script>
+<script src="main.js?v=23"></script>
 </body>
 </html>

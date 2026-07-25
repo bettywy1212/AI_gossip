@@ -10,6 +10,7 @@
   --ink-soft: #665b4b;
   --vermilion: #b8432a;
   --mustard: #d9a441;
+  --dandelion: #e4c55e;
   --serif: "Noto Serif SC", "Songti SC", "SimSun", "STSong", serif;
   --sans: "PingFang SC", "Microsoft YaHei", sans-serif;
   --page-max: 1040px;
@@ -532,6 +533,21 @@ body {
   align-items: center;
   justify-content: center;
 }
+.btn-blow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 22px;
+}
+.btn-blow-icon {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  flex: 0 0 auto;
+  filter: drop-shadow(0 1px 1px rgba(37, 31, 24, .25));
+  transform: translateY(-1px);
+}
 .result-copy { padding: 6px 0; }
 .result-name { font-size: 32px; font-weight: 900; letter-spacing: .08em; margin: 0 0 6px; }
 .result-tagline { color: var(--vermilion); font-size: 14px; font-weight: 700; line-height: 1.7; margin-bottom: 18px; }
@@ -557,6 +573,187 @@ body {
   font-size: 12px;
   color: var(--vermilion);
   letter-spacing: .08em;
+}
+
+/* ---------------- 吹一口 · 蒲公英 ---------------- */
+
+.blow-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(37, 31, 24, .55);
+  backdrop-filter: blur(2px);
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity .5s var(--ease-out), background .7s var(--ease-out);
+}
+.blow-overlay.on { opacity: 1; }
+.blow-overlay.settled { background: rgba(37, 31, 24, .62); }
+
+.blow-seeds {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.blow-seed {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  width: 52px;
+  height: 52px;
+  margin: -26px 0 0 -26px;
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: seed-blow var(--dur, 4.2s) linear var(--delay, 0s) forwards;
+  filter: drop-shadow(0 1px 3px rgba(37, 31, 24, .26));
+  pointer-events: none;
+}
+.blow-seed img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.blow-seed.lg {
+  width: 68px; height: 68px; margin: -34px 0 0 -34px;
+}
+.blow-seed.flip img { transform: scaleX(-1); }
+
+/* 冲脸：先四面炸开放大，再慢慢往上飘散 */
+@keyframes seed-blow {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(var(--sc0, .5)) rotate(0deg);
+  }
+  5% { opacity: 1; }
+  16% {
+    opacity: 1;
+    transform: translate(var(--tx1), var(--ty1)) scale(var(--sc, 1.2)) rotate(var(--rot1, 40deg));
+  }
+  42% {
+    opacity: .97;
+    transform: translate(var(--tx2), var(--ty2)) scale(calc(var(--sc, 1.2) * .96)) rotate(var(--rot2, 90deg));
+  }
+  78% {
+    opacity: .72;
+    transform: translate(var(--tx3), var(--ty3)) scale(calc(var(--sc, 1.2) * .88)) rotate(var(--rot3, 140deg));
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx3), var(--ty3)) scale(calc(var(--sc, 1.2) * .8)) rotate(var(--rot3, 160deg));
+  }
+}
+
+.seed-card-wrap {
+  position: relative;
+  z-index: 2;
+  width: min(420px, calc(100vw - 40px));
+  opacity: 0;
+  transform: translateY(22px) scale(.96);
+  transition:
+    opacity .85s var(--ease-out),
+    transform 1s var(--ease-out);
+  will-change: opacity, transform;
+}
+.seed-card-wrap.on {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+.seed-card-wrap.leaving {
+  opacity: 0;
+  transform: translateY(12px) scale(.98);
+  transition:
+    opacity .45s ease,
+    transform .5s ease;
+}
+
+.seed-card {
+  position: relative;
+  background:
+    linear-gradient(165deg, #faf6ea 0%, var(--paper-bright) 45%, #efe6d0 100%);
+  border: 1.5px solid var(--ink);
+  box-shadow: 10px 12px 0 rgba(37, 31, 24, .22);
+  padding: 36px 32px 28px;
+  overflow: visible;
+}
+.seed-bookmark {
+  position: absolute;
+  top: -78px;
+  right: -30px;
+  width: min(168px, 42vw);
+  height: auto;
+  pointer-events: none;
+  filter: drop-shadow(2px 6px 8px rgba(37, 31, 24, .28));
+  transform: rotate(8deg);
+  z-index: 1; /* 书签垫底，文案压在叶子上 */
+}
+.seed-close {
+  position: absolute;
+  top: 10px; left: 12px;
+  z-index: 5;
+  width: 32px; height: 32px;
+  border: none;
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  font-family: var(--sans);
+}
+.seed-close:hover { color: var(--ink); }
+.seed-role {
+  position: relative;
+  z-index: 4;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  margin: 8px 0 16px;
+  line-height: 1.45;
+  padding-right: 72px;
+}
+.seed-role strong { color: var(--ink); border-bottom: 3px solid var(--dandelion); }
+.seed-body {
+  position: relative;
+  z-index: 4;
+  font-size: 15px;
+  line-height: 1.9;
+  color: var(--ink-soft);
+  margin-bottom: 26px;
+}
+.seed-copy-btn {
+  position: relative;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 18px;
+  border: 1.5px solid var(--ink);
+  background: var(--dandelion);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .18em;
+  cursor: pointer;
+  transition: transform .15s, box-shadow .15s;
+  box-shadow: 3px 3px 0 rgba(37, 31, 24, .2);
+}
+.seed-copy-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 rgba(37, 31, 24, .22);
+}
+.seed-copy-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 rgba(37, 31, 24, .18);
+}
+.seed-copy-btn.copied {
+  background: var(--paper-bright);
 }
 
 /* ---------------- 05 瓜田实习 ---------------- */
@@ -949,10 +1146,25 @@ body {
 
 /* ---------------- 降级 ---------------- */
 
+@media (max-width: 720px) {
+  .seed-bookmark {
+    top: -60px;
+    right: -18px;
+    width: min(132px, 36vw);
+  }
+  .seed-card { padding: 32px 22px 24px; }
+  .seed-role { font-size: 19px; padding-right: 56px; }
+  .btn-blow-icon { width: 30px; height: 30px; }
+  .blow-seed { width: 44px; height: 44px; margin: -22px 0 0 -22px; }
+  .blow-seed.lg { width: 58px; height: 58px; margin: -29px 0 0 -29px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .rv, .stamp { opacity: 1 !important; transform: none !important; transition: none !important; }
   #quiz-body.archiving, #quiz-body.pulling { animation: none; }
   .scroll-hint i { animation: none; }
   .par { transform: none !important; translate: 0 !important; }
+  .blow-seed { animation: none !important; opacity: 0 !important; }
+  .blow-overlay, .seed-card-wrap { transition: none !important; }
 }
