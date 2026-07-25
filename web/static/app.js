@@ -9,6 +9,7 @@ let latestDay = null;  // 最新一期日期
 let status = null;
 let askArticle = null;
 let askController = null;
+let askRequestController = null;
 
 /* ---------------- 主题 ---------------- */
 
@@ -24,11 +25,19 @@ function currentTheme() {
   return THEMES.some((t) => t.id === saved) ? saved : "pixel";
 }
 
-function setTheme(id, { rerender = true } = {}) {
+function syncThemeControls(id) {
+  document.querySelectorAll("[data-theme-id]").forEach((button) => {
+    const active = button.dataset.themeId === id;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+}
+
+function setTheme(id) {
   if (!THEMES.some((t) => t.id === id)) return;
   localStorage.setItem("gossip-theme", id);
   document.body.dataset.theme = id;
-  if (rerender) render();
+  syncThemeControls(id);
 }
 
 /** 入口页跨端口跳转：?theme=tabloid&reader=format → 套用主题 / 读者类型后清掉 query */
@@ -38,7 +47,7 @@ function bootFromEntryParams() {
   const reader = params.get("reader");
   let touched = false;
   if (theme && THEMES.some((t) => t.id === theme)) {
-    setTheme(theme, { rerender: false });
+    setTheme(theme);
     touched = true;
   }
   if (reader) {
@@ -77,12 +86,15 @@ async function explainSelection(text, rect) {
   result.className = "selection-result loading";
   panel.hidden = false;
   placeSelectionUi(panel, rect);
+  askRequestController?.abort();
+  askRequestController = new AbortController();
   try {
     const question = `请用简单的话解读我选中的内容“${text}”，并说明它在这条新闻里是什么意思。`;
-    const data = await apiPost("/api/ask", { question, article: askArticle, history: [] });
+    const data = await apiPost("/api/ask", { question, article: askArticle, history: [] }, { signal: askRequestController.signal });
     result.textContent = data.answer;
     result.className = "selection-result";
   } catch (e) {
+    if (e.name === "AbortError") return;
     result.textContent = e.message || "暂时解读不了，请稍后再试";
     result.className = "selection-result error";
   }
@@ -109,12 +121,16 @@ function setupAskAssistant() {
   const panel = document.getElementById("selection-answer");
   let selectedText = "";
   let selectedRect = null;
-  const hide = () => { trigger.hidden = true; panel.hidden = true; };
-  body?.addEventListener("pointerup", () => setTimeout(() => {
+  const hide = () => {
+    trigger.hidden = true;
+    panel.hidden = true;
+    askRequestController?.abort();
+  };
+  const refreshSelection = () => setTimeout(() => {
     const selection = window.getSelection();
     const text = selection?.toString().trim().replace(/\s+/g, " ").slice(0, 160);
     if (!text || !selection.rangeCount || !body.contains(selection.anchorNode)) {
-      trigger.hidden = true;
+      hide();
       return;
     }
     selectedText = text;
@@ -122,13 +138,15 @@ function setupAskAssistant() {
     panel.hidden = true;
     trigger.hidden = false;
     placeSelectionUi(trigger, selectedRect);
-  }, 0), { signal });
+  }, 0);
+  body?.addEventListener("pointerup", refreshSelection, { signal });
+  body?.addEventListener("keyup", refreshSelection, { signal });
   trigger?.addEventListener("pointerdown", (e) => e.preventDefault(), { signal });
   trigger?.addEventListener("click", () => explainSelection(selectedText, selectedRect), { signal });
   document.getElementById("selection-close")?.addEventListener("click", hide, { signal });
   document.addEventListener("selectionchange", () => {
     const selection = window.getSelection();
-    if (!selection || selection.isCollapsed || !selection.toString().trim()) trigger.hidden = true;
+    if (!selection || selection.isCollapsed || !selection.toString().trim()) hide();
   }, { signal });
   document.addEventListener("pointerdown", (e) => {
     if (!trigger?.contains(e.target) && !panel?.contains(e.target) && !body?.contains(e.target)) hide();
@@ -139,17 +157,18 @@ function setupAskAssistant() {
 }
 
 function themeSwitch() {
-  return `<div class="theme-switch">
-    ${THEMES.map((t, idx) =>
-      `<button type="button" class="theme-chip${t.id === currentTheme() ? " active" : ""}"
-         onclick="setTheme('${t.id}')" title="快捷键 ${idx + 1}">
+  const selected = currentTheme();
+  return `<div class="theme-switch" role="group" aria-label="阅读主题">
+    ${THEMES.map((t, idx) => {
+      const active = t.id === selected;
+      return `<button type="button" class="theme-chip${active ? " active" : ""}"
+         aria-pressed="${active}"
+         data-action="set-theme" data-theme-id="${t.id}" title="快捷键 ${idx + 1}">
          <span class="theme-key">${idx + 1}</span><span class="theme-icon">${t.icon}</span>${t.label}
-       </button>`
-    ).join("")}
+       </button>`;
+    }).join("")}
   </div>`;
 }
-
-window.setTheme = setTheme;
 
 /* ---------------- 读者类型（测验结果） ---------------- */
 
@@ -211,7 +230,8 @@ const MELON_LABEL = { 1: "小瓜", 2: "中瓜", 3: "大瓜" };
 /* ---------------- 全民预测投票 ---------------- */
 
 let voteMap = {};   // { "<date>": { "<idx>": {a, b} } }
-const myVotes = JSON.parse(localStorage.getItem("gossip-my-votes") || "{}");
+let myVotes = {};
+try { myVotes = JSON.parse(localStorage.getItem("gossip-my-votes") || "{}"); } catch {}
 
 const myVote = (date, idx) => myVotes[`${date}:${idx}`];
 
@@ -226,11 +246,12 @@ async function ensureVotes(date) {
   voteMap[date] = data?.votes || {};
 }
 
-async function apiPost(path, body) {
+async function apiPost(path, body, { signal } = {}) {
   const resp = await fetch(path, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
+    signal,
   });
   if (!resp.ok) {
     let detail = `HTTP ${resp.status}`;
@@ -241,8 +262,10 @@ async function apiPost(path, body) {
 }
 
 function pollRevealedHtml(poll, cnt, myChoice, instant, date, idx) {
-  const total = Math.max((cnt.a || 0) + (cnt.b || 0), 1);
-  const pa = Math.round(((cnt.a || 0) / total) * 100);
+  const aCount = safeCount(cnt.a);
+  const bCount = safeCount(cnt.b);
+  const total = Math.max(aCount + bCount, 1);
+  const pa = Math.round((aCount / total) * 100);
   const pb = 100 - pa;
   const row = (key, label, pct) => `
     <div class="poll-row${myChoice === key ? " mine" : ""}">
@@ -259,8 +282,8 @@ function pollRevealedHtml(poll, cnt, myChoice, instant, date, idx) {
     <div class="poll-stamp">已盖章</div>
     ${row("a", poll.options[0], pa)}
     ${row("b", poll.options[1], pb)}
-    <div class="poll-sub">${(cnt.a || 0) + (cnt.b || 0)} 人已站队 · ${tease}</div>
-    <button type="button" class="pixel-btn small poll-share" onclick="copyVoteTaunt('${esc(date)}',${idx},'${myChoice}')">复制去群里挑衅 →</button>`;
+    <div class="poll-sub">${aCount + bCount} 人已站队 · ${tease}</div>
+    <button type="button" class="pixel-btn small poll-share" data-action="copy-vote" data-date="${esc(date)}" data-idx="${idx}" data-choice="${myChoice}">复制去群里挑衅 →</button>`;
 }
 
 function pollHtml(date, idx) {
@@ -268,6 +291,7 @@ function pollHtml(date, idx) {
   if (!it?.poll) return "";
   const poll = it.poll;
   const cnt = voteMap[date]?.[idx] || { a: 0, b: 0 };
+  const total = safeCount(cnt.a) + safeCount(cnt.b);
   const voted = myVote(date, idx);
   if (voted) {
     return `<div class="poll-box revealed" id="poll-box">${pollRevealedHtml(poll, cnt, voted, true, date, idx)}</div>`;
@@ -275,14 +299,14 @@ function pollHtml(date, idx) {
   return `<div class="poll-box" id="poll-box">
     <div class="poll-q">🗳️ 全民预测：${esc(poll.question)}</div>
     <div class="poll-btns">
-      <button type="button" class="pixel-btn small poll-opt" onclick="castVote('${esc(date)}',${idx},'a')">${esc(poll.options[0])}</button>
-      <button type="button" class="pixel-btn small poll-opt" onclick="castVote('${esc(date)}',${idx},'b')">${esc(poll.options[1])}</button>
+      <button type="button" class="pixel-btn small poll-opt" data-action="cast-vote" data-date="${esc(date)}" data-idx="${idx}" data-choice="a">${esc(poll.options[0])}</button>
+      <button type="button" class="pixel-btn small poll-opt" data-action="cast-vote" data-date="${esc(date)}" data-idx="${idx}" data-choice="b">${esc(poll.options[1])}</button>
     </div>
-    <div class="poll-sub">先站队再翻牌，看大家怎么押 · ${(cnt.a || 0) + (cnt.b || 0)} 人已站队</div>
+    <div class="poll-sub">先站队再翻牌，看大家怎么押 · ${total} 人已站队</div>
   </div>`;
 }
 
-window.castVote = async (date, idx, choice) => {
+async function castVote(date, idx, choice) {
   if (myVote(date, idx)) return;
   const box = document.getElementById("poll-box");
   if (!box || box.classList.contains("cracking")) return;
@@ -295,9 +319,13 @@ window.castVote = async (date, idx, choice) => {
   } catch {
     // 网络失败也让 demo 不掉链子：本地 +1
     const old = voteMap[date]?.[idx] || { a: 0, b: 0 };
-    cnt = { ...old, [choice]: (old[choice] || 0) + 1 };
+    cnt = {
+      a: safeCount(old.a),
+      b: safeCount(old.b),
+      [choice]: safeCount(old[choice]) + 1,
+    };
   }
-  (voteMap[date] ||= {})[idx] = { a: cnt.a, b: cnt.b };
+  (voteMap[date] ||= {})[idx] = { a: safeCount(cnt.a), b: safeCount(cnt.b) };
   const poll = issue?.items?.[idx]?.poll;
   setTimeout(() => {
     box.classList.remove("cracking");
@@ -308,7 +336,7 @@ window.castVote = async (date, idx, choice) => {
     }));
     toast("已站队！可复制文案去群里挑衅");
   }, 800);
-};
+}
 
 async function copyVoteTaunt(date, idx, choice) {
   const it = issue?.items?.[idx];
@@ -322,16 +350,15 @@ async function copyVoteTaunt(date, idx, choice) {
     toast("复制失败，请手动选中文案");
   }
 }
-window.copyVoteTaunt = copyVoteTaunt;
 
 function voteHintHtml(date, idx) {
   const it = issue?.items?.[idx];
   const cnt = voteMap[date]?.[idx];
   if (!it?.poll || !cnt) return "";
-  const total = (cnt.a || 0) + (cnt.b || 0);
+  const total = safeCount(cnt.a) + safeCount(cnt.b);
   if (!total) return "";
-  const aLeads = (cnt.a || 0) >= (cnt.b || 0);
-  const pct = Math.round(((aLeads ? cnt.a : cnt.b) / total) * 100);
+  const aLeads = safeCount(cnt.a) >= safeCount(cnt.b);
+  const pct = Math.round((safeCount(aLeads ? cnt.a : cnt.b) / total) * 100);
   const opt = it.poll.options[aLeads ? 0 : 1];
   return `<div class="vote-hint">🗳️ ${total} 人站队 · ${pct}% 押「${esc(opt)}」</div>`;
 }
@@ -339,6 +366,28 @@ function voteHintHtml(date, idx) {
 const esc = (s) =>
   String(s ?? "").replace(/[&<>"']/g, (c) =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+const safeDate = (value) => /^\d{4}-\d{2}-\d{2}$/.test(String(value)) ? String(value) : "";
+const safeIndex = (value) => {
+  const idx = Number(value);
+  return Number.isSafeInteger(idx) && idx >= 0 ? idx : null;
+};
+const safeCount = (value) => Math.max(0, Number.parseInt(value, 10) || 0);
+const melonLevel = (value) => Math.min(3, Math.max(1, Number.parseInt(value, 10) || 1));
+const safeExternalUrl = (value) => {
+  try {
+    const url = new URL(String(value), location.origin);
+    return /^(https?):$/.test(url.protocol) ? url.href : "";
+  } catch {
+    return "";
+  }
+};
+const itemHref = (date, idx) => {
+  const day = safeDate(date);
+  const item = safeIndex(idx);
+  if (item === null) return "#/";
+  return day && latestDay && day !== latestDay ? `#/issue/${day}/item/${item}` : `#/item/${item}`;
+};
 
 /* ---------------- 轻量新闻标记 ---------------- */
 
@@ -460,14 +509,13 @@ function toast(msg) {
   toast._t = setTimeout(() => el.classList.remove("show"), 1800);
 }
 
-window.copyGossip = copyGossip;
-window.toggleBody = (btn) => {
+function toggleBody(btn) {
   const box = btn.closest(".body-fold");
   if (!box) return;
   const open = box.classList.toggle("open");
   btn.textContent = open ? "收起正文 ↑" : "展开正文 ↓";
   btn.setAttribute("aria-expanded", open ? "true" : "false");
-};
+}
 
 /* ---------------- 单条竖屏分享图 ---------------- */
 
@@ -614,7 +662,6 @@ async function shareCard(date, idx) {
     toast("生成失败，试试复制吃瓜文案");
   }
 }
-window.shareCard = shareCard;
 
 /* ---------------- 用户类型测试 ---------------- */
 
@@ -673,13 +720,18 @@ function quizView() {
       <p class="quiz-q">${esc(cur.q)}</p>
       <div class="quiz-opts">
         ${cur.opts.map((o, i) =>
-          `<button type="button" class="pixel-btn quiz-opt" onclick="answerQuiz('${o.type}')">${esc(o.label)}</button>`
+          `<button type="button" class="pixel-btn quiz-opt" data-action="quiz-answer" data-reader-type="${o.type}">${esc(o.label)}</button>`
         ).join("")}
       </div>
-      ${step ? `<button type="button" class="body-toggle" onclick="quizBack()">← 上一题</button>` : ""}
+      ${step ? `<button type="button" class="body-toggle" data-action="quiz-back">← 上一题</button>` : ""}
     </div>
     ${foot()}`;
   setupTickerScroll();
+  if (step > 0) {
+    const question = document.querySelector(".quiz-q");
+    question?.setAttribute("tabindex", "-1");
+    question?.focus({ preventScroll: true });
+  }
 }
 
 function quizResultView() {
@@ -697,8 +749,8 @@ function quizResultView() {
       <p class="quiz-tip">${esc(info.tip)}</p>
       <p class="quiz-rec">推荐主题：<strong>${esc(themeLabel)}</strong></p>
       <div class="actions">
-        <button type="button" class="pixel-btn" onclick="applyQuizResult('${winner}')">套用推荐并去吃瓜</button>
-        <button type="button" class="pixel-btn small" onclick="retakeQuiz()">再测一次</button>
+        <button type="button" class="pixel-btn" data-action="quiz-apply" data-reader-type="${winner}">套用推荐并去吃瓜</button>
+        <button type="button" class="pixel-btn small" data-action="quiz-retake">再测一次</button>
         <a class="pixel-btn small" href="#/">先看看再说</a>
       </div>
     </div>
@@ -706,27 +758,28 @@ function quizResultView() {
   setupTickerScroll();
 }
 
-window.answerQuiz = (type) => {
+function answerQuiz(type) {
+  if (!READER_TYPES[type]) return;
   quizAnswers.push(type);
   quizView();
-};
-window.quizBack = () => {
+}
+function quizBack() {
   quizAnswers.pop();
   quizView();
-};
-window.retakeQuiz = () => {
+}
+function retakeQuiz() {
   quizAnswers = [];
   quizView();
-};
-window.applyQuizResult = (typeId) => {
+}
+function applyQuizResult(typeId) {
   const info = READER_TYPES[typeId];
   if (!info) return;
   applyReader(typeId);
-  setTheme(info.theme, { rerender: false });
+  setTheme(info.theme);
   toast(`已套用：${info.name} · ${THEMES.find((t) => t.id === info.theme)?.label || ""}`);
   if ((location.hash || "#/") === "#/") render();
   else location.hash = "#/";
-};
+}
 
 /* ---------------- 公共件 ---------------- */
 
@@ -738,7 +791,7 @@ function siteNav(active) {
     { hash: "#/about", id: "about", label: "关于" },
   ];
   return `<nav class="site-nav">${items.map((x) =>
-    `<a href="${x.hash}" class="${active === x.id ? "active" : ""}">${x.label}</a>`
+    `<a href="${x.hash}" class="${active === x.id ? "active" : ""}"${active === x.id ? ' aria-current="page"' : ""}>${x.label}</a>`
   ).join("")}</nav>`;
 }
 
@@ -757,11 +810,11 @@ function masthead() {
   return `
   ${themeSwitch()}
   <header class="masthead">
-    <div class="mast-top" onclick="location.hash='#/'">
+    <a class="mast-top" href="#/" aria-label="返回本期吃瓜">
       <span class="mast-badge">周四见？不，半天见</span>
       <h1>AI 八卦特刊</h1>
       <div class="tagline">严肃新闻看麻了？来这儿吃口瓜 🍉</div>
-    </div>
+    </a>
     ${ticker}
   </header>`;
 }
@@ -867,7 +920,7 @@ function melonKingIdx(date) {
   let best = -1;
   let bestTotal = 0;
   for (const [key, cnt] of Object.entries(votes)) {
-    const total = (cnt.a || 0) + (cnt.b || 0);
+    const total = safeCount(cnt.a) + safeCount(cnt.b);
     if (total > bestTotal) {
       bestTotal = total;
       best = Number(key);
@@ -889,27 +942,26 @@ function melonThermoHtml() {
 function cardsHtml(date, kingIdx = -1) {
   return issue.items
     .map((it, i) => {
+      const level = melonLevel(it.melon_level);
       const thumb = it.image
         ? `<div class="card-thumb"><img src="/images/${esc(it.image)}" alt="" loading="lazy"></div>`
         : `<div class="card-thumb no-img"><span>🖼️ 画手赶稿中</span></div>`;
-      const href = date && latestDay && date !== latestDay
-        ? `#/issue/${date}/item/${i}`
-        : `#/item/${i}`;
+      const href = itemHref(date, i);
       const kingCls = i === kingIdx ? " melon-king" : "";
       const kingBadge = i === kingIdx ? `<span class="melon-king-badge">👑 今日瓜王</span>` : "";
       return `
-      <article class="pixel-box card${kingCls}" onclick="location.hash='${href}'">
+      <a class="pixel-box card${kingCls}" href="${href}" aria-label="${esc(it.title)}">
         ${kingBadge}
         ${thumb}
         <div class="card-body">
-          <div class="level-badge lv${it.melon_level || 1}">${MELON[it.melon_level] || "🍉"} ${MELON_LABEL[it.melon_level] || "小瓜"}</div>
+          <div class="level-badge lv${level}">${MELON[level]} ${MELON_LABEL[level]}</div>
           <h3>${esc(it.title)}</h3>
           <div class="hook">${esc(it.hook)}</div>
           <div class="chars">出场：${esc((it.characters || []).join(" · "))}</div>
           ${voteHintHtml(date, i)}
           <div class="read-more">阅读全文</div>
         </div>
-      </article>`;
+      </a>`;
     })
     .join("");
 }
@@ -927,18 +979,18 @@ async function homeView(date) {
     if (top?.top?.length) {
       const medals = ["🥇", "🥈", "🥉"];
       const hot = top.top[0];
-      const ctaHref = hot.date === latestDay ? `#/item/${hot.idx}` : `#/issue/${hot.date}/item/${hot.idx}`;
+      const ctaHref = itemHref(hot.date, hot.idx);
       topBlock = `<aside class="home-side" aria-label="本周最熟的瓜">
         <section class="pixel-box top-melons">
           <div class="top-title">🔥 本周最熟的瓜</div>
           <div class="top-subline">按站队人数排 · 点进瓜里就能投</div>
           ${top.top.map((x, i) => {
-            const href = x.date === latestDay ? `#/item/${x.idx}` : `#/issue/${x.date}/item/${x.idx}`;
+            const href = itemHref(x.date, x.idx);
             return `<a class="top-row" href="${href}">
               <span class="top-medal">${medals[i] || "🍉"}</span>
               <span class="top-body">
                 <span class="top-name">${esc(x.title)}</span>
-                <span class="top-count">${x.total} 人站队</span>
+                <span class="top-count">${safeCount(x.total)} 人站队</span>
               </span>
             </a>`;
           }).join("")}
@@ -965,7 +1017,7 @@ async function homeView(date) {
       <main class="cards">${cardsHtml(viewingDate, kingIdx)}</main>
       ${topBlock}
     </div>
-    ${isArchive ? "" : `<p class="kbd-hint">Demo 彩蛋：<kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> 换主题 · <kbd>Enter</kbd> 进首瓜</p>`}
+    ${isArchive ? "" : `<p class="kbd-hint">Demo 彩蛋：<kbd>1</kbd> 到 <kbd>${THEMES.length}</kbd> 换主题 · <kbd>Enter</kbd> 进首瓜</p>`}
     ${foot()}`;
   setupTickerScroll();
 }
@@ -979,6 +1031,8 @@ async function itemView(idx, date) {
   if (!it) { location.hash = date ? `#/issue/${date}` : "#/"; return render(); }
 
   const viewingDate = issue.date;
+  const level = melonLevel(it.melon_level);
+  const sourceUrl = safeExternalUrl(it.source_url);
   askArticle = {
     title: it.title,
     body: it.body,
@@ -988,6 +1042,7 @@ async function itemView(idx, date) {
     source_url: it.source_url || "",
   };
   const backHref = date && latestDay && date !== latestDay ? `#/issue/${date}` : "#/";
+  const bodyId = `article-body-${idx}`;
   const comic = it.image
     ? `<div class="comic-zone"><img src="/images/${esc(it.image)}" alt="八卦漫画"></div>`
     : `<div class="comic-zone no-img"><span>🖼️ 本条漫画还在画手桌上，下期补上</span></div>`;
@@ -1001,23 +1056,25 @@ async function itemView(idx, date) {
   app.innerHTML = `${masthead()}${siteNav(date && latestDay && date !== latestDay ? "archive" : "home")}
     <a class="back pixel-btn small" href="${backHref}">← ${date && latestDay && date !== latestDay ? "回本期" : "回瓜田"}</a>
     <div class="pixel-box detail">
-      <div class="level-badge lv${it.melon_level || 1}">${MELON[it.melon_level] || "🍉"} ${MELON_LABEL[it.melon_level] || "小瓜"}</div>
+      <div class="level-badge lv${level}">${MELON[level]} ${MELON_LABEL[level]}</div>
       <h2>${esc(it.title)}</h2>
       ${comic}
       <div class="hook-box">${esc(it.hook)}</div>
       ${markLegend}
       <div class="body-fold">
-        <button type="button" class="body-toggle" aria-expanded="false" onclick="toggleBody(this)">展开正文 ↓</button>
-        <div class="body">${markPlain(it.body, it)}</div>
+        <button type="button" class="body-toggle" aria-expanded="false" aria-controls="${bodyId}" data-action="toggle-body">展开正文 ↓</button>
+        <div class="body" id="${bodyId}">${markPlain(it.body, it)}</div>
       </div>
       ${pollHtml(viewingDate, idx)}
       <div class="actions">
-        <button type="button" class="pixel-btn small" onclick="copyGossip('${esc(viewingDate)}', ${idx})">复制吃瓜</button>
-        <button type="button" class="pixel-btn small" onclick="shareCard('${esc(viewingDate)}', ${idx})">下载分享图</button>
+        <button type="button" class="pixel-btn small" data-action="copy-gossip" data-date="${esc(viewingDate)}" data-idx="${idx}">复制吃瓜</button>
+        <button type="button" class="pixel-btn small" data-action="share-card" data-date="${esc(viewingDate)}" data-idx="${idx}">下载分享图</button>
       </div>
       <div class="source">
         <span>来源</span>
-        <a href="${esc(it.source_url)}" target="_blank" rel="noopener">${esc(it.source_title || it.source_url)}</a>
+        ${sourceUrl
+          ? `<a href="${esc(sourceUrl)}" target="_blank" rel="noopener noreferrer">${esc(it.source_title || it.source_url)}</a>`
+          : `<span>${esc(it.source_title || "来源链接不可用")}</span>`}
       </div>
     </div>
     ${foot()}
@@ -1042,10 +1099,12 @@ async function archiveView() {
     }
     const rows = list.map((x) => {
       const gen = (x.generated_at || "").replace("T", " ").slice(0, 16);
-      const isLatest = x.date === latestDay;
-      return `<a class="pixel-box archive-row" href="#/issue/${esc(x.date)}">
+      const day = safeDate(x.date);
+      if (!day) return "";
+      const isLatest = day === latestDay;
+      return `<a class="pixel-box archive-row" href="#/issue/${day}">
         <div class="archive-date">📅 ${esc(x.date)}${isLatest ? ' <span class="pill">最新</span>' : ""}</div>
-        <div class="archive-meta">${x.item_count || 0} 条瓜${gen ? ` · ${esc(gen)}` : ""}</div>
+        <div class="archive-meta">${safeCount(x.item_count)} 条瓜${gen ? ` · ${esc(gen)}` : ""}</div>
       </a>`;
     }).join("");
     app.innerHTML = `${masthead()}${siteNav("archive")}
@@ -1090,9 +1149,9 @@ function aboutView() {
       <ul>
         <li><strong>今日瓜王</strong>：站队人数最多的卡片自动戴 👑</li>
         <li><strong>投完挑衅文案</strong>：投票后可一键复制「我押了 XX，你呢？」</li>
-        <li><strong>键盘吃瓜</strong>：首页按 <kbd>1</kbd>/<kbd>2</kbd>/<kbd>3</kbd> 换主题，<kbd>Enter</kbd> 进第一条瓜</li>
+        <li><strong>键盘吃瓜</strong>：首页按 <kbd>1</kbd> 到 <kbd>${THEMES.length}</kbd> 换主题，<kbd>Enter</kbd> 进第一条瓜</li>
         <li><strong>瓜度温度计</strong>：刊头显示本期平均瓜度</li>
-        <li><strong>八卦越传越邪</strong>：往下滚时走马灯加速</li>
+        <li><strong>刊头走马灯</strong>：把本期爆点串成一条不打断阅读的线索</li>
       </ul>
       <h3>v1.1 已上线</h3>
       <ul>
@@ -1108,36 +1167,24 @@ function aboutView() {
 
 /* ---------------- 路由 ---------------- */
 
-let _tickerScrollHandler = null;
-
 function setupTickerScroll() {
-  if (_tickerScrollHandler) {
-    window.removeEventListener("scroll", _tickerScrollHandler);
-    _tickerScrollHandler = null;
-  }
-  requestAnimationFrame(() => {
-    const inner = document.querySelector(".ticker-inner");
-    if (!inner) return;
-    _tickerScrollHandler = () => {
-      const dur = Math.max(10, 48 - window.scrollY / 32);
-      inner.style.animationDuration = `${dur}s`;
-    };
-    window.addEventListener("scroll", _tickerScrollHandler, { passive: true });
-    _tickerScrollHandler();
-  });
+  // 走马灯保持稳定速度，避免滚动时产生额外的监听和视觉干扰。
 }
 
 function setupKeyboardMelon() {
   document.addEventListener("keydown", (e) => {
-    if (e.target.closest("input, textarea, select, button, .quiz-opt, .poll-opt")) return;
-    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const target = e.target instanceof Element ? e.target : null;
+    const typing = target?.closest("input, textarea, select, [contenteditable='true']");
+    if (typing || e.ctrlKey || e.metaKey || e.altKey || e.repeat) return;
     const hash = location.hash || "#/";
     const onHome = hash === "#/" || /^#\/issue\/\d{4}-\d{2}-\d{2}$/.test(hash);
-    if (e.key === "1") { e.preventDefault(); setTheme("pixel"); toast("👾 像素夜刊"); }
-    if (e.key === "2") { e.preventDefault(); setTheme("tabloid"); toast("🗞️ 复古小报"); }
-    if (e.key === "3") { e.preventDefault(); setTheme("candy"); toast("🍭 糖果粗野"); }
-    if (e.key === "4") { e.preventDefault(); setTheme("mag"); toast("📖 轻杂志"); }
-    if (e.key === "Enter" && onHome && issue?.items?.length) {
+    const theme = THEMES[Number(e.key) - 1];
+    if (theme) {
+      e.preventDefault();
+      setTheme(theme.id);
+      toast(`${theme.icon} ${theme.label}`);
+    }
+    if (e.key === "Enter" && !target?.closest("a, button") && onHome && issue?.items?.length) {
       e.preventDefault();
       const d = issue.date;
       location.hash = latestDay && d !== latestDay ? `#/issue/${d}/item/0` : "#/item/0";
@@ -1145,6 +1192,44 @@ function setupKeyboardMelon() {
   });
 }
 setupKeyboardMelon();
+
+app.addEventListener("click", (event) => {
+  const control = event.target instanceof Element ? event.target.closest("[data-action]") : null;
+  if (!control) return;
+  const action = control.dataset.action;
+  const date = safeDate(control.dataset.date);
+  const idx = safeIndex(control.dataset.idx);
+  const choice = control.dataset.choice;
+  if (action === "set-theme") setTheme(control.dataset.themeId);
+  else if (action === "toggle-body") toggleBody(control);
+  else if (action === "copy-gossip" && date && idx !== null) copyGossip(date, idx);
+  else if (action === "share-card" && date && idx !== null) shareCard(date, idx);
+  else if (action === "cast-vote" && date && idx !== null && /^(a|b)$/.test(choice)) castVote(date, idx, choice);
+  else if (action === "copy-vote" && date && idx !== null && /^(a|b)$/.test(choice)) copyVoteTaunt(date, idx, choice);
+  else if (action === "quiz-answer") answerQuiz(control.dataset.readerType);
+  else if (action === "quiz-back") quizBack();
+  else if (action === "quiz-retake") retakeQuiz();
+  else if (action === "quiz-apply") applyQuizResult(control.dataset.readerType);
+});
+
+function routeTitle() {
+  const heading = document.querySelector(".detail h2, .page-title");
+  return heading ? `${heading.textContent.trim()} · AI 八卦特刊` : "AI 八卦特刊";
+}
+
+async function navigate({ focus = true } = {}) {
+  askController?.abort();
+  askRequestController?.abort();
+  askArticle = null;
+  await render();
+  document.title = routeTitle();
+  if (focus) {
+    const target = document.querySelector(".detail h2, .page-title, main, .masthead h1");
+    target?.setAttribute("tabindex", "-1");
+    target?.focus({ preventScroll: true });
+  }
+  window.dispatchEvent(new CustomEvent("gossip:route-rendered", { detail: { title: document.title } }));
+}
 
 function render() {
   const hash = location.hash || "#/";
@@ -1167,5 +1252,5 @@ function render() {
   return homeView();
 }
 
-window.addEventListener("hashchange", render);
-render();
+window.addEventListener("hashchange", () => navigate());
+navigate({ focus: false });
