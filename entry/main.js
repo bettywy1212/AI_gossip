@@ -8,11 +8,15 @@ function track(name, params) {
   } catch (_) { /* 统计失败不影响流程 */ }
 }
 
+/* 工牌图走 /static/ip/badges + 版本号，避免 /entry/assets CDN 长缓存打到旧占位图 */
+const BADGE_V = "qr2";
+const badgeImg = (file) => `/static/ip/badges/${file}?v=${BADGE_V}`;
+
 const CAST = {
   overload: {
     name: "电量见底记者",
     theme: "mag",
-    image: "assets/ai-gossip-share-badge-low-battery-reporter.png",
+    image: badgeImg("ai-gossip-share-badge-low-battery-reporter.png"),
     tagline: "今天想知道，但脑子已经下班。",
     blurb: "你不是不关心 AI。你只是没多余电量，把一条新闻从头扛到尾。",
     assignment: "今晚只吃一条。先看漫画和一句话吃瓜，正文想展开再展开。",
@@ -21,7 +25,7 @@ const CAST = {
   format: {
     name: "通稿逃犯",
     theme: "tabloid",
-    image: "assets/ai-gossip-share-badge-press-release-escapee.png",
+    image: badgeImg("ai-gossip-share-badge-press-release-escapee.png"),
     tagline: "没有人、没有冲突、没有人话，我不进场。",
     blurb: "一看到“近日正式发布”，你就想翻窗离开。你要的不是更多信息，是先知道：这事到底谁急了？",
     assignment: "先看本周最熟的瓜，先站队，再补剧情。",
@@ -30,7 +34,7 @@ const CAST = {
   learn: {
     name: "课代表失联",
     theme: "candy",
-    image: "assets/ai-gossip-share-badge-class-monitor-missing.png",
+    image: badgeImg("ai-gossip-share-badge-class-monitor-missing.png"),
     tagline: "我想懂，但别把我带回课堂。",
     blurb: "你愿意知道 AI 圈发生了什么。但一旦消息开始像补课材料，你的注意力就先下课了。",
     assignment: "先看这件事跟谁有关、会影响什么；术语不懂就问，别打开十个搜索页。",
@@ -39,7 +43,7 @@ const CAST = {
   exec: {
     name: "已读未回选手",
     theme: "pixel",
-    image: "assets/ai-gossip-share-badge-seen-unreplied-runner.png",
+    image: badgeImg("ai-gossip-share-badge-seen-unreplied-runner.png"),
     tagline: "打开很多，真正进场总差最后一步。",
     blurb: "你的收藏夹里不缺新闻。缺的是那一下——有人把第一条线索递到你手里，让你愿意开始。",
     assignment: "从本周最熟的瓜开始。先投一票，给自己一个进场理由。",

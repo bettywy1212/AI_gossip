@@ -676,6 +676,11 @@ async def cache_policy(request: Request, call_next):
     elif request.url.path.startswith("/images/"):
         # 漫画文件名含日期/slug，可较长缓存；前端仍带 ?v=date 便于主动刷新
         response.headers.setdefault("Cache-Control", "public, max-age=86400")
+    elif "/badges/" in request.url.path or (
+        request.url.path.startswith("/entry/assets/ai-gossip-share-badge")
+    ):
+        # 工牌会替换二维码，避免 CDN 长缓存钉死旧占位图
+        response.headers["Cache-Control"] = "public, max-age=300, must-revalidate"
     return response
 
 
