@@ -19,6 +19,15 @@ web/.env
 web/*.log
 __pycache__/
 
+# OpenDeploy 本地部署产物（常含明文 API Key / ADMIN_TOKEN / 整包 source.zip）
+.opendeploy/
+web/.opendeploy/
+
+# 本地临时导出 / 授权核对缓存（勿提交）
+.tmp-*
+docs/_tmp-*
+docs/.tmp-*
+
 # Runtime data：默认忽略，demo 刊物 / 配图 / 投票快照除外（供 clone 即看）
 web/data/*
 !web/data/issues/

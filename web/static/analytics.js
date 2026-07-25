@@ -56,7 +56,11 @@
       if (!gaId || !/^G-[A-Z0-9]+$/i.test(gaId)) return;
       await loadGtag(gaId);
       ready = true;
-      trackPageView();
+      var title = document.title;
+      if ((location.pathname || "").indexOf("/entry") === 0) {
+        title = "编辑部入口 · " + (document.title || "AI 八卦特刊");
+      }
+      trackPageView(title);
       if (isMainSpa()) {
         window.addEventListener("hashchange", function () {
           trackPageView();

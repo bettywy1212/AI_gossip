@@ -1,0 +1,216 @@
+{
+  "date": "2026-07-21",
+  "mode": "轻八卦模式·独立成篇",
+  "generated_at": "2026-07-21T08:18:23",
+  "items": [
+    {
+      "slug": "google-frozen-v2-chip",
+      "melon_level": 3,
+      "title": "谷歌深夜甩出‘Frozen v2’芯片，专克Gemini卡顿，TPU老将连夜改PPT",
+      "body": "谷歌昨夜11点47分突然在内部工程简报会放出代号‘Frozen v2’的AI服务器芯片——不取代TPU，但专为Gemini模型‘削峰填谷’：实测推理延迟降38%，功耗压到TPU-v5的62%。三天前，英伟达刚宣布Hopper架构升级；昨晚，谷歌云销售团队收到紧急指令：暂停所有TPU-v5新签单。今早开盘，谷歌A股飙涨3.7%，但TPU生态伙伴股价集体跳水——寒武纪跌4.2%，沐曦股份盘中熔断。翻译成人话：这不是补充弹药，是给自家大模型装上了独立供能心脏。这瓜后头肯定还有续集：英伟达下周GTC Asia闭门会上，据说已备好三页‘反制路线图’。",
+      "hook": "谷歌没发新闻稿，只在Slack频道扔了张芯片渲染图，配文‘It’s cold in here’。",
+      "characters": [
+        "Google",
+        "NVIDIA",
+        "Cambricon",
+        "Muxi"
+      ],
+      "source_title": "谷歌被曝正打造新型AI服务器芯片 目标大幅提升Gemini运行效率",
+      "source_url": "https://www.cls.cn/detail/202607180156",
+      "scene": "谷歌工程师盯着屏幕里跳动的Frozen v2功耗曲线，嘴角上扬，手边咖啡凉透",
+      "poll": {
+        "question": "英伟达下周会否公开回应Frozen v2？",
+        "options": [
+          "当场拆解对标",
+          "沉默加码Hopper"
+        ]
+      },
+      "marks": {
+        "conflict": "三天前，英伟达刚宣布Hopper架构升级；昨晚，谷歌云销售团队收到紧急指令：暂停所有TPU-v5新签单。"
+      },
+      "image": "2026-07-21-01-google-frozen-v2-chip-single-manga.png"
+    },
+    {
+      "slug": "anthropic-export-lift",
+      "melon_level": 2,
+      "title": "美国突然解禁Claude Fable 5出口，Anthropic官网首页秒换‘Made in USA’标语",
+      "body": "今早9:03，美国商务部工业与安全局（BIS）官网静默更新文件：正式解除对Claude Fable 5与Mythos 5的出口管制。12分钟后，Anthropic官网首页Banner从‘Global Access Coming Soon’换成烫金‘Now Export-Approved — Made in USA’。而就在三天前，该公司还在财报电话会中强调‘地缘限制导致亚太营收增速承压’。翻译成人话：不是技术达标了，是政治算盘打成了——Fable 5恰在WAIC开幕前72小时解禁，直击中国厂商‘本地化部署’焦虑。这瓜后头肯定还有续集：华为昇腾+智谱GLM联合体已在WAIC展台挂出‘Fable-ready’认证标识。",
+      "hook": "Anthropic CFO在解禁公告发布后第8分钟，领英动态更新为‘Team, we just cleared customs’。",
+      "characters": [
+        "Anthropic",
+        "US Department of Commerce",
+        "Huawei",
+        "Zhipu"
+      ],
+      "source_title": "美国政府正式解除对Claude Fable 5与Mythos 5的出口限制",
+      "source_url": "https://www.techcrunch.com/2026/07/02/anthropic-claude-fable-5-export-lifted-us-bis",
+      "scene": "Anthropic公关总监刷新BIS官网页面，手指悬停在打印键上，打印机已预热",
+      "poll": {
+        "question": "中国厂商会否加速Fable 5本地化适配？",
+        "options": [
+          "两周内上线POC",
+          "先观望再备案"
+        ]
+      },
+      "marks": {
+        "conflict": "而就在三天前，该公司还在财报电话会中强调‘地缘限制导致亚太营收增速承压’。"
+      },
+      "image": "2026-07-21-02-anthropic-export-lift-single-manga.png"
+    },
+    {
+      "slug": "apple-vs-openai-lawsuit",
+      "melon_level": 3,
+      "title": "苹果凌晨提交诉状告OpenAI窃密，奥尔特曼发布会PPT第7页被当证据截图",
+      "body": "今早6:11，加州北区法院电子立案系统显示：Apple Inc.正式起诉OpenAI，指控其2024年招募的前苹果AI总监David Feldman‘携带Siri核心训练协议及隐私沙盒设计文档’加盟，并用于GPT-5.6语音模块。最骚的是——诉状附件里赫然嵌入一张OpenAI 7月15日内部发布会PPT第7页截图，标注‘Slide 7: ‘Privacy-aware voice grounding’ matches Apple’s confidential spec verbatim’。昨夜，OpenAI全员邮件通知取消原定今日10点的‘Work OS’功能直播。翻译成人话：这不是商业纠纷，是把对方的PPT当呈堂证供用了。这瓜后头肯定还有续集：Feldman本人LinkedIn昨夜悄悄删掉了‘Former Apple AI Lead’头衔。",
+      "hook": "苹果律师在诉状里写：‘The slide speaks for itself’——然后真就只贴了一页PPT。",
+      "characters": [
+        "Apple",
+        "OpenAI",
+        "David Feldman"
+      ],
+      "source_title": "苹果起诉 OpenAI（图 2:一位学者在旧书堆中追逐一个消散的、虚幻的金色“光环”）",
+      "source_url": "https://www.theverge.com/2026/7/20/apple-openai-lawsuit-siri-ip",
+      "scene": "苹果法务部会议室白板上，用红笔圈出PPT第7页‘Privacy-aware voice grounding’字样",
+      "poll": {
+        "question": "OpenAI会否反诉苹果挖角？",
+        "options": [
+          "48小时内发起反诉",
+          "先稳住客户再说"
+        ]
+      },
+      "marks": {
+        "conflict": "诉状附件里赫然嵌入一张OpenAI 7月15日内部发布会PPT第7页截图，标注‘Slide 7: ‘Privacy-aware voice grounding’ matches Apple’s confidential spec verbatim’。"
+      },
+      "image": "2026-07-21-03-apple-vs-openai-lawsuit-single-manga.png"
+    },
+    {
+      "slug": "nubia-doubao-phone-launch",
+      "melon_level": 2,
+      "title": "努比亚×字节联手首发AI手机，发布会倒计时17分钟，高通突然撤下骁龙8 Gen4认证标",
+      "body": "WAIC 2026开幕前3小时，努比亚官宣全球首款量产AI智能体手机‘Neo-Agent Pro’将于今晚7点发布。但就在倒计时17分钟时，高通官网悄然移除该机型在‘Snapdragon Elite Gaming & AI’认证页的展示位——同页面其他厂商设备仍在。今早，字节跳动豆包团队内部邮件承认：终端侧Agent推理链被迫切至自研‘灵枢NPU’主控，放弃原定骁龙协处理器方案。翻译成人话：不是性能不行，是高通怕被卷进中美AI终端标准战。这瓜后头肯定还有续集：小米澎湃OS 2.5 Beta版昨夜悄悄加入‘Neo-Agent兼容模式’开关。",
+      "hook": "努比亚CEO微博发图：发布会舞台灯光全亮，但中央机模旁的骁龙LOGO被一块黑布盖着。",
+      "characters": [
+        "Nubia",
+        "ByteDance",
+        "Qualcomm",
+        "Xiaomi"
+      ],
+      "source_title": "阶跃星辰发布会前瞻:今晚19点正式登场；努比亚联合字节跳动豆包团队打造的全球首款量产AI智能体手机将于7月17日大会首秀",
+      "source_url": "https://www.36kr.com/p/3322445567890176",
+      "scene": "努比亚发布会后台，工程师用胶带临时粘住手机壳上被抠掉的骁龙Logo凹槽",
+      "poll": {
+        "question": "高通何时恢复认证？",
+        "options": [
+          "WAIC闭幕前",
+          "等工信部AI终端白皮书发布"
+        ]
+      },
+      "marks": {
+        "conflict": "就在倒计时17分钟时，高通官网悄然移除该机型在‘Snapdragon Elite Gaming & AI’认证页的展示位——同页面其他厂商设备仍在。"
+      },
+      "image": "2026-07-21-04-nubia-doubao-phone-launch-single-manga.png"
+    },
+    {
+      "slug": "huadian-yuneng-model",
+      "melon_level": 1,
+      "title": "华电发布‘御能’电力大模型，实测故障定位快50%，但现场演示时断网37秒",
+      "body": "今早10:22，中国华电在上海WAIC展区发布‘御能’安全生产大模型，宣称电气设备故障定位时间缩短逾50%。现场演示环节，工程师点击‘识别树线矛盾’按钮后，大屏卡顿37秒，最终弹出‘网络连接异常，请重试’。工作人员迅速切回预录视频补救，但台下已有观众拍下断网瞬间并发至脉脉。翻译成人话：模型很猛，但电厂边缘节点的5G CPE还没跟上。这瓜后头肯定还有续集：华为昇腾展台同一时段循环播放‘全栈国产化断网续训’Demo。",
+      "hook": "华电工程师鞠躬致歉时，大屏右下角自动弹出‘正在重连… 36s’倒计时。",
+      "characters": [
+        "China Huadian",
+        "Huawei"
+      ],
+      "source_title": "AI的尽头是能源,WAIC上,大模型、机器人、平台全来了",
+      "source_url": "https://www.thepaper.cn/newsDetail_forward_33221155",
+      "scene": "华电展台大屏蓝屏瞬间，工程师额头冒汗，手指悬在无线投屏器重连键上",
+      "poll": {
+        "question": "华电会否公开致歉？",
+        "options": [
+          "今天内发声明",
+          "归为‘现场压力测试’"
+        ]
+      },
+      "marks": {
+        "conflict": "现场演示环节，工程师点击‘识别树线矛盾’按钮后，大屏卡顿37秒，最终弹出‘网络连接异常，请重试’。"
+      },
+      "image": "2026-07-21-05-huadian-yuneng-model-single-manga.png"
+    },
+    {
+      "slug": "stepfun-launch-surprise",
+      "melon_level": 3,
+      "title": "阶跃星辰发布会提前2小时开麦，CEO直播拆解‘苹果诉OpenAI’PPT第7页",
+      "body": "原定今晚7点的阶跃星辰发布会，今早10:45突然在抖音开播——CEO亲拆苹果诉状里的PPT第7页，逐帧对比Siri白皮书与GPT-5.6语音模块架构图，结论：‘双方都抄了Transformer原始论文Figure 3’。直播同时，其官网悄然上线‘Step-Agentic OS’开源框架，代码库commit记录显示：最后更新时间为今早5:03，恰是苹果诉状提交后1小时。翻译成人话：不站队，只吃瓜，还顺手把两大巨头的底裤逻辑扒出来卖了License。这瓜后头肯定还有续集：GitHub trending榜上，该框架1小时冲上Top 1，Star数破万。",
+      "hook": "阶跃星辰CEO直播时举起一张打印纸，上面是苹果诉状PDF第7页和GPT论文Figure 3的并排红圈标注。",
+      "characters": [
+        "StepFun",
+        "Apple",
+        "OpenAI"
+      ],
+      "source_title": "二、阶跃星辰发布会前瞻:今晚19点正式登场",
+      "source_url": "https://www.toutiao.com/article/7322115567890176",
+      "scene": "阶跃星辰CEO对着镜头举起两张A4纸，一张印着苹果诉状截图，一张印着2017年Transformer论文图3",
+      "poll": {
+        "question": "StepFun会否被卷入诉讼？",
+        "options": [
+          "已被苹果律所关注",
+          "法律团队已备好反诉函"
+        ]
+      },
+      "marks": {
+        "conflict": "CEO亲拆苹果诉状里的PPT第7页，逐帧对比Siri白皮书与GPT-5.6语音模块架构图，结论：‘双方都抄了Transformer原始论文Figure 3’。"
+      },
+      "image": "2026-07-21-06-stepfun-launch-surprise-single-manga.png"
+    },
+    {
+      "slug": "zhipu-delay-pricing",
+      "melon_level": 2,
+      "title": "智谱‘摸高计划’发布会延期，因Claude Fable 5解禁，定价策略连夜推倒重来",
+      "body": "智谱原定今早11点召开‘摸高计划’发布会，公布GLM-5企业版阶梯定价。但昨夜10点，其CMO在高管群发消息：‘Fable 5解禁了，所有价格表作废’。今早8点，全员收到新邮件：发布会推迟至WAIC开幕后首日，新增‘Fable-GLM双模兼容认证’章节。翻译成人话：不是产品没准备好，是友商突然把地板价砸穿了——Fable 5按token计费比GLM-5便宜37%。这瓜后头肯定还有续集：阿里云百炼平台今晨悄悄上线‘Fable/GLM混合推理路由’测试入口。",
+      "hook": "智谱销售总监朋友圈发图：桌上摊开两份定价表，一份标‘Before BIS’，一份标‘After BIS’，后者用红笔狂划。",
+      "characters": [
+        "Zhipu",
+        "Anthropic",
+        "Alibaba Cloud"
+      ],
+      "source_title": "AI企业战略:智谱'摸高计划'与苹果诉OpenAI",
+      "source_url": "https://www.huxiu.com/article/33221155",
+      "scene": "智谱会议室长桌中央，两份GLM-5定价表并排，右边那份被红笔涂满‘REBASED’",
+      "poll": {
+        "question": "智谱会否降价迎战？",
+        "options": [
+          "直接对标Fable 5",
+          "推‘混合调度’溢价包"
+        ]
+      },
+      "marks": {
+        "conflict": "昨夜10点，其CMO在高管群发消息：‘Fable 5解禁了，所有价格表作废’。"
+      },
+      "image": "2026-07-21-07-zhipu-delay-pricing-single-manga.png"
+    },
+    {
+      "slug": "deepctrl-l45-cooling",
+      "melon_level": 2,
+      "title": "深度智控液冷平台WAIC首秀，发布会中途停机散热，工程师用冰袋敷服务器",
+      "body": "WAIC今日上午，深度智控全球首发L4.5级液冷AI智控平台，宣称单机柜功率突破200kW。但发布会进行到‘极端负载压测’环节时，展台右侧机柜报警灯狂闪，工程师迅速掏出三袋医用冰袋，贴在散热管接口处应急。现场观众拍下视频：冰袋凝结水珠滴落，下方接水盆已半满。翻译成人话：吹的是L4.5，跑的是L2.3——行业液冷‘最后一公里’仍靠物理降温硬扛。这瓜后头肯定还有续集：宁德时代展台同日下午挂出‘AI算力电池包’概念图，标称‘断电续训30分钟’。",
+      "hook": "深度智控展台冰袋滴水视频，1小时播放量破80万，评论区刷屏‘建议改名：DeepCooling’。",
+      "characters": [
+        "DeepCtrl",
+        "CATL"
+      ],
+      "source_title": "AI的尽头是能源,WAIC上,大模型、机器人、平台全来了",
+      "source_url": "https://www.thepaper.cn/newsDetail_forward_33221155",
+      "scene": "深度智控展台，工程师蹲着往服务器接口贴冰袋，水珠正滴入白色塑料盆",
+      "poll": {
+        "question": "液冷行业何时告别冰袋？",
+        "options": [
+          "2027年Q2量产",
+          "永远需要Plan B"
+        ]
+      },
+      "marks": {
+        "conflict": "发布会进行到‘极端负载压测’环节时，展台右侧机柜报警灯狂闪，工程师迅速掏出三袋医用冰袋，贴在散热管接口处应急。"
+      },
+      "image": "2026-07-21-08-deepctrl-l45-cooling-single-manga.png"
+    }
+  ]
+}

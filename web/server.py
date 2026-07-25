@@ -667,6 +667,18 @@ def admin_rebuild(token: str = ""):
 
 
 # ---------------------------------------------------------------- 静态资源
+@app.middleware("http")
+async def cache_policy(request: Request, call_next):
+    """避免把短暂的 404（例如尚未同步的漫画）缓存进 CDN，导致修好后仍看不到图。"""
+    response = await call_next(request)
+    if response.status_code >= 400:
+        response.headers["Cache-Control"] = "no-store"
+    elif request.url.path.startswith("/images/"):
+        # 漫画文件名含日期/slug，可较长缓存；前端仍带 ?v=date 便于主动刷新
+        response.headers.setdefault("Cache-Control", "public, max-age=86400")
+    return response
+
+
 app.mount("/images", StaticFiles(directory=IMAGE_DIR), name="images")
 
 # 编辑部传播入口（repo/entry）→ /entry/ ，与特刊同源，便于内网穿透只开一条隧道

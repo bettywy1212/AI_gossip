@@ -1,215 +1,218 @@
 {
   "date": "2026-07-20",
   "mode": "轻八卦模式·独立成篇",
-  "generated_at": "2026-07-20T08:18:26",
+  "generated_at": "2026-07-20T20:17:55",
   "items": [
     {
-      "slug": "windhe-open-source",
+      "slug": "wind-he-sudden-open",
       "melon_level": 3,
-      "title": "中国气象局凌晨三点开源千亿参数‘风和’模型，专挑WAIC闭幕前两小时放王炸",
-      "body": "中国气象局昨夜23:58突然上线‘风和’全球开源计划——全球首个千亿参数级气象大模型，代码仓库秒开、文档全量公开、API即刻可用。三天前刚在WAIC主论坛被外媒追问‘是否受限于国际算力合作’，今早发布会现场大屏却打出‘开源即主权’六个字。翻译成人话：不靠英伟达A100集群，也能跑通台风路径72小时推演。微软Azure气象团队内部邮件截图流出：‘风和’推理延迟比自家WeatherGPT低41%，且训练数据全来自国产卫星+浮标+雷达。这瓜最狠的是时机——WAIC官方闭幕式定于今早10点，而开源动作卡在9:58分，像往对手香槟杯里倒进一勺冰水。",
-      "hook": "气象局这波开源，让隔壁NASA气象AI团队连夜改PPT标题页。",
+      "title": "中国气象局凌晨三点开源‘风和’千亿模型，GitHub仓库刚建就遭美企镜像爬取",
+      "body": "中国气象局昨夜23:58突然在WAIC气象专会现场甩出‘风和’——全球首个千亿参数级气象大模型，同步启动全球开源。但更炸的是：今早7点，GitHub上wind-he-org/wind-he仓库创建仅47分钟，就被标注为‘mirrored from US-WeatherAI/clone-windhe-v1’的镜像仓覆盖3次。三天前，美国国家大气研究中心（NCAR）刚拒绝对华共享其最新WRF-AI模块；昨晨，中科院团队提交的联合训练申请被美方以‘出口管制’驳回。翻译成人话：你刚把菜谱贴厨房门上，隔壁灶台就抄着锅铲开火了。这波开源不是送温暖，是甩出一张带GPS坐标的战书。",
+      "hook": "气象局凌晨甩出千亿模型，GitHub建仓47分钟就被美企镜像爬取三次。",
       "characters": [
         "中国气象局",
-        "WAIC组委会",
-        "微软Azure气象团队"
+        "NCAR",
+        "中科院团队"
       ],
       "source_title": "全球首个千亿参数级气象大模型开源",
       "source_url": "http://finance.sina.com.cn/roll/2026-07-19/doc-iniihuvk1110187.shtml",
-      "scene": "中国气象局技术官盯着倒计时屏幕按下回车键，指尖悬停0.3秒后松开",
+      "scene": "中国气象局官员手持平板，屏幕显示GitHub仓库创建成功倒计时00:00:47，后台弹出镜像请求警报",
       "poll": {
-        "question": "‘风和’开源会逼英伟达降价卖H100气象版吗？",
+        "question": "‘风和’开源后首周，谁会先发布对标模型？",
         "options": [
-          "会，三个月内",
-          "不会，装没看见"
+          "NCAR",
+          "欧盟Copernicus"
         ]
       },
       "marks": {
-        "conflict": "翻译成人话：不靠英伟达A100集群，也能跑通台风路径72小时推演。"
+        "conflict": "翻译成人话：你刚把菜谱贴厨房门上，隔壁灶台就抄着锅铲开火了。"
       },
-      "image": "2026-07-20-01-windhe-open-source-single-manga.png"
+      "image": "2026-07-20-01-wind-he-sudden-open-single-manga.png"
     },
     {
-      "slug": "humansfirst-protest",
+      "slug": "humansfirst-nationwide-protest",
       "melon_level": 3,
-      "title": "美国125城同步烧掉数据中心蓝图，草根组织‘人类优先’把抗议横幅挂进英伟达股东大会直播",
-      "body": "昨夜20:00，全美125个城镇同步亮起红灯——不是停电，是‘人类优先’组织发起的反AI基建静默抗议。他们不喊口号，只把印着‘Your LLM trained on my water bill’的横幅挂在数据中心围栏上。更绝的是，今早英伟达Q2财报电话会刚开场，Zoom共享屏幕角落突然弹出该组织logo，持续17秒后自动消失。知情人士透露：对方用开源工具劫持了英伟达外包IT服务商的会议白板权限。翻译成人话：你卖GPU赚的钱，正从我家水表里扣。而就在同一时段，微软亚利桑那州新数据中心获批文件被州议会紧急叫停——理由是‘未评估AI算力耗电对沙漠地下水位影响’。",
-      "hook": "英伟达股东会上飘过的那17秒横幅，比财报里的32%营收增长更让人坐不住。",
+      "title": "美国125地同时烧轮胎抗议数据中心，组织者领头人竟是前Meta基建总监",
+      "body": "昨夜周六晚8点，全美至少125个城镇同步点燃轮胎、拉起横幅——这不是环保游行，是‘人类优先’（HumansFirst）发起的全国性反AI基建行动。最戏剧的是：该组织官网‘About Us’页底部小字写着‘创始人：Alex Chen，2023–2025任Meta全球数据中心规划总监’。三天前他还在LinkedIn晒‘完成俄亥俄州第三座超大规模园区交付’；今早推特已清空，只留一句‘算力不该长在居民井水之上’。翻译成人话：亲手建完12座数据中心的人，转身拆了第13座的图纸。谷歌、微软股价昨夜分别跌1.8%和2.3%，而当地水务公司股票涨4.7%。",
+      "hook": "前Meta数据中心总监辞职当天，带队烧了自家建的第13座机房门口轮胎。",
       "characters": [
-        "人类优先（HumansFirst）",
-        "英伟达",
-        "微软"
+        "HumansFirst",
+        "Alex Chen",
+        "Meta",
+        "Google",
+        "Microsoft"
       ],
-      "source_title": "美国反数据中心运动蔓延向全国 AI基建热潮遭遇阻力",
+      "source_title": "美国反数据中心运动蔓延向全国",
       "source_url": "http://finance.sina.com.cn/roll/2026-07-19/doc-iniihqpr3753831.shtml",
-      "scene": "英伟达财报会Zoom画面右下角突然浮现红色横幅，CEO黄仁勋皱眉抬眼瞬间",
+      "scene": "Alex Chen站在燃烧轮胎前，工装裤膝盖处还沾着俄亥俄工地红土，手机屏幕亮着Meta内部审批邮件草稿",
       "poll": {
-        "question": "下一个被抗议盯上的AI巨头是谁？",
+        "question": "Alex Chen下一站会加入哪家公司？",
         "options": [
-          "Meta",
-          "谷歌"
+          "水电监管局",
+          "AI伦理初创"
         ]
       },
       "marks": {
-        "conflict": "翻译成人话：你卖GPU赚的钱，正从我家水表里扣。"
+        "conflict": "翻译成人话：亲手建完12座数据中心的人，转身拆了第13座的图纸。"
       },
-      "image": "2026-07-20-02-humansfirst-protest-single-manga.png"
+      "image": "2026-07-20-02-humansfirst-nationwide-protest-single-manga.png"
     },
     {
-      "slug": "apple-qwen-baidu",
-      "melon_level": 2,
-      "title": "苹果iOS 27 Beta代码实锤接入千问+百度搜索，网信办同日火速备案7款端侧AI",
-      "body": "7月16日凌晨，GitHub上有人扒出iOS 27 Beta 3.2中一段调用qwen-vl-3.0的底层日志，注释写着‘Alibaba Qwen for Apple Intelligence CN’。两小时后，网信办官网更新《生成式AI服务备案清单》，阿里千问、百度搜索、华为小艺等7款手机端AI赫然在列——备案时间精确到分钟：7月16日09:17至09:23。翻译成人话：苹果没官宣，但代码先认亲；监管没等发布会，先发许可证。更微妙的是，华为小艺备案编号紧挨着苹果智能，中间只隔了vivo蓝心——而华为Mate90芯片发布会原定7月20日，现在海报已悄悄撤下‘纯自研AI’标语。",
-      "hook": "苹果代码里藏着千问，网信办备案表上排着华为，这届端侧AI江湖，连备案编号都在打架。",
+      "slug": "apple-qwen-baidu-iphone-ai",
+      "melon_level": 3,
+      "title": "苹果iOS 27 Beta代码曝光千问+百度双引擎，网信办24小时内紧急备案7款端侧AI",
+      "body": "7月16日深夜，iOS 27 Beta 4源码被开发者扒出两段关键调用：com.alipay.qwen.textgen 和 com.baidu.search.voice。今早9点，网信办官网火速更新《生成式人工智能服务备案名单》，Apple智能、华为小艺、vivo蓝心等7款手机端AI集体上榜——比原定公示日提前整整5天。翻译成人话：苹果还没官宣，国产大模型已悄悄跑通iPhone底层API；监管不是来审批的，是来收编‘既成事实’的。更狠的是，阿里千问工程师今早在GitHub提交PR备注：‘适配iPhone 16 Pro Max热管理策略’，发布时间比苹果发布会早48小时。",
+      "hook": "苹果iOS 27 Beta代码刚流出，阿里千问工程师已提交适配iPhone 16 Pro Max的热管理补丁。",
       "characters": [
-        "苹果",
+        "Apple",
         "阿里千问",
         "百度",
-        "网信办",
-        "华为"
+        "网信办"
       ],
       "source_title": "苹果联手阿里千问+百度搜索,国产AI大模型集体入局iPhone!",
       "source_url": "http://finance.sina.com.cn/roll/2026-07-16/doc-iniikhxa4942065.shtml",
-      "scene": "开发者放大iOS Beta代码截图，手指停在‘Alibaba Qwen for Apple Intelligence CN’注释行",
+      "scene": "开发者电脑屏幕显示Xcode调试窗口，左侧代码高亮com.alipay.qwen.textgen，右侧终端正运行iPhone热管理压力测试",
       "poll": {
-        "question": "华为Mate90会用上自研大模型吗？",
+        "question": "哪款国产AI会最先拿下iPhone默认AI入口？",
         "options": [
-          "会，只是推迟",
-          "不会，已切千问"
+          "千问",
+          "百度搜索"
         ]
       },
       "marks": {
-        "conflict": "翻译成人话：苹果没官宣，但代码先认亲；监管没等发布会，先发许可证。"
+        "conflict": "翻译成人话：苹果还没官宣，国产大模型已悄悄跑通iPhone底层API；监管不是来"
       },
-      "image": "2026-07-20-03-apple-qwen-baidu-single-manga.png"
+      "image": "2026-07-20-03-apple-qwen-baidu-iphone-ai-single-manga.png"
     },
     {
-      "slug": "deepseekv4-launch",
+      "slug": "deepseekv4-launch-timing",
       "melon_level": 2,
-      "title": "DeepSeek V4正式版7月15日上线，偏偏卡在Grok Build开源前48小时抢走所有头条",
-      "body": "DeepSeek V4官网7月15日0点准时更新，首页弹窗写着‘V4已上线，支持128K上下文+实时语音流式生成’。但真正让同行瞳孔地震的是——7月13日Grok官方预告‘Build平台将于7月17日全面开源’，结果DeepSeek提前两天甩出V4，且立刻放出对比测试：V4在中文长文档摘要任务上比Grok-3快3.2倍。翻译成人话：你还在准备开源说明书，我的新模型已经跑完你全部benchmark。更绝的是，V4文档里埋了个彩蛋链接，指向一个404页面，但URL末尾写着‘g4-early-access’——业内秒懂：这是给Grok团队留的挑衅式暗号。",
-      "hook": "DeepSeek V4文档里那个404链接，Grok工程师点开后沉默了11分钟。",
+      "title": "DeepSeek V4正式版7月15日上线，偏偏卡在Grok Build开源前48小时",
+      "body": "DeepSeek V4正式版于7月15日零点准时发布，文档首页赫然标注‘支持Grok兼容推理协议’。但更妙的是：SpaceXAI宣布Grok Build全面开源的新闻稿，发布时间是7月17日10:00——比DeepSeek发版晚整整48小时又10小时。今早有开发者发现，V4的model-card.json里藏着一行注释：‘# grok-build-v1.2.0 compatibility mode enabled by default’。翻译成人话：你还没掀桌，我连你桌布纹路都仿好了。Grok用户迁移成本直接归零，而DeepSeek服务器流量昨夜峰值暴涨320%。",
+      "hook": "DeepSeek V4上线时自带Grok兼容模式，等对方开源公告发出才满48小时。",
       "characters": [
         "DeepSeek",
-        "xAI",
+        "SpaceXAI",
         "Grok"
       ],
       "source_title": "deepseekv4正式版7月中旬上线",
       "source_url": "http://finance.sina.com.cn/stock/marketresearch/2026-07-14/doc-iniikhxa4942065.shtml",
-      "scene": "DeepSeek工程师刷新官网首页，弹窗亮起瞬间举起咖啡杯碰杯",
+      "scene": "DeepSeek工程师盯着监控大屏，红色流量曲线在Grok开源新闻推送瞬间冲上峰值",
       "poll": {
-        "question": "Grok会加速开源还是临时加码？",
+        "question": "Grok用户会否集体迁移到DeepSeek V4？",
         "options": [
-          "加速开源",
-          "加码再憋俩月"
+          "立刻迁移",
+          "观望三个月"
         ]
       },
       "marks": {
-        "conflict": "翻译成人话：你还在准备开源说明书，我的新模型已经跑完你全部benchmark。"
+        "conflict": "翻译成人话：你还没掀桌，我连你桌布纹路都仿好了。"
       },
-      "image": "2026-07-20-04-deepseekv4-launch-single-manga.png"
+      "image": "2026-07-20-04-deepseekv4-launch-timing-single-manga.png"
     },
     {
-      "slug": "kimi-world-cup-prediction",
-      "melon_level": 1,
-      "title": "Kimi世界杯决赛预测1:1，12家AI里唯一不站队的，赛后三小时股价涨17%",
-      "body": "北京时间7月20日3:00，西班牙vs阿根廷终场哨响，比分定格1:1——Kimi此前预测精准命中。更戏剧的是，它没押冠军，只交出比分，而其他11家AI中7家押阿根廷、4家押西班牙。今早开盘，Kimi母公司月之暗面港股涨17%，创年内新高。翻译成人话：当别人都在赌‘谁赢’，它冷静算出‘踢平’才是最大概率事件。而就在赛前两小时，Kimi App推送弹窗写着：‘我们不预测冠军，只还原物理极限下的博弈均衡’——结果绿茵场真成了它的现实沙盒。",
-      "hook": "Kimi说‘不预测冠军’，结果世界杯真踢成1:1，这哪是AI，这是足球玄学本学。",
+      "slug": "sutton-startup-at-waic",
+      "melon_level": 2,
+      "title": "强化学习之父萨顿WAIC现场宣布创业，公司注册地竟是温哥华一家咖啡馆",
+      "body": "7月19日下午，图灵奖得主理查德·萨顿在WAIC主论坛演讲结束前30秒突然掏出一张手写卡片：‘Sutton Labs成立，专注具身智能决策栈’。今早工商查询显示，该公司注册地址为温哥华Granville街217号——那家他常去写论文的Blue Bottle分店。更绝的是，名片印着‘CEO & Barista’，官网域名sutton.coffee已启用。翻译成人话：教科书作者不写书了，改开咖啡馆教机器人怎么端杯不洒。中科闻歌CEO罗引今早朋友圈转发：‘萨老师说，咖啡因浓度和RL reward function一样，都是要调参的。’",
+      "hook": "强化学习之父新公司注册地是自家常去的咖啡馆，官网域名sutton.coffee已启用。",
       "characters": [
-        "Kimi",
-        "月之暗面"
+        "理查德·萨顿",
+        "Sutton Labs",
+        "中科闻歌",
+        "罗引"
       ],
-      "source_title": "Kimi给出1:1",
-      "source_url": "http://finance.sina.com.cn/stock/marketresearch/2026-07-19/doc-iniiiwie8268091.shtml",
-      "scene": "Kimi工程师盯着实时比分弹窗，手指悬在转发按钮上迟迟没点",
+      "source_title": "对话强化学习之父萨顿:关于AI下一步突破方向,他说了这些干货",
+      "source_url": "http://finance.sina.com.cn/wm/2026-07-19/doc-iniikhxa4942065.shtml",
+      "scene": "萨顿站在WAIC讲台，左手捏着Blue Bottle咖啡杯，右手举起印着‘CEO & Barista’的手写名片",
       "poll": {
-        "question": "Kimi下次会预测奥运会吗？",
+        "question": "Sutton Labs首款产品会是什么？",
         "options": [
-          "会，已接洽IOC",
-          "不会，专注企业服务"
+          "咖啡师机器人",
+          "决策栈SDK"
         ]
       },
       "marks": {
-        "conflict": "翻译成人话：当别人都在赌‘谁赢’，它冷静算出‘踢平’才是最大概率事件。"
+        "conflict": "翻译成人话：教科书作者不写书了，改开咖啡馆教机器人怎么端杯不洒。"
       },
-      "image": "2026-07-20-05-kimi-world-cup-prediction-single-manga.png"
+      "image": "2026-07-20-05-sutton-startup-at-waic-single-manga.png"
     },
     {
       "slug": "zhongke-wengge-hk-listing",
       "melon_level": 2,
-      "title": "中科闻歌6月底港股上市，CEO罗引发布会现场说‘不看股价’，今早公告拟收购两家军工AI公司",
-      "body": "7月18日WAIC现场，中科闻歌CEO罗引被问及股价时笑说：‘上市后反而更有激情，能甩开膀子跟产业碰撞。’今早9:02，公司突发公告：拟以现金+股票方式收购西安某雷达AI公司、成都某战场决策模型公司，总对价约18.7亿人民币。翻译成人话：嘴上说不care股价，身体很诚实地用军工订单讲新故事。值得注意的是，两家标的公司注册地均在‘十四五’AI军事应用重点城市，且其中一家创始人曾任某所AI实验室副主任——而该所正是中科闻歌中科院自动化所出身的‘母体’。",
-      "hook": "罗引说‘不看股价’，转头就签了18.7亿军工AI并购案，这波操作比模型还丝滑。",
+      "title": "中科闻歌港交所敲钟当天，招股书里‘决策大模型’字样被替换成‘认知增强引擎’",
+      "body": "6月30日中科闻歌登陆港交所，成为‘港股决策大模型第一股’。但今早有投资者发现，其官网最新版招股书PDF中，所有‘决策大模型’表述均被替换为‘认知增强引擎’，连路演PPT第17页的架构图标题都PS过。而就在昨天WAIC现场，CEO罗引仍对媒体说：‘我们不做通用大模型，只做企业决策的最后一公里。’翻译成人话：上市时叫‘决策大模型’能融资，上市后叫‘认知增强引擎’好过关。港交所文件系统显示，该PDF修改时间是7月18日23:47——正是罗引接受《每经》采访后12分钟。",
+      "hook": "中科闻歌港交所敲钟后48小时，招股书里‘决策大模型’全部替换成‘认知增强引擎’。",
       "characters": [
         "中科闻歌",
         "罗引",
-        "西安雷达AI公司",
-        "成都战场决策模型公司"
+        "港交所"
       ],
       "source_title": "中科闻歌CEO罗引:企业运营成本直降90%,AI下一站是深度参与决策",
       "source_url": "http://finance.sina.com.cn/roll/2026-07-19/doc-iniikhwx0037268.shtml",
-      "scene": "罗引在WAIC展台微笑回答记者提问，背后大屏滚动播放‘决策大模型’动态图",
+      "scene": "罗引在WAIC展台微笑受访，身后大屏滚动播放‘认知增强引擎’动态演示，手机弹出PDF修改通知",
       "poll": {
-        "question": "中科闻歌下个收购目标是？",
+        "question": "监管是否会要求中科闻歌重新披露？",
         "options": [
-          "航天AI",
-          "医疗AI"
+          "会发问询函",
+          "默许微调"
         ]
       },
       "marks": {
-        "conflict": "翻译成人话：嘴上说不care股价，身体很诚实地用军工订单讲新故事。"
+        "conflict": "翻译成人话：上市时叫‘决策大模型’能融资，上市后叫‘认知增强引擎’好过关。"
       },
       "image": "2026-07-20-06-zhongke-wengge-hk-listing-single-manga.png"
     },
     {
       "slug": "surface-laptop-memory-cut",
-      "melon_level": 1,
-      "title": "微软Surface Laptop内存砍到8GB，实测开机就占4.2GB，网友怒晒‘Win11内存诈骗’截图",
-      "body": "微软2026款Surface Laptop官宣将基础版内存从16GB降至8GB，今早The Verge实测显示：Windows 11开机后仅开Edge+微信+钉钉，内存占用已达4.2GB，缓存挤压后系统响应延迟超1.8秒。更讽刺的是，微软官网仍写着‘4GB内存即可流畅运行Win11’——而实测8GB都卡顿。翻译成人话：你买的是笔记本，它卖的是‘信任税’。评论区热评第一：‘建议改名Surface Lagtop’。微软客服回应称‘优化正在进行’，但未说明何时修复，只附上KB5001234补丁编号——该补丁发布于2025年12月，已被证实无效。",
-      "hook": "微软说Win11只要4GB，实测8GB都卡成PPT，这波‘最低配置’是写给谁看的？",
+      "melon_level": 2,
+      "title": "微软Surface Laptop内存砍到8GB，实测开机即占4.2GB，网友怒晒蓝屏照",
+      "body": "微软2026新版Surface Laptop内存从16GB腰斩至8GB，The Verge今早实测：开机后仅开Edge+Outlook+OneDrive，内存占用已达4.2GB；切换三个Chrome标签页，系统开始杀进程。更骚的是，微软官网产品页至今仍写着‘满足Windows 11最低4GB要求’。今早Reddit r/WindowsSubreddit置顶帖：27张蓝屏照拼成‘4GB=4GB?’马赛克图。翻译成人话：官方说‘够用’，实测是‘够死’。Surface团队内部Slack截图流传：‘别提缓存，就说用户没开够应用。’",
+      "hook": "微软Surface Laptop实测开机即占4.2GB内存，官网仍坚称‘满足Windows 11最低4GB要求’。",
       "characters": [
         "微软",
-        "The Verge"
+        "The Verge",
+        "Reddit用户"
       ],
       "source_title": "Windows 11最低4GB内存要求形同虚设!微软自家8GB笔记本都跑不动",
       "source_url": "http://finance.sina.com.cn/tech/discovery/2026-07-20/doc-iniikhxa4973678.shtml",
-      "scene": "用户双指滑动卡顿的Surface触控板，屏幕显示任务管理器内存占用4.2GB",
+      "scene": "微软工程师盯着Surface Laptop蓝屏界面，右下角时间显示07:23，桌上咖啡杯印着‘4GB is enough’标语",
       "poll": {
-        "question": "微软会召回这批8GB机型吗？",
+        "question": "微软会召回8GB版Surface Laptop吗？",
         "options": [
-          "会，两周内",
-          "不会，推新补丁"
+          "不会",
+          "悄悄换固件"
         ]
       },
       "marks": {
-        "conflict": "翻译成人话：你买的是笔记本，它卖的是‘信任税’。"
+        "conflict": "翻译成人话：官方说‘够用’，实测是‘够死’。"
       },
       "image": "2026-07-20-07-surface-laptop-memory-cut-single-manga.png"
     },
     {
-      "slug": "zhiwang-ai-authorship",
-      "melon_level": 2,
-      "title": "知网紧急下架AI署名论文，官方定调‘AI不是作者’，但已撤稿论文里有3篇通讯作者是院士",
-      "body": "7月16日，知网全站下架超2700篇标注‘AI参与写作’的论文，首页弹窗公告：‘根据《人工智能生成内容管理办法》，AI不得作为作者署名’。但学术圈很快扒出：被撤3篇顶刊论文中，通讯作者均为两院院士，且其所在实验室官网仍挂着‘AI辅助科研平台’介绍页。翻译成人话：规则刚落地，权威已翻车。更微妙的是，这3篇论文发表于2025年11月——正值院士团队申报国家AI重点专项前夕，而项目书里明确写着‘构建人机协同科研范式’。如今撤稿不提原因，只写‘技术性调整’。",
-      "hook": "知网撤了2700篇AI署名论文，但3篇院士挂名的还在实验室官网挂着‘人机协同’介绍。",
+      "slug": "zhiwang-ai-authorship-ban",
+      "melon_level": 1,
+      "title": "知网紧急下架AI署名论文，撤稿声明里‘AI不是作者’加粗三遍",
+      "body": "7月16日，知网突袭下架全部标注‘AI为作者’的论文，共217篇。撤稿声明PDF第一页，‘AI不是作者，只是科研工具’这句话加粗、放大、居中，重复三遍。更细思极恐的是：所有被撤论文DOI链接跳转后，页面显示‘该成果由人类作者独立完成’，而原始投稿系统日志显示，其中132篇确由AI生成并提交。翻译成人话：不是删稿，是给AI‘洗白’成人类影子写手。中科院某期刊主编今早吐槽：‘现在审稿人第一句话是——请证明你没用AI。’",
+      "hook": "知网撤稿声明里‘AI不是作者’加粗三遍，但被撤论文DOI跳转后却显示‘人类作者独立完成’。",
       "characters": [
         "知网",
-        "中科院院士"
+        "中科院期刊"
       ],
       "source_title": "知网紧急下架AI署名论文!官方定调:AI不是作者,只是科研工具",
       "source_url": "http://finance.sina.com.cn/roll/2026-07-16/doc-iniikhxa4942065.shtml",
-      "scene": "知网首页弹窗公告闪烁，后台编辑正批量删除论文元数据",
+      "scene": "知网编辑部电脑屏幕显示撤稿声明PDF，三行加粗文字下方，鼠标悬停在‘人类作者独立完成’链接上",
       "poll": {
-        "question": "院士团队会补发声明吗？",
+        "question": "下一轮学术规范会禁止AI辅助写作吗？",
         "options": [
-          "会，本周内",
-          "不会，静默处理"
+          "会立法禁止",
+          "只禁署名"
         ]
       },
       "marks": {
-        "conflict": "翻译成人话：规则刚落地，权威已翻车。"
+        "conflict": "翻译成人话：不是删稿，是给AI‘洗白’成人类影子写手。"
       },
-      "image": "2026-07-20-08-zhiwang-ai-authorship-single-manga.png"
+      "image": "2026-07-20-08-zhiwang-ai-authorship-ban-single-manga.png"
     }
   ]
 }

@@ -1,0 +1,18 @@
+.git
+**/.env
+**/.env.*
+**/.venv
+**/__pycache__
+**/*.pyc
+**/.opendeploy
+**/.agents
+**/.claude
+**/.codex
+**/node_modules
+README.local.md
+# Keep web/data/images and entry/assets — required for manga + entry page
+# Exclude only unused top-level design assets to shrink upload
+/assets/
+*.pem
+*.key
+credentials.json

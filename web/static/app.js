@@ -340,6 +340,13 @@ const esc = (s) =>
   String(s ?? "").replace(/[&<>"']/g, (c) =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
+/** 漫画 URL 带刊期版本，避开 CDN 对历史 404 的缓存 */
+function mangaUrl(filename, date) {
+  if (!filename) return "";
+  const v = encodeURIComponent(date || latestDay || "1");
+  return `/images/${encodeURIComponent(filename)}?v=${v}`;
+}
+
 /* ---------------- 轻量新闻标记 ---------------- */
 
 const TIME_ANCHORS = ["三天前", "两天前", "昨晚", "昨夜", "今早", "今天", "凌晨", "半夜"];
@@ -551,7 +558,7 @@ async function shareCard(date, idx) {
   ctx.fillRect(pad, comicTop, W - pad * 2, comicH);
   if (it.image) {
     try {
-      const img = await loadImage(`/images/${it.image}`);
+      const img = await loadImage(mangaUrl(it.image, issue?.date));
       const ratio = Math.max((W - pad * 2) / img.width, comicH / img.height);
       const dw = img.width * ratio;
       const dh = img.height * ratio;
@@ -890,7 +897,7 @@ function cardsHtml(date, kingIdx = -1) {
   return issue.items
     .map((it, i) => {
       const thumb = it.image
-        ? `<div class="card-thumb"><img src="/images/${esc(it.image)}" alt="" loading="lazy"></div>`
+        ? `<div class="card-thumb"><img src="${mangaUrl(it.image, date)}" alt="" loading="lazy"></div>`
         : `<div class="card-thumb no-img"><span>🖼️ 画手赶稿中</span></div>`;
       const href = date && latestDay && date !== latestDay
         ? `#/issue/${date}/item/${i}`
@@ -989,7 +996,7 @@ async function itemView(idx, date) {
   };
   const backHref = date && latestDay && date !== latestDay ? `#/issue/${date}` : "#/";
   const comic = it.image
-    ? `<div class="comic-zone"><img src="/images/${esc(it.image)}" alt="八卦漫画"></div>`
+    ? `<div class="comic-zone"><img src="${mangaUrl(it.image, viewingDate)}" alt="八卦漫画"></div>`
     : `<div class="comic-zone no-img"><span>🖼️ 本条漫画还在画手桌上，下期补上</span></div>`;
 
   const markLegend = `<div class="mark-legend" aria-hidden="true">
